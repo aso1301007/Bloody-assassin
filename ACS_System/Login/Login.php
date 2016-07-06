@@ -35,15 +35,15 @@ if($MAIL == $D_mail){
 		$_session['user_id']=$D_id;
 		switch ($D_kubun){
 			case "ACS":
-				header('location:A_top.html');
+				header('location:../acs/ACS_Home.html');
 				exit();
 
 			case "注文者":
-				header('location:S_top.html');
+				header('location:../Shcool/School_Home.html');
 				exit();
 
 			case "管理者":
-				header('location:SAdmin_top.html');
+				header('location:../SAdmin/SAdmin_Home.html');
 				exit();
 		}
 	}else header('location:Logon_failure.html');
