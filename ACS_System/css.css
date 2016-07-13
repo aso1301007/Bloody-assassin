@@ -1,0 +1,156 @@
+@CHARSET "UTF-8";
+
+/* select_menu要素
+----------------------------------------------------------- */
+#select_menu{
+  width:848px;
+  margin-left:auto;
+  margin-right:auto;
+  background:#72BBF0;
+  }
+
+#menu{margin-left:0px;
+ 		padding: 0px;
+ 		margin:0px;
+		background:#72BBF0;
+ }
+
+#menu li {
+  list-style:none;
+  text-align:center;
+  background-color:#FFFFFF;
+  position:relative ;
+  color:#222222;
+
+/* display:inline-block;*/
+  float:left;
+  margin-right:auto;
+  margin-left:auto;
+  padding-top:5px;
+  padding-bottom:5px;
+  width: 210px;
+/*  height: 20px;*/
+  border: solid 1px #72BBF0;
+  font-weight: bold;
+list-style-position: inside;
+
+
+}
+
+#menu li:hover {
+  color: #222222;
+  background:#72BBF0;
+}
+
+
+
+/* メニューの中身----------------------------------------------------------- */
+#menu li ul {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: -1px;
+  padding: 5px;
+  width: 200px;
+  background: #eee;
+  border: solid 1px #ccc;
+}
+
+
+#menu li ul li {
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  border: none;
+}
+#menu li ul li a {
+  display: inline-block;
+  width: 200px;
+  height: 20px;
+}
+#menu li ul li a:hover {
+  background: #E6FFE9;
+  color: #0000FF;
+}
+
+/* header要素
+----------------------------------------------------------- */
+
+#header{
+background-color:#FFFFFF;
+width:848px;
+height:80px;
+margin-left:auto;
+margin-right:auto;
+}
+
+input[type=button]{
+ padding: 5px; /*ボタン内の余白*/
+ margin-left: 20px;
+ margin-top: 15px;
+ background: #72BBF0;
+ background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#72BBF0)); /*グラデーション*/
+ background: -webkit-linear-gradient(#FFF, #72BBF0); /*同上*/
+ background: linear-gradient(#FFF, #72BBF0);   /*同上*/
+ font-size: 16px; /*文字サイズ*/
+
+/*border : solid 1px #000000;
+margin-top:20px;
+margin-left:15px;
+vertical-align:middle;
+float: left;
+padding:5px;
+border-width : 1px;
+border-padding:5px;
+color:#000000;
+*/
+}
+
+#login_name{
+text-align:right;
+padding:20px;
+float:right;
+margin-top:25px;
+padding:5px;
+font-size:1em;
+}
+
+/* body,main要素
+----------------------------------------------------------- */
+body{
+width:1200px;
+background-color:#F0F8FF;
+margin-left : auto ; margin-right : auto ;
+
+}
+#main{
+background-color:#FFFFFF;
+width:848px;
+margin-left:auto;
+margin-right:auto;
+patting:40px;
+
+      overflow:hidden;
+}
+
+#border{
+width:848px;
+  margin:60px 0px 5px 0px;
+  border: none;
+  border: solid 2px #72BBF0;
+}
+
+
+
+/*タイトル表示
+----------------------------------------*/
+#title{
+width:848px;
+hight:30px;
+margin:30px 0px 5px 0px;
+  background:#FFFFFF;
+text-align: center;
+border:5px;
+font-size:1.5em;
+}
+
