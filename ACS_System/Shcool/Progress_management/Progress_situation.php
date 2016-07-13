@@ -3,15 +3,15 @@
 
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel=stylesheet type=text/css href=css.css>
+<link rel=stylesheet type=text/css href=../../css.css>
 
 
 
 <title>進捗状況</title>
 
 
-<script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>
-<script src="js/jquery.focused.min.js"></script>
+<script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
+<script src="../../js/jquery.focused.min.js"></script>
 
 <script type="text/javascript">
 jQuery(document).ready(function($){
@@ -39,23 +39,28 @@ jQuery(document).ready(function($){
 session_start();
 
 require_once '../../DB.php';
-//require_once 'user_name';
+
 
 
 /*//-----前ページで指定された注文書のID受け取り-----
 */
-$_SESSION['sintyoku_tm_id']=1;
+$_SESSION['sintyoku_tm_id']=$_POST['sintyoku_tm_id'];
 $tm_id=$_SESSION['sintyoku_tm_id'];
 //---------------------------------------
 
 
+//------ユーザ名取得---------
+$user_name=$_SESSION['user_name'];
+//$user_name="高塚";
+
+//-----------------------------
+
+
 //-----------日付と注文書名の取得---------------------
-//$sql1 = "SELECT * FROM tyuumon join hinmei on where tm_id = ? and tyuumon.hin_id = hinmei.hin_id";
-$sql1 = "SELECT * FROM tyuumon where tm_id = ?";
+$sql1 = "SELECT * FROM tyuumon,hinmei where tm_id = ? and tyuumon.hin_id = hinmei.hin_id";
 $data1 = $pdo->prepare($sql1);
 $data1 ->execute(array($tm_id));//要らないかも？
 //print $sql1;
-
 
 
 //SELECTでとってきた値を格納
@@ -64,33 +69,9 @@ while($row1 = $data1 -> fetch(PDO::FETCH_ASSOC)){
 //	print_r($row1);
 		$t_date = $row1['t_date'];
 		$t_naiyou = $row1['t_naiyou'];
-//		$hin_janru = $row1['hin_janru'];
-		$hin_id=$row1['hin_id'];
-
-
+		$hin_janru = $row1['hin_janru'];
+//		$hin_id=$row1['hin_id'];
 }
-
-
-//品名取得
-$sql2 = "SELECT * FROM hinmei where hin_id = ?";
-$data2 = $pdo->prepare($sql2);
-$data2 ->execute(array($hin_id));//要らないかも？
-//print $sql1;
-
-
-//SELECTでとってきた値を格納
-while($row2 = $data2 -> fetch(PDO::FETCH_ASSOC)){
-		$hin_janru = $row2['hin_janru'];
-}
-
-
-
-
-
-//------ユーザ名取得---------
-//$user_name=$_SESSION['user_name'];
-$user_name="高塚万理奈";
-//-----------------------------
 
 
 
@@ -116,7 +97,7 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 echo <<<EOT
 
 <div id="header">
-			<div id="top"><a href="../School_Home.php">TOP</a></div>
+			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
 			<div id="login_name">$user_name さん</div>
 </div>
 
@@ -234,7 +215,6 @@ switch ($houkoku){
 			<form action="../../sintyoku_update/sintyoku_delete.php" method="post">
 					<input type="submit" value="取消">
 					<input type="hidden" name="flg_name" value="tm_nouhin_flg">
-<!-- 						$_SESSION['flg_name']="nouhin"; -->
 			</form>
 			</td><td>
 			<form action="../../sintyoku_update/sintyoku_ok.php" method="post">
