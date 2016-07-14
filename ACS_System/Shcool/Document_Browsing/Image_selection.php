@@ -97,9 +97,10 @@ class page{
 //-----------日付と注文書名の取得---------------------
 
 	function Date(){
-		$sql = "SELECT TY.tm_id,TY.t_date, TY.t_naiyou, HI.hin_janru, G.gazou_path FROM (tyuumon TY
+		$sql = "SELECT TY.tm_id,TY.t_date, TY.t_naiyou, HK.h_seisaku_id, G.gazou_path FROM ((tyuumon TY
 				INNER JOIN hinmei HI ON TY.hin_id = HI.hin_id)
-				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id ORDER BY TY.t_date ASC LIMIT 9";
+				(LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id))
+				ORDER BY TY.t_date ASC LIMIT 9";
 //		$data = $pdo->prepare($sql);
 //	$data ->execute();//要らないかも？
 					if (!($result_tyuumon = $this->pdo->prepare($sql))) {
@@ -237,10 +238,10 @@ echo <<<EOT
 								<div style="float:left; margin-left:6em; text-align:center;">
 								<form action="Documents_detail.php" method="post">
  									<input type="image" src="$img_path" alt="画像" width="140px" height="120px"/>
-									<input type="hidden" name="sintyoku_tm_id" value="$tm_id" />
+									<input type="hidden" name="eturan_tm_id" value="$tm_id" />
 								</form>
 EOT;
-								echo "製作日:",$sql01['t_date'],"<br />品名：",$sql01['hin_janru'],"<br />内容:",$sql01['t_naiyou'];
+								echo "製作物ナンバー:",$sql01['tm_id'],"<br/>製作日:",$sql01['t_date'],"<br />品名：",$sql01['hin_janru'];
 								echo "</div>";
 								$count++;
 					}
@@ -250,7 +251,10 @@ EOT;
 </div>
 
 </div>
-
+<?php
+     		// MySQL 切断
+     		$pdo = null;
+    	?>
 
 </body>
 
