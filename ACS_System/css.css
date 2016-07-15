@@ -84,8 +84,17 @@ margin-left:auto;
 margin-right:auto;
 }
 
-#top{
-border : solid 1px #000000;
+input[type=button]{
+ padding: 5px; /*ボタン内の余白*/
+ margin-left: 20px;
+ margin-top: 15px;
+ background: #72BBF0;
+ background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#72BBF0)); /*グラデーション*/
+ background: -webkit-linear-gradient(#FFF, #72BBF0); /*同上*/
+ background: linear-gradient(#FFF, #72BBF0);   /*同上*/
+ font-size: 16px; /*文字サイズ*/
+
+/*border : solid 1px #000000;
 margin-top:20px;
 margin-left:15px;
 vertical-align:middle;
@@ -94,7 +103,7 @@ padding:5px;
 border-width : 1px;
 border-padding:5px;
 color:#000000;
-
+*/
 }
 
 #login_name{
@@ -120,7 +129,7 @@ width:848px;
 margin-left:auto;
 margin-right:auto;
 patting:40px;
-height:800px;
+
       overflow:hidden;
 }
 
@@ -133,59 +142,15 @@ width:848px;
 
 
 
-/*進捗タイトル表示
+/*タイトル表示
 ----------------------------------------*/
 #title{
 width:848px;
-hight:0px;
+hight:30px;
 margin:30px 0px 5px 0px;
   background:#FFFFFF;
 text-align: center;
 border:5px;
 font-size:1.5em;
-}
-
-
-/*書類名の出力
----------------------------------------*/
-#syorui{
-width:848px;
-margin-top:70px;
-text-align: center;
-font-size:1.5em;
-}
-
-
-
-/* 画像
---------------------------------------------*/
-#img1{
-width:848px;
-height:70px;
-      overflow:hidden;
-margin-top:75px;
-text-align:center;
-}
-
-#img2{
-width:848px;
-height:70px;
-      overflow:hidden;
-margin-top:50px;
-text-align:center;
-}
-
-
-
-
-/*進捗更新ボタン
----------------------------------------------------*/
-
-#nouhin_button{
-width:150px;
-height:50px;
-      overflow:hidden;
-margin-top:10px;
-margin-left:180px;
 }
 
