@@ -11,13 +11,13 @@ $PASS=$_POST['PASS'];
 
 
 //DB接続を行うPHPファイルを読み込み。同一フォルダにDB.phpを保存しておく
-require_once "DB.php";
+require "DB.php";
 
 
 
-$sql = "SELECT * FROM user WHERE user_mail = '$MAIL'";
+$sql = "SELECT * FROM user WHERE user_mail = ?";
 $data = $pdo->prepare($sql);
-$data->execute();//要らないかも？
+$data->execute(array($MAIL));//要らないかも？
 
 
 //----繰り返しでSERECTでとってきた値を表示----------
