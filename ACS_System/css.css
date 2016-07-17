@@ -154,3 +154,45 @@ border:5px;
 font-size:1.5em;
 }
 
+/*書類名の出力
+---------------------------------------*/
+#syorui{
+width:848px;
+margin-top:70px;
+text-align: center;
+font-size:1.5em;
+}
+
+
+
+/* 画像
+--------------------------------------------*/
+#img1{
+width:848px;
+height:70px;
+      overflow:hidden;
+margin-top:75px;
+text-align:center;
+}
+
+#img2{
+width:848px;
+height:70px;
+      overflow:hidden;
+margin-top:50px;
+text-align:center;
+}
+
+
+
+
+/*進捗更新ボタン
+---------------------------------------------------*/
+
+#nouhin_button{
+width:150px;
+height:50px;
+      overflow:hidden;
+margin-top:10px;
+margin-left:180px;
+}
