@@ -220,7 +220,7 @@
 			<div id="open01" style="display:none;clear:both;">
 				<?php
 					while($sql01 = $tyuumon01->fetch(PDO::FETCH_ASSOC)){
-						echo $sql01['t_date'], "　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
+						echo date('Y年m月d日', strtotime($sql01['t_date'])), "　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -239,7 +239,7 @@
 			<div id="open02" style="display:none;clear:both;">
 				<?php
 					while($sql02 = $tyuumon02->fetch(PDO::FETCH_ASSOC)){
-						echo $sql02['t_date'], "　・　", $sql02['hin_janru'], "　・　", $sql02['t_naiyou'], "<br />";
+						echo date('Y年m月d日', strtotime($sql02['t_date'])), "　・　", $sql02['hin_janru'], "　・　", $sql02['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -258,7 +258,7 @@
 			<div id="open03" style="display:none;clear:both;">
 				<?php
 					while($sql03 = $tyuumon03->fetch(PDO::FETCH_ASSOC)){
-						echo $sql03['t_date'], "　・　", $sql03['hin_janru'], "　・　", $sql03['t_naiyou'], "<br />";
+						echo date('Y年m月d日', strtotime($sql03['t_date'])), "　・　", $sql03['hin_janru'], "　・　", $sql03['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -277,7 +277,7 @@
 			<div id="open04" style="display:none;clear:both;">
 				<?php
 					while($sql04 = $tyuumon04->fetch(PDO::FETCH_ASSOC)){
-						echo $sql04['t_date'], "　・　", $sql04['hin_janru'], "　・　", $sql04['t_naiyou'], "<br />";
+						echo date('Y年m月d日', strtotime($sql04['t_date'])), "　・　", $sql04['hin_janru'], "　・　", $sql04['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -296,7 +296,7 @@
 			<div id="open05" style="display:none;clear:both;">
 				<?php
 					while($sql05 = $tyuumon05->fetch(PDO::FETCH_ASSOC)){
-						echo $sql05['t_date'], "　・　", $sql05['hin_janru'], "　・　", $sql05['t_naiyou'], "<br />";
+						echo date('Y年m月d日', strtotime($sql05['t_date'])), "　・　", $sql05['hin_janru'], "　・　", $sql05['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -316,7 +316,7 @@
 			<div id="open06" style="display:none;clear:both;">
 				<?php
 					while($sql06 = $tyuumon06->fetch(PDO::FETCH_ASSOC)){
-						echo $sql06['t_date'], "　・　", $sql06['hin_janru'], "　・　", $sql06['t_naiyou'], "<br />";
+						echo date('Y年m月d日', strtotime($sql06['t_date'])), "　・　", $sql06['hin_janru'], "　・　", $sql06['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -335,7 +335,7 @@
 			<div id="open07" style="display:none;clear:both;">
 				<?php
 					while($sql07 = $tyuumon07->fetch(PDO::FETCH_ASSOC)){
-						echo $sql07['t_date'], "　・　", $sql07['hin_janru'], "　・　", $sql07['t_naiyou'], "<br />";
+						echo date('Y年m月d日', strtotime($sql07['t_date'])), "　・　", $sql07['hin_janru'], "　・　", $sql07['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
