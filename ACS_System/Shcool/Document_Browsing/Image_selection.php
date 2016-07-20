@@ -96,10 +96,9 @@ select2.options[<?php echo($count_s); ?>] = new Option("<?php echo($pull_s['scho
 
 
 
-$result = $pdo->prepare("SELECT tyuumon.tm_id,tyuumon_master.tm_seisakubutu,tyuumon.t_date,hinmei.hin_janru,gazou.gazou_path
-						FROM  tyuumon,hinmei,tyuumon_master,gazou
-						WHERE tyuumon.hin_id=hinmei.hin_id and tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.tm_id=gazou.tm_id LIMIT 9");
-
+$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru, G.gazou_path FROM ((tyuumon TY
+				INNER JOIN hinmei HI ON TY.hin_id = HI.hin_id)
+				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)ORDER BY TY.t_date ASC LIMIT 9");
 $result->execute();
 
 
@@ -165,7 +164,7 @@ if(isset($_POST['selectName1'])){
 
 <div id="header">
 			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
-			<div id="login_name"><?php $user_name?> さん</div>
+			<div id="login_name"><?php echo $user_name;?> さん</div>
 
 </div>
 
@@ -235,11 +234,13 @@ if(isset($_POST['selectName1'])){
 
 <ul class="ul-list-02" >
 	<?php
-		$count=1;
+		$count=0;
 		while ($row = $result -> fetch(PDO::FETCH_ASSOC))  {
 			$img_path=$row['gazou_path'];
-			if($img_path==null){$img_path="NoImage.png";}//画像がないときNoImage.png;
 
+			if($img_path==null){   //画像がないときNoImage.png
+				$img_path="NoImage.png";
+			}
 			$tm_id =$row['tm_id'];
 			if($count%3==0){
 				echo"<br clear='left'>";
