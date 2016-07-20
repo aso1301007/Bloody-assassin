@@ -12,7 +12,7 @@
 #menu{margin-left:0px;
  		padding: 0px;
  		margin:0px;
-		background:#72BBF0;
+		background:#4169e1;
  }
 
 #menu li {
@@ -26,11 +26,11 @@
   float:left;
   margin-right:auto;
   margin-left:auto;
-  padding-top:5px;
+  padding-top:8px;
   padding-bottom:5px;
   width: 210px;
 /*  height: 20px;*/
-  border: solid 1px #72BBF0;
+  border: solid 1px #4169e1;
   font-weight: bold;
 list-style-position: inside;
 
@@ -38,8 +38,8 @@ list-style-position: inside;
 }
 
 #menu li:hover {
-  color: #222222;
-  background:#72BBF0;
+  color: #FFFFFF;
+  background:#4169e1;
 }
 
 
@@ -49,7 +49,8 @@ list-style-position: inside;
   display: none;
   position: absolute;
   top: 30px;
-  left: -1px;
+  left: 1px;
+  hight:5px;
   padding: 5px;
   width: 200px;
   background: #eee;
@@ -59,7 +60,7 @@ list-style-position: inside;
 
 #menu li ul li {
   margin: 0;
-  padding: 0;
+  padding: 1px;
   width: 200px;
   border: none;
 }
@@ -71,6 +72,7 @@ list-style-position: inside;
 #menu li ul li a:hover {
   background: #E6FFE9;
   color: #0000FF;
+  border:solid 1px #ccc;
 }
 
 /* header要素
@@ -86,9 +88,9 @@ margin-right:auto;
 
 input[type=button]{
  padding: 5px; /*ボタン内の余白*/
- margin-left: 20px;
- margin-top: 15px;
- background: #72BBF0;
+ margin-top:15px;
+ margin-left:20px;
+ background: #4169e1;
  background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#72BBF0)); /*グラデーション*/
  background: -webkit-linear-gradient(#FFF, #72BBF0); /*同上*/
  background: linear-gradient(#FFF, #72BBF0);   /*同上*/
@@ -120,15 +122,17 @@ font-size:1em;
 body{
 width:1200px;
 background-color:#F0F8FF;
-margin-left : auto ; margin-right : auto ;
+margin-left : auto ;
+margin-right : auto ;
 
 }
 #main{
 background-color:#FFFFFF;
 width:848px;
+hight:auto;
 margin-left:auto;
 margin-right:auto;
-patting:40px;
+/*patting:40px;*/
 
       overflow:hidden;
 }
@@ -137,7 +141,7 @@ patting:40px;
 width:848px;
   margin:60px 0px 5px 0px;
   border: none;
-  border: solid 2px #72BBF0;
+  border: solid 2px #4169e1;
 }
 
 
@@ -154,3 +158,65 @@ border:5px;
 font-size:1.5em;
 }
 
+
+/*書類名の出力
+---------------------------------------*/
+#syorui{
+width:848px;
+margin-top:70px;
+text-align: center;
+font-size:1.5em;
+}
+
+
+
+/* 画像
+--------------------------------------------*/
+#img1{
+width:848px;
+height:70px;
+      overflow:hidden;
+margin-top:75px;
+text-align:center;
+}
+
+#img2{
+width:848px;
+height:70px;
+      overflow:hidden;
+margin-top:50px;
+text-align:center;
+}
+
+
+
+
+/*進捗更新ボタン
+---------------------------------------------------*/
+
+#nouhin_button{
+width:150px;
+height:50px;
+      overflow:hidden;
+margin-top:10px;
+margin-left:180px;
+}
+
+
+/*ソート
+------------------------------------------------*/
+#sort{
+margin-left:25px;
+width:50%;
+padding:4px;
+float:left;
+  border: solid 2px #ccc;
+}
+/*検索
+----------------------------------------------*/
+#search{
+margin-right:20px;
+width:auto;
+float:right;
+	border: solid 2px #ccc;
+}
