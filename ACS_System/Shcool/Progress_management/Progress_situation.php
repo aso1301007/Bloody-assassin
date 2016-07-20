@@ -38,8 +38,7 @@ jQuery(document).ready(function($){
 
 session_start();
 
-require_once '../../DB.php';
-
+require '../../DB.php';
 
 
 /*//-----前ページで指定された注文書のID受け取り-----
@@ -53,6 +52,10 @@ $tm_id=$_SESSION['sintyoku_tm_id'];
 $user_name=$_SESSION['user_name'];
 //$user_name="高塚";
 
+
+if($user_name==null){
+	header('Location: ../../Login/login.hml');
+}
 //-----------------------------
 
 
@@ -93,12 +96,12 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 
 
 
+?>
 
-echo <<<EOT
 
 <div id="header">
-			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
-			<div id="login_name">$user_name さん</div>
+			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='../School_Home.php'">
+			<div id="login_name"><?php $user_name?> さん</div>
 </div>
 
 <div id="select_menu" style="clear:left;">
@@ -136,7 +139,8 @@ echo <<<EOT
 
 
 <div id="syorui">
-EOT;
+<?php
+
 //注文書名を出力
 echo $t_date."  ・  " .$t_naiyou."  ・  " .$hin_janru;
 
@@ -209,20 +213,28 @@ switch ($houkoku){
 
 
 <!-- 進捗状況を変更するボタン -->
+<?php
+
+
+echo <<<EOT
 <div id="nouhin_button">
 	<table>
 		<tr><td>
-			<form action="../../sintyoku_update/sintyoku_delete.php" method="post">
-					<input type="submit" value="取消">
-					<input type="hidden" name="flg_name" value="tm_nouhin_flg">
-			</form>
+			<form action="sintyoku_update.php" method="post">
+				<input type="submit" value="取消" name="delete"/>
+				<input type="hidden" name="flg_name" value="tm_nouhin_flg">
+				<input type="hidden" name="what" value="0">
+		</form>
 			</td><td>
-			<form action="../../sintyoku_update/sintyoku_ok.php" method="post">
-					<input type="submit" value="OK">
-					<input type="hidden" name="flg_name" value="tm_nouhin_flg">
-			</form>
+			<form action="sintyoku_update.php" method="post">
+				<input type="submit" value="OK" name="ok"/>
+				<input type="hidden" name="flg_name" value="tm_nouhin_flg">
+				<input type="hidden" name="what" value="1">
+		</form>
 			</td></tr>
 	</table>
 </div>
+EOT;
+?>
 </body>
 </html>
