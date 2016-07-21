@@ -88,28 +88,30 @@ if($user_name==null){
 echo "tm_id:".$tm_id;
 
 //-----注文書内容をDBから受け取る-----------------------
- $sql = "SELECT * FROM ((((((tyuumon TY
+ $sql = "SELECT * FROM (((((((tyuumon TY
 		INNER JOIN hinmei HI ON TY.hin_id = HI.hin_id)
 		INNER JOIN school SC ON TY.school_id = SC.school_id)
-		INNER JOIN tyuumonsha TS ON TY.school_id=TS.school_id)
 		INNER JOIN tyuumon_master TM ON TY.tm_id=TM.tm_id)
+		INNER JOIN tyuumonsha TS ON TM.user_id=TS.user_id)
+		INNER JOIN user U ON TM.user_id=U.user_id)
 		INNER JOIN gakubu GK ON TY.school_id=GK.school_id)
 		LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
-		WHERE TY.tm_id =?";
+		WHERE TY.tm_id =:tm_id";
 $data = $pdo->prepare($sql);
-$data->execute(array('$tm_id'));
+$data->bindParam(':tm_id', $tm_id, PDO::PARAM_STR);
+$data->execute();
 
 
 while($row = $data ->fetch(PDO::FETCH_ASSOC)){
-	 $user_id=$row['user_id'];    //注文マスターテーブルを主にする為の取得
+	 $t_user_id=$row['user_id'];    //注文マスターテーブルを主にする為の取得
 	 $t_date = $row['t_date'];
 	 $naiyou = $row['t_naiyou'];     //見積りor発注
-	 echo "学校名：".$row['SC.school_name']; //学校名
+	 $school_name=$row['school_name']; //学校名
 	 $hin_name = $row['hin_janru'];      //品名
 	 $gakubu_name=$row['gakubu_name'];  //利用する学部名
 	 $bikou = $row['t_bikou'];
 	 $mokuteki = $row['t_mokuteki'];
-	 echo "size:".$row['t_size'];
+	 $size=$row['t_size'];
 	 $page = $row['t_page'];
 	 $color = $row['t_color'];
 	 $men = $row['t_men'];
@@ -137,7 +139,7 @@ while($row = $data ->fetch(PDO::FETCH_ASSOC)){
 }
 
 
-echo "user_id".$user_id;
+echo "user_id:".$t_user_id;
 
 //注文者の部署、担当者情報
 $sql1="SELECT * FROM ((tyuumon_master TM
@@ -349,7 +351,7 @@ list($t_yy, $t_mm, $t_dd) = explode('-', $t_date);  // 文字列の分解
  <td class=xl68>　</td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>学校名</td>
  <td colspan=8 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <input type="text" name="school_name" maxlength="25" class = "one" value="school_name">
+ <input type="text" name="school_name" maxlength="25" class = "one" value="<?php echo $school_name;?>">
  </td>
  <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>部署名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
