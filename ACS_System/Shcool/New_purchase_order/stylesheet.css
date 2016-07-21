@@ -7,9 +7,10 @@ input.five {  width: 80%;height: 100%; border:none; background:none; font-size: 
 input.six {  width: 50%;height: 100%; border:none; background:none; font-size: 100%; direction: rtl;}
 input.seven { width: 100%;height: 100%; border:none; background:none; font-size: 140%; direction: rtl;}
 input.eight {width: 100%; height: 100%;}
-input.nine {width: 60px; height : 60px;}
+input.nine {width: 100px; height : 40px;}
 textarea.one {  width: 100%;height: 100%; border:none; background:none; font-size: 100%;}
 select.one {width: 100%; height: 100%; font-size: 110%;}
+select.two {width: 100%; height: 100%; font-size: 90%;}
 form  { text-align: center; }
 td
 	{
