@@ -101,7 +101,7 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 
 <div id="header">
 			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='../School_Home.php'">
-			<div id="login_name"><?php $user_name?> さん</div>
+			<div id="login_name"><?php echo $user_name;?> さん</div>
 </div>
 
 <div id="select_menu" style="clear:left;">
