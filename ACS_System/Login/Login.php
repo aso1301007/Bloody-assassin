@@ -11,8 +11,8 @@ $PASS=$_POST['PASS'];
 
 
 //DB接続を行うPHPファイルを読み込み。同一フォルダにDB.phpを保存しておく
-require "DB.php";
-
+require "../DB.php";
+session_start();
 
 
 $sql = "SELECT * FROM user WHERE user_mail = ?";
@@ -32,18 +32,19 @@ while($row = $data ->fetch(PDO::FETCH_ASSOC)){
 //メールアドレスとパスワードで認証
 if($MAIL == $D_mail){
 	if($PASS == $D_pass){
-		$_session['user_id']=$D_id;
+		$_SESSION['user_id']=$D_id;
+		require '../user_name.php';
 		switch ($D_kubun){
 			case "ACS":
-				header('location:../acs/ACS_Home.html');
+				header('location: ../acs/ACS_Home.php');
 				exit();
 
 			case "注文者":
-				header('location:../Shcool/School_Home.html');
+				header('location: ../Shcool/School_Home.php');
 				exit();
 
 			case "管理者":
-				header('location:../SAdmin/SAdmin_Home.html');
+				header('location:../SAdmin/SAdmin_Home.php');
 				exit();
 		}
 	}else header('location:Logon_failure.html');
