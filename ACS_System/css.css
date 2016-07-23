@@ -88,12 +88,14 @@ margin-right:auto;
 
 input[type=button]{
  padding: 5px; /*ボタン内の余白*/
+ hight:auto;
  margin-top:15px;
  margin-left:20px;
  background: #4169e1;
- background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#72BBF0)); /*グラデーション*/
- background: -webkit-linear-gradient(#FFF, #72BBF0); /*同上*/
- background: linear-gradient(#FFF, #72BBF0);   /*同上*/
+ border-radius:5px;
+background:-webkit-gradient(linear, left top, left bottom, from(#FFF), to(#72BBF0)); /*グラデーション*/
+ background:-webkit-linear-gradient(#FFF, #72BBF0); /*同上*/
+ background:linear-gradient(#FFF, #72BBF0);   /*同上*/
  font-size: 16px; /*文字サイズ*/
 
 /*border : solid 1px #000000;
@@ -159,19 +161,27 @@ font-size:1.5em;
 }
 
 
-/*書類名の出力
----------------------------------------*/
+
+/* 進捗確認ページで使うスタイル
+--------------------------------------------*/
 #syorui{
-width:848px;
+width:700px;
 margin-top:70px;
+margin-left:50px;
 text-align: center;
 font-size:1.5em;
+background:#72BBF0;
+color:#FFF;
+padding:15px;
+border:2px dashed rgba(255,255,255,0.5);
+border-radius:6px;
+-moz-border-radius:6px;
+-webkit-border-radius:6px;
+box-shadow:0 0 0 5px #72BBF0,0 2px 3px 5px rgba(0,0,0,5);
+-moz-box-shadow:0 0 0 5px #72BBF0, 0 2px 3px 5px rgba(0,0,0,5);
+-webkit-box-shadow:0 0 0 5px #72BBF0, 0 2px 3px 5px rgba(0,0,0,5);
 }
 
-
-
-/* 画像
---------------------------------------------*/
 #img1{
 width:848px;
 height:70px;
@@ -189,11 +199,6 @@ text-align:center;
 }
 
 
-
-
-/*進捗更新ボタン
----------------------------------------------------*/
-
 #nouhin_button{
 width:150px;
 height:50px;
@@ -203,20 +208,51 @@ margin-left:180px;
 }
 
 
+#shounin{
+width:750px;
+margin-top:70px;
+margin-left:20px;
+text-align: center;
+font-size:1.4em;
+padding:20px;
+background:#FFF;
+box-shadow:0 0 50px #4169e1 inset,10px 5px 0 #cecece;
+-moz-box-shadow:0 0 50px #4169e1 inset,10px 5px 0 #cecece;
+-webkit-box-shadow:0 0 50px #4169e1 inset,10px 5px 0 #cecece;
+}
+/*-------------------------------------------*/
+
+
 /*ソート
 ------------------------------------------------*/
-#sort{
-margin-left:25px;
-width:50%;
-padding:4px;
-float:left;
-  border: solid 2px #ccc;
+#period_sort{
+float:right;
+width:400px;
+height:70px;
+border-style: solid;
+border-width: 1px;
+margin:20px 20px 5px 5px;
+padding:10px;
+align:left;
+}
+
+
+#item_sort{
+border-style: solid;
+border-width: 1px;
+margin:5px 20px 10px 20px;
+padding:10px;
+align:left;
 }
 /*検索
 ----------------------------------------------*/
-#search{
-margin-right:20px;
-width:auto;
-float:right;
-	border: solid 2px #ccc;
+#number_search{
+style="float:left;
+width:350px;
+height:70px;
+border-style: solid;
+border-width: 1px;
+margin:20px 5px 5px 20px;
+padding:10px;
+align:left;>
 }

@@ -3,6 +3,7 @@
 
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <link rel="stylesheet" type="text/css" href="../../css.css"/>
 <title>書類閲覧</title>
 
@@ -28,140 +29,135 @@ jQuery(document).ready(function($){
 
 
 <script type="text/javascript">
-function functionName()
+function sort()
 {
-var select1 = document.forms.sort.selectName1; //変数select1を宣言
-var select2 = document.forms.sort.selectName2; //変数select2を宣言
+	var select1 = document.forms.sort.selectName1; //変数select1を宣言
+	var select2 = document.forms.sort.selectName2; //変数select2を宣言
 
-select2.options.length = 0; // 選択肢の数がそれぞれに異なる場合、これが重要
+	select2.options.length = 0; // 選択肢の数がそれぞれに異なる場合、これが重要
 
-<?php
+	<?php
+	require "../../DB.php";
+
+	$pull_hin_janru = $pdo->prepare("SELECT * FROM hinmei");
+	$pull_hin_janru->execute();
+	$pull_school_name = $pdo->prepare("SELECT * FROM school");
+	$pull_school_name ->execute();
+	$count_h=0;
+	$count_s=0;
+	if (!$pull_hin_janru) {
+		exit('データを登録できませんでした。');
+	}
+	if (!$pull_school_name) {
+		exit('データを登録できませんでした。');
+	}
+	?>
+
+	if (select1.options[select1.selectedIndex].value == "t_naiyou")
+	{
+	select2.options[0] = new Option("見積もり","mi");
+	select2.options[1] = new Option("発注","ha");
+	}
+
+	else if (select1.options[select1.selectedIndex].value == "hin_janru")
+	{
+	<?php while ($pull_h = $pull_hin_janru -> fetch(PDO::FETCH_ASSOC))  { ?>
+
+	select2.options[<?php echo($count_h); ?>] = new Option("<?php echo($pull_h['hin_janru']); ?>","<?php echo($pull_h['hin_id']);?>");
+
+	<?php $count_h++; } ?>
+	}
+	else if (select1.options[select1.selectedIndex].value == "school_name")
+	{
+	<?php while ($pull_s = $pull_school_name -> fetch(PDO::FETCH_ASSOC))  { ?>
+
+	select2.options[<?php echo($count_s); ?>] = new Option("<?php echo($pull_s['school_name']); ?>","<?php echo($pull_s['school_id']);?>");
+
+	<?php $count_s++; } ?>
+	}
+	}
+
+	</script>
+
+	</head>
+
+	<body onload="sort()">
+
+	<?php
 session_start();
-require '../../DB.php';
-require '../../user_name.php';
+$user_name=$_SESSION['user_name'];   //ユーザー名取得
 
-$user_name=$_SESSION['user_name'];
-if($user_name==null){
-	header("Location: ../../Login/login.html");
-}
-
+	//ログインしていないorセッションが切れた場合------------
+	if($user_name==null){
+		header("Location: ../../Login/login.html");
+	}
 
 
-$pull_hin_janru = $pdo->prepare("SELECT * FROM hinmei");
-$pull_hin_janru->execute();
-$pull_school_name = $pdo->prepare("SELECT * FROM school");
-$pull_school_name ->execute();
-$count_h=0;
-$count_s=0;
-if (!$pull_hin_janru) {
-	exit('データを登録できませんでした。');
-}
-if (!$pull_school_name) {
-	exit('データを登録できませんでした。');
-}
-?>
-
-if (select1.options[select1.selectedIndex].value == "t_naiyou")
-{
-select2.options[0] = new Option("見積もり","mi");
-select2.options[1] = new Option("発注","ha");
-}
-
-else if (select1.options[select1.selectedIndex].value == "hin_janru")
-{
-<?php while ($pull_h = $pull_hin_janru -> fetch(PDO::FETCH_ASSOC))  { ?>
-
-select2.options[<?php echo($count_h); ?>] = new Option("<?php echo($pull_h['hin_janru']); ?>","<?php echo($pull_h['hin_id']);?>");
-
-<?php $count_h++; } ?>
-}
-else if (select1.options[select1.selectedIndex].value == "school_name")
-{
-<?php while ($pull_s = $pull_school_name -> fetch(PDO::FETCH_ASSOC))  { ?>
-
-select2.options[<?php echo($count_s); ?>] = new Option("<?php echo($pull_s['school_name']); ?>","<?php echo($pull_s['school_id']);?>");
-
-<?php $count_s++; } ?>
-}
-}
-
-</script>
-
-</head>
-
-<body onload="functionName()">
-
-<?php
-
-
-
-
-$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru, G.gazou_path FROM ((tyuumon TY
+$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru, G.gazou_path,tm_seisakubutu FROM (((tyuumon TY
 				INNER JOIN hinmei HI ON TY.hin_id = HI.hin_id)
+				INNER JOIN tyuumon_master TM ON TY.tm_id=TM.tm_id)
 				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)ORDER BY TY.t_date ASC LIMIT 9");
 $result->execute();
 
 
 
-if (!$result) {
-	exit('データを登録できませんでした。');
-}
+	if (!$result) {
+		exit('データを登録できませんでした。');
+	}
 
 
-//検索
-if(isset($_POST['search_text'])){
-$search_word = $_POST['search_text'];
-	$search_result= $pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
-			from tyuumon,tyuumon_master,hinmei,gazou
-			where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.hin_id=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and tm_seisakubutu
-			LIKE :keyword");
-	$keyword = "%".$search_word."%";
-	$search_result->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-	$result=$search_result;
-	$result->execute();
-}
-
-
-//ソート
-if(isset($_POST['selectName1'])){
-	$koumoku = $_POST['selectName1'];
-	$zyouken = $_POST['selectName2'];
-
-	//見積もりor発注
-	if($koumoku=='t_naiyou'){
-		$sort_result= $pdo->prepare("select * from tyuumon,gazou,hinmei
-									where tyuumon.t_naiyou=:zyouken and tyuumon.tm_id=gazou.tm_id and hinmei.hin_id=tyuumon.hin_id
-									order by :zyouken");
-		$sort_result->bindValue(":zyouken", $zyouken);
-		$result=$sort_result;
+	//検索
+	if(isset($_POST['search_text'])){
+	$search_word = $_POST['search_text'];
+		$search_result= $pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
+				from tyuumon,tyuumon_master,hinmei,gazou
+				where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.hin_id=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and tm_seisakubutu
+				LIKE :keyword");
+		$keyword = "%".$search_word."%";
+		$search_result->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+		$result=$search_result;
 		$result->execute();
 	}
 
-	//品名ジャンル
-	if($koumoku=='hin_janru'){
-		$sort_result= $pdo->prepare("select * from tyuumon,hinmei,gazou
-									where tyuumon.hin_id=hinmei.hin_id and tyuumon.tm_id=gazou.tm_id and hinmei.hin_id=:zyouken
-									order by :zyouken");
-		$sort_result->bindValue(":zyouken", $zyouken);
-		$result=$sort_result;
-		$result->execute();
+
+	//ソート
+	if(isset($_POST['selectName1'])){
+		$koumoku = $_POST['selectName1'];
+		$zyouken = $_POST['selectName2'];
+
+		//見積もりor発注
+		if($koumoku=='t_naiyou'){
+			$sort_result= $pdo->prepare("select * from tyuumon,gazou,hinmei
+										where tyuumon.t_naiyou=:zyouken and tyuumon.tm_id=gazou.tm_id and hinmei.hin_id=tyuumon.hin_id
+										order by :zyouken");
+			$sort_result->bindValue(":zyouken", $zyouken);
+			$result=$sort_result;
+			$result->execute();
+		}
+
+		//品名ジャンル
+		if($koumoku=='hin_janru'){
+			$sort_result= $pdo->prepare("select * from tyuumon,hinmei,gazou
+										where tyuumon.hin_id=hinmei.hin_id and tyuumon.tm_id=gazou.tm_id and hinmei.hin_id=:zyouken
+										order by :zyouken");
+			$sort_result->bindValue(":zyouken", $zyouken);
+			$result=$sort_result;
+			$result->execute();
+		}
+
+		//学校名
+
+		if($koumoku=='school_name'){
+			$sort_result= $pdo->prepare("select * from tyuumon,tyuumon_master,tyuumonsha,school,hinmei,gazou
+										where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon_master.user_id=tyuumonsha.user_id and
+										tyuumonsha.school_id=school.school_id and tyuumon.hin_id=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and
+										 school.school_id=:zyouken order by :zyouken");
+			$sort_result->bindValue(":zyouken", $zyouken);
+			$result=$sort_result;
+			$result->execute();
+		}
 	}
-
-	//学校名
-
-	if($koumoku=='school_name'){
-		$sort_result= $pdo->prepare("select * from tyuumon,tyuumon_master,tyuumonsha,school,hinmei,gazou
-									where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon_master.user_id=tyuumonsha.user_id and
-									tyuumonsha.school_id=school.school_id and tyuumon.hin_id=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and
-									 school.school_id=:zyouken order by :zyouken");
-		$sort_result->bindValue(":zyouken", $zyouken);
-		$result=$sort_result;
-		$result->execute();
-	}
-}
-
-?>
-
+	?>
 <div id="header">
 			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
 			<div id="login_name"><?php echo $user_name;?> さん</div>
@@ -200,37 +196,76 @@ if(isset($_POST['selectName1'])){
 <div id="border"></div>
 <div id="title">書類一覧</div>
 
-
-
-
-<a style="float:left;margin-left:50px">ソート機能</a><a style="float:left;margin-left:345px">検索機能</a><br/>
-<div id="sort" style="float:right;float:left;  border: solid 3px #ccc; margin-left:50px">
-
-	<a style="clear:right;float:left">項目：</a>
-	<form name="sort" method="post"action="">
-
-	<select name = "selectName1" onchange="functionName()">
-	<option value="t_naiyou" label="注文内容" >注文内容</option>
-	<option value="hin_janru" label="品名ジャンル" >品名ジャンル</option>
-	<option value="school_name" label="学校名" >学校名</option>
-	</select>
-
-	<a >条件：</a>
-	<select name = "selectName2">
-	</select>
-
-	<input style="float:right;block;" type="submit" value="ソート" />
+<div>
+<!-------製作物ナンバー検索--------------------------->
+<div id="number_search" style="float:left; width:350px; height:70px; border-style: solid; border-width: 1px; margin:20px 5px 5px 20px; padding:10px;" align="left">
+	<b>制作物ナンバーを入力してください。</b>
+	<form  method="post" action="Image_selection.php"style="float:right">
+		<p>制作物ナンバー：<input type="text" style="height:20px; vertical-align: middle;" name="number_search" size="20" maxlength="8" />
+		<span style="margin-right: 1em;"></span>
+		<input type="submit" style="height:32px; vertical-align: middle;" value="表示" /></p>
 	</form>
 </div>
 
-<div id="search"  style="border: solid 3px #ccc;">
-	制作物ナンバー：<form  method="post" action="Image_selection.php"style="float:right">
-	<input type="text" name="search_text" /><input type="submit" value="検索" /></form>
+
+<!-------日時ソート-------------------------------------->
+<div id="period_sort" style="float:right; width:400px; height:70px; border-style: solid; border-width: 1px; margin:20px 20px 5px 5px; padding:10px;" align="left">
+	<form name="sort_period">
+		<b>年と月を選択してください。</b>
+		<p>年：
+		<select name = "select_yaer" onchange="sort_date()">
+			<option value="2016">2016年</option>
+			<option value="2015">2015年</option>
+			<option value="99" selected>選択してください</option>
+		</select><span style="margin-right: 1em;"></span>
+		月：
+		<select name = "select_month" onchange="sort_date()">
+			<option value="1">1月</option>
+			<option value="2">2月</option>
+			<option value="3">3月</option>
+			<option value="4">4月</option>
+			<option value="5">5月</option>
+			<option value="6">6月</option>
+			<option value="7">7月</option>
+			<option value="8">8月</option>
+			<option value="9">9月</option>
+			<option value="10">10月</option>
+			<option value="11">11月</option>
+			<option value="12">12月</option>
+			<option value="99" selected>選択してください</option>
+		</select><span style="margin-right: 1em;"></span>
+		<input type="submit" style="height:32px; vertical-align: middle;" value="表示" /></p>
+	</form>
+</div>
+
+
+<!-------ソート項目------------------------------->
+
+<div id="number_search" style="float:left; width:auto; height:70px; border-style: solid; border-width: 1px; margin:20px 5px 5px 20px; padding:10px;" align="left">
+	<form name="sort" method="post"action="">
+		<b>項目と条件を選択してください。</b>
+		<p>項目：
+		<select name = "selectName1" onchange="sort()">
+			<option value="t_naiyou" label="注文内容" >注文内容</option>
+			<option value="hin_janru" label="品名ジャンル" >品名ジャンル</option>
+			<option value="school_name" label="学校名" >学校名</option>
+			<option value="99" selected>選択してください</option>
+		</select><span style="margin-right: 1em;"></span>
+
+		<a>条件：</a>
+		<select name = "selectName2">
+			<option value="99" selected>選択してください</option>
+		</select>
+		<span style="margin-right: 1em;">
+	<input type="submit" style="height:32px; vertical-align: middle;" value="表示" /></p>
+	</form>
+</div>
+
 </div>
 
 
 
-<div id="syoruiitiran" style="clear:right;clear:left;">
+<div id="syoruiitiran" style="clear:right;clear:left; margin-top:15em;">
 
 <ul class="ul-list-02" >
 	<?php
@@ -245,17 +280,17 @@ if(isset($_POST['selectName1'])){
 			if($count%3==0){
 				echo"<br clear='left'>";
 			}
-
+//			text-align:center;
 	//書類情報
 echo <<<EOT
-	<div style="float:left; margin-left:6em; text-align:center;">
+	<div style="float:left; margin-left:3em;">
 								<form action="Documents_detail.php" method="post">
  									<input type="image" src="$img_path" alt="画像" width="140px" height="120px"/>
 									<input type="hidden" name="eturan_tm_id" value="$tm_id" />
 								</form>
 EOT;
-								echo "製作物ナンバー:",$row['tm_id'],"<br/>製作日:",$row['t_date'],"<br />品名：",$row['hin_janru'];
-								echo "</div>";
+								echo "製作物ナンバー：",$row['tm_seisakubutu'],"<br/>製作日：",$row['t_date'],"<br />品名：",$row['hin_janru'];
+								echo "<br/><br/></div>";
 								$count++;
 		}
 				?>
@@ -269,6 +304,4 @@ EOT;
     	?>
 
 </body>
-
-
 </html>

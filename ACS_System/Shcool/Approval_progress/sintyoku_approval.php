@@ -7,9 +7,9 @@
 //session_start();
 //require_once'../DB.php';
 
-function sintyoku_approval($flg_name,$what){
+function sintyoku_approval($flg_name,$what,$tm_id){
 
-	$tm_id = $_SESSION['tm_id'];
+//	$tm_id = $_SESSION['approval_tm_id'];
 //	echo $tm_id;
 //	echo $flg_name;
 
