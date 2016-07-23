@@ -26,7 +26,8 @@
 		//DB接続を行うPHPファイルを読み込み。同一フォルダにDB.phpを保存しておく
 		require_once "../DB.php";
 		//セッションデータ取得
-		$user_id = $_SESSION['user_id'];	//ユーザ表.ユーザid
+//		$user_id = $_SESSION['user_id'];	//ユーザ表.ユーザid
+		$user_id = 2;
  		$user_name = $_SESSION['user_name'];//ログイン者名
 
 	?>
@@ -57,22 +58,22 @@
 				$result_count->execute();
 				$result_set = $result_count->fetchAll();
 				$count = count($result_set);
-
 				return $count;
 			}
 
 			function Date(){
 				//MySQL 問い合わせ(更新降順の注文書)
 				$sql_tyuumon = "SELECT TY.t_date, TY.t_naiyou, HI.hin_janru
-								FROM ((tyuumon TY inner join hinmei HI on TY.hin_id = HI.hin_id)
+								FROM ((tyuumon TY inner join hinmei HI on TY.t_hin_name = HI.hin_id)
 									inner join tyuumon_master TM on TY.tm_id = TM.tm_id)
 									inner join user USER on TM.user_id = USER.user_id
 								WHERE ". $this->True_Flg. " = true and ". $this->False_Flg. " = false
 									and TM.tm_sakujo_flg = false and TM.user_id =".$this->User_Id
-								." ORDER BY TY.t_date DESC LIMIT 10";
+									." ORDER BY TY.t_date DESC LIMIT 10";
 				if (!($result_tyuumon = $this->pdo->prepare($sql_tyuumon))) {
 					echo "クエリ失敗(tyuumon)";
 					die;
+
 				}
 
 				$result_tyuumon->execute();
