@@ -26,8 +26,8 @@
 		//DB接続を行うPHPファイルを読み込み。同一フォルダにDB.phpを保存しておく
 		require_once "../DB.php";
 		//セッションデータ取得
-//		$user_id = $_SESSION['user_id'];	//ユーザ表.ユーザid
-		$user_id = 2;
+		$user_id = $_SESSION['user_id'];	//ユーザ表.ユーザid
+//		$user_id = 2;
  		$user_name = $_SESSION['user_name'];//ログイン者名
 
 	?>
