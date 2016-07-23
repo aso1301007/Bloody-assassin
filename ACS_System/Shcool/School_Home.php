@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../css.css"></link>
 
-<title>学校ホームページ</title>
+<title>学校トップページ</title>
 <script type="text/javascript" src="../js/jquery-3.0.0.min.js"></script>
 <script src="../js/jquery.focused.min.js"></script>
 <script type="text/javascript">
@@ -81,37 +81,43 @@
 			}
 		}
 	?>
-	<div id="header">
-		<div id="title">
-			<input type="button" name="top" value="TOP" onclick="location.href='School_Home.php'" />
-		</div>
-		<div id="login_name"><?php echo $user_name;?>さん</div>
-	</div>
-	<div id="select_menu" style="clear:left;">
-		<ul id="menu">
-			<li>ログイン</li>
-			<li>書類閲覧
-				<ul style="list-style:none;">
-					<li><a href="#">発注書一覧</a></li>
-					<li><a href="#">制作物結果報告書</a></li>
-				</ul>
-			</li>
-			<li>検索機能
-				<ul style="list-style:none;">
-					<li><a href="#">制作物ナンバー検索</a></li>
-				</ul>
-			</li>
-			<li>DB管理
-				<ul style="list-style:none;">
-					<li><a href="#">注文者マスタ追加</a></li>
-					<li><a href="#">制作会社マスタ追加</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
+<div id="header">
+			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='School_Home.php'">
+			<div id="login_name"><?php echo $user_name;?> さん</div>
+</div>
 
-	<div id="main">
-		<table border="1" width="500" align="center">
+<div id="select_menu" style="clear:left;">
+
+	<ul id="menu">
+		<li>ログアウト
+			<ul style="list-style:none;">
+				<li><a href="../Login/Logout.php">ログアウト</a></li>
+			</ul>
+		</li>
+		<li>注文機能
+			<ul style="list-style:none;">
+				<li><a href="#">新規注文書</a></li>
+				<li><a href="#">注文書選択</a></li>
+			</ul>
+		</li>
+		<li>書類
+			<ul style="list-style:none;">
+				<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
+				<li><a href="#">製作物画像登録</a></li>
+			</ul>
+		</li>
+		<li>進捗管理
+			<ul style="list-style:none;">
+				<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
+			</ul>
+		</li>
+	</ul>
+
+</div>
+<div id="main">
+<div id="border"></div>
+<div id="title">学校トップページ</div>
+	<table border="1" width="500" align="center">
 			<tr><th><?php echo $user_name;?>さんの進捗状況</th></tr>
 		<?php
 			//START_折りたたみページ1(発注済み)

@@ -59,7 +59,7 @@
 			function Date(){
 				//MySQL 問い合わせ(更新降順の注文書)
 				$sql_tyuumon = "SELECT TY.t_date, TY.t_naiyou, HI.hin_janru
-								FROM ((tyuumon TY inner join hinmei HI on TY.t_hin_name = HI.hin_id)
+								FROM ((tyuumon TY inner join hinmei HI on TY.hin_id = HI.hin_id)
 									inner join tyuumon_master TM on TY.tm_id = TM.tm_id)
 									inner join user USER on TM.user_id = USER.user_id
 								WHERE ". $this->True_Flg. " = true and ". $this->False_Flg. " = false
@@ -82,11 +82,12 @@
 		$user_id = $_SESSION['user_id'];	//ユーザ表.ユーザid
 	 	$user_name = $_SESSION['user_name'];//ログイン者名
 	?>
-	<div id="header">
-		<input type="button" name="top" value="TOP" onclick="location.href='ACS_Home.php'"/>
-		<div id="login_name"><?php echo $user_name;?>さん</div>
-	</div>
-	<div id="select_menu" style="clear:left;">
+<div id="header">
+			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='ACS_Home.php'">
+			<div id="login_name"><?php echo $user_name;?> さん</div>
+</div>
+
+<div id="select_menu" style="clear:left;">
 		<ul id="menu">
 			<li>ログアウト
 				<ul style="list-style:none;">
@@ -115,15 +116,9 @@
 
 	<div id="main">
 	<div id="border"></div>
-	<div id="title">トップページ</div>
-		<table border="1" width="500" align="center">
-			<tr><th>進捗状況</th></tr>
-		<tr><td>
-			<form action="" method="post">
-				<input type="submit" name="TOP" value="進捗管理"></input>
-			</form>
-		</td></tr>
-
+	<div id="title">ACSトップページ</div>
+	<table border="1" width="500" align="center">
+			<tr><th><?php echo $user_name;?>さんの進捗状況</th></tr>
 		<?php
 			//START_折りたたみページ1(発注済み)
 				//クラスオブジェクト作成
@@ -224,7 +219,7 @@
 			<div id="open01" style="display:none;clear:both;">
 				<?php
 					while($sql01 = $tyuumon01->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql01['t_date'])), "　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
+						echo $sql01['t_date'], "　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -243,7 +238,7 @@
 			<div id="open02" style="display:none;clear:both;">
 				<?php
 					while($sql02 = $tyuumon02->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql02['t_date'])), "　・　", $sql02['hin_janru'], "　・　", $sql02['t_naiyou'], "<br />";
+						echo $sql02['t_date'], "　・　", $sql02['hin_janru'], "　・　", $sql02['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -262,7 +257,7 @@
 			<div id="open03" style="display:none;clear:both;">
 				<?php
 					while($sql03 = $tyuumon03->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql03['t_date'])), "　・　", $sql03['hin_janru'], "　・　", $sql03['t_naiyou'], "<br />";
+						echo $sql03['t_date'], "　・　", $sql03['hin_janru'], "　・　", $sql03['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -281,7 +276,7 @@
 			<div id="open04" style="display:none;clear:both;">
 				<?php
 					while($sql04 = $tyuumon04->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql04['t_date'])), "　・　", $sql04['hin_janru'], "　・　", $sql04['t_naiyou'], "<br />";
+						echo $sql04['t_date'], "　・　", $sql04['hin_janru'], "　・　", $sql04['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -300,7 +295,7 @@
 			<div id="open05" style="display:none;clear:both;">
 				<?php
 					while($sql05 = $tyuumon05->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql05['t_date'])), "　・　", $sql05['hin_janru'], "　・　", $sql05['t_naiyou'], "<br />";
+						echo $sql05['t_date'], "　・　", $sql05['hin_janru'], "　・　", $sql05['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -320,7 +315,7 @@
 			<div id="open06" style="display:none;clear:both;">
 				<?php
 					while($sql06 = $tyuumon06->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql06['t_date'])), "　・　", $sql06['hin_janru'], "　・　", $sql06['t_naiyou'], "<br />";
+						echo $sql06['t_date'], "　・　", $sql06['hin_janru'], "　・　", $sql06['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -339,7 +334,7 @@
 			<div id="open07" style="display:none;clear:both;">
 				<?php
 					while($sql07 = $tyuumon07->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql07['t_date'])), "　・　", $sql07['hin_janru'], "　・　", $sql07['t_naiyou'], "<br />";
+						echo $sql07['t_date'], "　・　", $sql07['hin_janru'], "　・　", $sql07['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
