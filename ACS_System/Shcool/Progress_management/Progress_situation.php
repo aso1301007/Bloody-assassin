@@ -50,7 +50,6 @@ $tm_id=$_SESSION['sintyoku_tm_id'];
 
 //------ユーザ名取得---------
 $user_name=$_SESSION['user_name'];
-//$user_name="高塚";
 if($user_name==null){
 	header('Location: ../../Login/login.html');
 }
@@ -61,64 +60,62 @@ if($user_name==null){
 $sql1 = "SELECT * FROM tyuumon,hinmei where tm_id = ? and tyuumon.t_hin_name= hinmei.hin_id";
 $data1 = $pdo->prepare($sql1);
 $data1 ->execute(array($tm_id));//要らないかも？
-//print $sql1;
 
 
-//SELECTでとってきた値を格納
 while($row1 = $data1 -> fetch(PDO::FETCH_ASSOC)){
 		$t_date = $row1['t_date'];
 		$t_naiyou = $row1['t_naiyou'];
 		$hin_janru = $row1['hin_janru'];
 }
-
+//------------------------------------------------------
 
 
 //-----------------承認進捗を取得----------------
 //その注文書承認の最新状態を示すidを取得
-$approval = "SELECT S.sm_id,MAX(S.s_id) AS s_id FROM shounin_master SM, shounin S
+$approval = "SELECT S.sm_id,S.s_id AS s_id FROM shounin_master SM, shounin S
 			WHERE SM.sm_id = S.sm_id
-			AND SM.tm_id =?
-			GROUP BY S.sm_id";
+			AND SM.tm_id =?";
 $app = $pdo->prepare($approval);
 $app ->execute(array($tm_id));//要らないかも？
-
-while($row2 = $app -> fetch(PDO::FETCH_ASSOC)){
-	$s_id=$row2['s_id'];
-	$sm_id=$row2['sm_id'];
+while ($app1 = $app -> fetch(PDO::FETCH_ASSOC)){
+//	$s_id=$app1['s_id'];
+	$sm_id=$app1['sm_id'];
 }
+
 
 
 //承認情報の取得
-$approval_info="SELECT * FROM shounin S,shounin_master SM,user U WHERE S.s_id=:s_id
-				AND SM.sm_id=:sm_id AND S.sm_id=SM.sm_id AND U.user_id=SM.sm_sinseisha_id";
+$approval_info="SELECT * FROM shounin S,shounin_master SM,user U
+				WHERE S.sm_id=SM.sm_id AND S.sm_id=:sm_id
+				AND U.user_id=SM.sm_sinseisha_id";
 $app_info = $pdo->prepare($approval_info);
-$app_info->bindParam(':s_id', $s_id, PDO::PARAM_STR);
 $app_info->bindParam(':sm_id', $sm_id, PDO::PARAM_STR);
 
 $app_info ->execute();
-while($row3 = $app_info -> fetch(PDO::FETCH_ASSOC)){
-	$s_moto=$row3['s_moto'];
-	$s_saki=$row3['s_saki'];
-	$shounin_flg=$row3['s_shounin_flg'];
-	$sasimodosi=$row3['s_sasimodosi_flg'];
-	$sinseisha_name=$row3['user_name'];  //申請者の名前
-	$sakujo_flg=$row3['sm_sakujo_flg'];
-}
 
 //名前取得
-$name="SELECT moto.user_name AS 'moto_name', saki.user_name AS 'saki_name'
-		FROM shounin, user moto, user saki
-		WHERE shounin.s_saki = saki.user_id
-			AND shounin.s_moto = moto.user_id
-			AND shounin.s_id =:s_id";
+$name="SELECT user_name AS 'saki_name'
+		FROM shounin S, user U
+		WHERE S.s_saki = U.user_id";
+//			AND S.s_id =:s_id";
 $name_info = $pdo->prepare($name);
 $name_info->bindParam(':s_id', $s_id, PDO::PARAM_STR);
-
 $name_info ->execute();
-while($row4 = $name_info -> fetch(PDO::FETCH_ASSOC)){
-	$moto_name=$row4['moto_name'];
-	$saki_name=$row4['saki_name'];
-}
+
+
+
+
+
+
+
+// $name="SELECT moto.user_name AS 'moto_name', saki.user_name AS 'saki_name'
+// 		FROM shounin S, user moto, user saki
+// 		WHERE S.s_saki = saki.user_id
+// 			AND S.s_moto = moto.user_id";
+// //			AND S.s_id =:s_id";
+// $name_info = $pdo->prepare($name);
+
+// $name_info ->execute();
 //-------------------------------------------------------------------------
 
 
@@ -185,20 +182,49 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 <?php
 
 //注文書名を出力
-echo date('Y年m月d日', strtotime($t_date))."  ・  " .$t_naiyou."  ・  " .$hin_janru;
+echo Date('Y年m月d日', strtotime($t_date))."  ・  " .$t_naiyou."  ・  " .$hin_janru;
 
 echo "</div><div id='shounin'>";
+echo "<div style='text-align:center;'>承認の進捗状況</div><br/>";
+while($app_info1 = $app_info -> fetch(PDO::FETCH_ASSOC)){
+//	$moto_id=$app_info1['s_moto'];
+	$saki_id=$app_info1['s_saki'];
+	$shounin_flg=$app_info1['s_shounin_flg'];
+	$sasimodosi=$app_info1['s_sasimodosi_flg'];
+	$sinseisha_name=$app_info1['user_name'];  //申請者の名前
+	$sakujo_flg=$app_info1['sm_sakujo_flg'];
+	$hizuke=$app_info1['s_date'];
+//	$s_id=$app_info1['s_id'];
 
-if($shounin_flg==0){
-	if($sasimodosi==0){
-		echo "承認状況：",$saki_name,"さんの承認待ちです。";
-	}else{
-		echo "承認状況：",$saki_name,"さんから差し戻しが発生しました。";
+	//名前取得
+	$name="SELECT user_name AS 'saki_name'
+		FROM shounin S, user U
+		WHERE S.s_saki = U.user_id
+			AND U.user_id =:saki_id";
+	$name_info = $pdo->prepare($name);
+	$name_info->bindParam(':saki_id', $saki_id, PDO::PARAM_STR);
+	$name_info ->execute();
+
+//名前取得
+	while($name_info1 = $name_info -> fetch(PDO::FETCH_ASSOC)){
+		$saki_name=$name_info1['saki_name'];
+	}
+
+//条件によって表示切替
+echo "<div style='margin-left:1em;'>";
+	if($shounin_flg==0){
+		if($sasimodosi==0){ echo $hizuke,"　　",$saki_name,"さんの承認待ちです。";
+	}else{ echo $hizuke,"　　",$saki_name,"さんから差し戻しされました。";
 	}
 }else{
-	echo "承認状況：",$saki_name,"さんが承認しました。";
+	echo $hizuke,"　　",$saki_name,"さんが承認しました。";
 }
 
+if($sakujo_flg==1){
+	echo "削除されました";
+}
+echo "<br/></div>";
+}
 echo "</div><div id='img1'>";
 
 //進捗を判定して画像貼り付け
