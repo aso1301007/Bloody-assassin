@@ -59,7 +59,7 @@
 			function Date(){
 				//MySQL 問い合わせ(更新降順の注文書)
 				$sql_tyuumon = "SELECT TY.t_date, TY.t_naiyou, HI.hin_janru
-								FROM ((tyuumon TY inner join hinmei HI on TY.hin_id = HI.hin_id)
+								FROM ((tyuumon TY inner join hinmei HI on TY.t_hin_name = HI.hin_id)
 									inner join tyuumon_master TM on TY.tm_id = TM.tm_id)
 									inner join user USER on TM.user_id = USER.user_id
 								WHERE ". $this->True_Flg. " = true and ". $this->False_Flg. " = false
