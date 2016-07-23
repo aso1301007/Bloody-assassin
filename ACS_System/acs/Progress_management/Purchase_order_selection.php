@@ -288,16 +288,13 @@ if(isset($_POST['selectName1'])){
 	//書類情報
 echo <<<EOT
 	<div style="float:left; margin-left:6em; text-align:center;">
-								<form action="Progress_situation.php" method="post">
- 									<input type="image" src="$img_path" alt="画像" width="140px" height="120px"/>
-									<input type="hidden" name="sintyoku_tm_id" value="$tm_id" />
-								</form>
+			<input type="image" src="$img_path" alt="画像" width="140px" height="120px" onclick="location.href='Progress_situation.php?select_id=$tm_id'"/></br>
 EOT;
 								echo "製作物ナンバー:",$row['tm_id'],"<br/>製作日:",$row['t_date'],"<br />品名：",$row['hin_janru'];
 								echo "</div>";
 								$count++;
 		}
-				?>
+?>
 
 </div>
 

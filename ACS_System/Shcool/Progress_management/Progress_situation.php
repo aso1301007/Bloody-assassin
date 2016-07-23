@@ -7,7 +7,7 @@
 
 
 
-<title>進捗状況</title>
+<title>学校_進捗状況</title>
 
 
 <script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
@@ -25,10 +25,17 @@ jQuery(document).ready(function($){
 	});
 
 });
-
-
 </script>
-
+<script>
+	function check(){
+		if(window.confirm('納品の進捗を更新してよろしいですか？')){ // 確認ダイアログを表示
+			return true; // 「OK」時は送信を実行
+		}else{ // 「キャンセル」時の処理
+			window.alert('キャンセルされました'); // 警告ダイアログを表示
+		return false; // 送信を中止
+		}
+	}
+</script>
 
 </head>
 
@@ -43,7 +50,7 @@ require '../../DB.php';
 
 /*//-----前ページで指定された注文書のID受け取り-----
 */
-$_SESSION['sintyoku_tm_id']=$_POST['sintyoku_tm_id'];
+$_SESSION['sintyoku_tm_id']=$_GET['select_id'];
 $tm_id=$_SESSION['sintyoku_tm_id'];
 //---------------------------------------
 
@@ -297,13 +304,13 @@ echo <<<EOT
 <div id="nouhin_button">
 	<table>
 		<tr><td>
-			<form action="sintyoku_update.php" method="post">
-				<input type="submit" value="取消" name="delete"/>
+			<form action="sintyoku_update.php" method="get" onSubmit="return check()">
+				<input type="submit" value="取消" name="delete">
 				<input type="hidden" name="flg_name" value="tm_nouhin_flg">
 				<input type="hidden" name="what" value="0">
-		</form>
+			</form>
 			</td><td>
-			<form action="sintyoku_update.php" method="post">
+			<form action="sintyoku_update.php" method="get" onSubmit="return check()">
 				<input type="submit" value="OK" name="ok"/>
 				<input type="hidden" name="flg_name" value="tm_nouhin_flg">
 				<input type="hidden" name="what" value="1">
@@ -312,6 +319,7 @@ echo <<<EOT
 	</table>
 </div>
 EOT;
+
 ?>
 </body>
 </html>
