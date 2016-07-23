@@ -26,7 +26,7 @@
 	$user_name=$_SESSION['user_name'];
 ?>
 	<div id="header">
-			<input type="button" name="top" value="TOP" onclick="location.href='../ACS_Home.php'">
+			<input type="button" name="top" value="TOP" onclick="location.href='School_Home.php'">
 
 		<div id="login_name"><?php echo $user_name;?>さん</div>
 	</div>
@@ -34,7 +34,7 @@
 		<ul id="menu">
 			<li>ログアウト
 				<ul style="list-style:none;">
-					<li><a href="../../Login/Logout.php">ログアウト</a></li>
+					<li><a href="../Login/Logout.php">ログアウト</a></li>
 				</ul>
 			</li>
 			<li>書類閲覧
@@ -45,7 +45,7 @@
 			</li>
 			<li>進捗管理
 				<ul style="list-style:none;">
-					<li><a href="Purchase_order_selection.php">進捗管理</a></li>
+					<li><a href="Progress_management/Purchase_order_selection.php">進捗管理</a></li>
 				</ul>
 			</li>
 			<li>DB管理
