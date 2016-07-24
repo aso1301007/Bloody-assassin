@@ -38,7 +38,7 @@ jQuery(document).ready(function($){
 <body>
 
 <div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../Select_Report/School_Home.psp'">
+			<input type = "button" name = "top" value = "TOP" onclick = "location.href='#'">
 			<div id="login_name">担当者さん</div>
 </div>
 
@@ -73,13 +73,12 @@ jQuery(document).ready(function($){
 <div id="main">
 <div id = "border"></div>
 <p></p>
+<form action="Save_success.php" method="POST" name = "form1">
 <h1><center>以下の内容で保存してよろしいですか？</center></h1>
 <table align = center>
 <tr>
 <td>
-<form action="Save_success.php" method="POST" name = "form1">
-<input type="submit" value="保存" class ="nine">
-</form>
+<input type="submit" value="保存" class ="nine" >
 </td>
 <td>
 <form action="newfile1.php" method="POST" name = "form2">
@@ -132,10 +131,10 @@ $estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" disabled = \"
 $order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" disabled = \"disabled\">発注</td>";
 switch ($t_naiyou){
 case 'mi':
-	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked disabled = \"disabled\">見積もり</td>";
+	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked>見積もり</td>";
 	break;
 case 'ha':
-	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked disabled = \"disabled\">発注</td>";
+	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked>発注</td>";
 	break;
 }
 
@@ -197,10 +196,10 @@ $kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" disabled = \"disabl
 $ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" disabled = \"disabled\">両面</td>";
 switch ($t_men){
 	case '1':
-		$kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" checked disabled = \"disabled\">片面</td>";
+		$kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" checked>片面</td>";
 		break;
 	case '2':
-		$ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" checked disabled = \"disabled\">両面</td>";
+		$ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" checked>両面</td>";
 		break;
 }
 
@@ -208,10 +207,10 @@ $yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" disabled 
 $no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" disabled = \"disabled\">なし</td>";
 switch ($t_sakunen_jisseki){
 	case '1':
-		$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" checked disabled = \"disabled\">あり</td>";
+		$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" checked>あり</td>";
 		break;
 	case '2':
-		$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" checked disabled = \"disabled\">なし</td>";
+		$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" checked>なし</td>";
 		break;
 }
 
@@ -219,10 +218,10 @@ $komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" disabled = \"di
 $nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" disabled = \"disabled\">(税抜き)</td>";
 switch ($t_zei_hantei){
 	case '1':
-		$komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" checked disabled = \"disabled\">(税込み)</td>";
+		$komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" checked>(税込み)</td>";
 		break;
 	case '2':
-		$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" checked disabled = \"disabled\">(税抜き)</td>";
+		$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" checked>(税抜き)</td>";
 		break;
 }
 
@@ -230,15 +229,14 @@ $l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" disabled = \
 $l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" disabled = \"disabled\">両面</td>";
 switch ($t_sakunen_men){
 	case '1':
-		$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" checked disabled = \"disabled\">片面</td>";
+		$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" checked>片面</td>";
 		break;
 	case '2':
-		$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" checked disabled = \"disabled\">両面</td>";
+		$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" checked>両面</td>";
 		break;
 }
 ?>
 
-<form action="newfile3.php" method="POST">
 <table border=0 width=713 style='border-collapse:
  collapse;table-layout:fixed;width:529pt' align = center>
  <col width=31 span=23 style='width:23pt'>
