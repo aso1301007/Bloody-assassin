@@ -58,6 +58,7 @@ function functionName()
 	if (select1.options[select1.selectedIndex].value == "99")
 	{
 	select2.options[0] = new Option("項目を選択してください","");
+	<?php if(!isset($_POST['selectName2'])){$_POST['selectName2']=null;?>select2.options[0].selected = true;<?php }?>
 	}
 
 	if (select1.options[select1.selectedIndex].value == "t_naiyou")
