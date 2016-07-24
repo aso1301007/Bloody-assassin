@@ -63,7 +63,9 @@ function functionName()
 	if (select1.options[select1.selectedIndex].value == "t_naiyou")
 	{
 	select2.options[0] = new Option("見積もり","mi");
+	<?php if($_POST['selectName2']=="mi"){?>select2.options[0].selected = true;<?php }?>
 	select2.options[1] = new Option("発注","ha");
+	<?php if($_POST['selectName2']=="ha"){?>select2.options[1].selected = true;<?php }?>
 	}
 
 
@@ -72,19 +74,22 @@ function functionName()
 	<?php while ($pull_h = $pull_hin_janru -> fetch(PDO::FETCH_ASSOC))  { ?>
 
 	select2.options[<?php echo($count_h); ?>] = new Option("<?php echo($pull_h['hin_janru']); ?>","<?php echo($pull_h['hin_id']);?>");
+	<?php if($_POST['selectName2']==$pull_h['hin_id']){?>select2.options[<?php echo($count_h); ?>].selected = true;<?php }?>
 
 	<?php $count_h++; } ?>
+
 	}
 	else if (select1.options[select1.selectedIndex].value == "school_name")
 	{
 	<?php while ($pull_s = $pull_school_name -> fetch(PDO::FETCH_ASSOC))  { ?>
 
 	select2.options[<?php echo($count_s); ?>] = new Option("<?php echo($pull_s['school_name']); ?>","<?php echo($pull_s['school_id']);?>");
+	<?php if($_POST['selectName2']==$pull_s['school_id']){?>select2.options[<?php echo($count_s); ?>].selected = true;<?php }?>
 
 	<?php $count_s++; }?>
-	}
-	}
 
+	}
+	}
 	</script>
 
 	</head>
@@ -145,6 +150,7 @@ $result->execute();
 
 		//見積もりor発注
 		if($koumoku=='t_naiyou'){
+			$select_Name1="t_naiyou";
 			$sort_result= $pdo->prepare("select * from tyuumon,gazou,hinmei,tyuumon_master
 										where tyuumon.t_naiyou=:zyouken and tyuumon.tm_id=gazou.tm_id and hinmei.hin_id=tyuumon.t_hin_name
 										and tyuumon_master.tm_id=tyuumon.tm_id
@@ -163,6 +169,7 @@ $result->execute();
 
 		//品名ジャンル
 		if($koumoku=='hin_janru'){
+			$select_Name1="hin_janru";
 			$sort_result= $pdo->prepare("select * from tyuumon,hinmei,gazou,tyuumon_master
 										where tyuumon.t_hin_name=hinmei.hin_id and tyuumon.tm_id=gazou.tm_id and tyuumon.tm_id=tyuumon_master.tm_id and hinmei.hin_id=:zyouken
 										order by '".":zyouken"."'");
@@ -180,6 +187,7 @@ $result->execute();
 
 		//学校名
 		if($koumoku=='school_name'){
+			$select_Name1="school_name";
 			$sort_result= $pdo->prepare("select * from tyuumon,tyuumon_master,tyuumonsha,school,hinmei,gazou
 										where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon_master.user_id=tyuumonsha.user_id and
 										tyuumonsha.school_id=school.school_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and
@@ -319,10 +327,10 @@ if (!$date_pull) {
 		<b>項目と条件を選択してください。</b>
 		<p>項目：
 		<select name = "selectName1" onchange="functionName()">
-			<option value="t_naiyou" label="注文内容" 		<?php if(isset($_POST['select_Name1'])){if($_POST['select_Name1'] == "t_naiyou") { print 'selected';}} ?>>注文内容</option>
-			<option value="hin_janru" label="品名ジャンル" 	<?php if(isset($_POST['select_Name1'])){if($_POST['select_Name1'] == "hin_janru") { print 'selected';}} ?>>品名ジャンル</option>
-			<option value="school_name" label="学校名" 		<?php if(isset($_POST['select_Name1'])){if($_POST['select_Name1'] == "school_name") { print 'selected';}} ?>>学校名</option>
- 			<option value="99" <?php if(!isset($_POST['select_Name1'])) { print 'selected';} ?>>選択してください</option>
+			<option value="t_naiyou" label="注文内容" 	<?php if(isset($select_Name1)){if($select_Name1 == "t_naiyou") { print 'selected';}} ?>>注文内容</option>
+			<option value="hin_janru" label="品名ジャンル" 	<?php if(isset($select_Name1)){if($select_Name1 == "hin_janru") { print 'selected';}} ?>>品名ジャンル</option>
+			<option value="school_name" label="学校名" 	<?php if(isset($select_Name1)){if($select_Name1 == "school_name") { print 'selected';}} ?>>学校名</option>
+ 			<option value="99" <?php if(!isset($select_Name1)) { print 'selected';} ?>>選択してください</option>
 		</select><span style="margin-right: 1em;"></span>
 
 		<a>条件：</a>
