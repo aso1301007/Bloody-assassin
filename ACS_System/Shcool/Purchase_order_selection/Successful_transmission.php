@@ -1,4 +1,5 @@
-<?php session_start()?>
+
+<?php session_start();?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
@@ -26,7 +27,7 @@
 ?>
 <div id="header">
 	<input type="button" name="top" value="TOP" onclick="location.href='School_Home.php'"/>
-	<div id="login_name"><?php $_SESSION['user_name'];?>さん</div>
+	<div id="login_name"><?php// echo $user_name;?>さん</div>
 </div>
 <div id="select_menu" style="clear:left;">
 	<ul id="menu">
@@ -57,40 +58,26 @@
 <div id="main">
 	<div id="border"></div>
 	<div id="title">送信結果：成功</div>
-<?php
-	require '../../DB.php';			//DB.php呼び出し
-?>
-<?php
-$id = $_REQUEST['id'];//注文ID
-$sql = "SELECT t_tantousha
-			FROM tyuumon
-			WHERE tm_id = ". $id;
-$result_sql = $pdo->prepare($sql);
-$result_sql->execute();
-$SQL = $result_sql->fetch(PDO::FETCH_ASSOC);
 
+<?php
 // 1.言語、文字コードを指定
 mb_language("Ja");
 mb_internal_encoding("UTF-8");
 
 // 送信先、件名、本文を変数に格納
-$mailto = "1301007@st.asojuku.ac.jp";
-$subject = "[ACS_System]注文書が送信されました。";
-$content = "http://".gethostname() ."/acs_system/Shcool/Purchase_order_selection/Confirmation_success.php?id=". $id;
+$mailto = "hellsing.10@ezweb.ne.jp";
+$subject = "PHPでのメール送信について";
+$content = "こんにちは。";
 
 // 2.差出人を日本語表示
-$mailfrom="From:" .mb_encode_mimeheader($SQL['t_tantousha']);
+$mailfrom="From:" .mb_encode_mimeheader("富良斗 太郎") ."<hellsing.10@ezweb.ne.jp>";
 
 // 3.上記(送信先、件名、本文、差出人)を日本語でメール送信実行
-if(mb_send_mail($mailto, $subject, $content, $mailfrom)){
-	echo "<div align=\"center\"><font size=\"5\">送信しました。</font></div>";
-}
-else{
-	echo "<div align=\"center\"><font size=\"5\">送信に失敗しました。<br />初めからやり直してください。</font><br />";
-	echo "<input type=\"button\"  value=\"戻る\" onclick=\"location.href='Selection.php'\" /></div>";
-}
+mb_send_mail($mailto, $subject, $content, $mailfrom);
+echo '送信完了!';
 ?>
- <?php
+
+
 // echo "http://localhost". $_SERVER["REQUEST_URI"]. "<br />";
 // $id = $_REQUEST['id'];
 // $addres = "http://localhost/acs_system/Shcool/Purchase_order_selection/Confirmation_success.php?id=". $id;
@@ -102,6 +89,15 @@ else{
 // 	echo "失敗";
 // }
 ?>
+
+<?php
+// if (mb_send_mail('1301007@st.asojuku.ac.jp', 'aaa', 'test')) {
+// echo ‘送信成功’;
+// } else {
+// echo ‘送信失敗’;
+// }
+// ?>
+
 </div>
 </body>
 </html>

@@ -7,7 +7,7 @@
 
 
 
-<title>進捗状況</title>
+<title>学校_進捗状況</title>
 
 
 <script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
@@ -25,10 +25,17 @@ jQuery(document).ready(function($){
 	});
 
 });
-
-
 </script>
-
+<script>
+	function check(){
+		if(window.confirm('納品の進捗を更新してよろしいですか？')){ // 確認ダイアログを表示
+			return true; // 「OK」時は送信を実行
+		}else{ // 「キャンセル」時の処理
+			window.alert('キャンセルされました'); // 警告ダイアログを表示
+		return false; // 送信を中止
+		}
+	}
+</script>
 
 </head>
 
@@ -43,42 +50,85 @@ require '../../DB.php';
 
 /*//-----前ページで指定された注文書のID受け取り-----
 */
-$_SESSION['sintyoku_tm_id']=$_POST['sintyoku_tm_id'];
+$_SESSION['sintyoku_tm_id']=$_GET['select_id'];
 $tm_id=$_SESSION['sintyoku_tm_id'];
 //---------------------------------------
 
 
 //------ユーザ名取得---------
 $user_name=$_SESSION['user_name'];
-//$user_name="高塚";
-
-
 if($user_name==null){
-	header('Location: ../../Login/login.hml');
+	header('Location: ../../Login/login.html');
 }
 //-----------------------------
 
 
 //-----------日付と注文書名の取得---------------------
-$sql1 = "SELECT * FROM tyuumon,hinmei where tm_id = ? and tyuumon.hin_id = hinmei.hin_id";
+$sql1 = "SELECT * FROM tyuumon,hinmei where tm_id = ? and tyuumon.t_hin_name= hinmei.hin_id";
 $data1 = $pdo->prepare($sql1);
 $data1 ->execute(array($tm_id));//要らないかも？
-//print $sql1;
 
 
-//SELECTでとってきた値を格納
 while($row1 = $data1 -> fetch(PDO::FETCH_ASSOC)){
-//	print "a";
-//	print_r($row1);
 		$t_date = $row1['t_date'];
 		$t_naiyou = $row1['t_naiyou'];
 		$hin_janru = $row1['hin_janru'];
-//		$hin_id=$row1['hin_id'];
+}
+//------------------------------------------------------
+
+
+//-----------------承認進捗を取得----------------
+//その注文書承認の最新状態を示すidを取得
+$approval = "SELECT S.sm_id,S.s_id AS s_id FROM shounin_master SM, shounin S
+			WHERE SM.sm_id = S.sm_id
+			AND SM.tm_id =?";
+$app = $pdo->prepare($approval);
+$app ->execute(array($tm_id));//要らないかも？
+while ($app1 = $app -> fetch(PDO::FETCH_ASSOC)){
+//	$s_id=$app1['s_id'];
+	$sm_id=$app1['sm_id'];
 }
 
 
 
- //進捗を注文書マスター表から取得
+//承認情報の取得
+$approval_info="SELECT * FROM shounin S,shounin_master SM,user U
+				WHERE S.sm_id=SM.sm_id AND S.sm_id=:sm_id
+				AND U.user_id=SM.sm_sinseisha_id";
+$app_info = $pdo->prepare($approval_info);
+$app_info->bindParam(':sm_id', $sm_id, PDO::PARAM_STR);
+
+$app_info ->execute();
+
+//名前取得
+$name="SELECT user_name AS 'saki_name'
+		FROM shounin S, user U
+		WHERE S.s_saki = U.user_id";
+//			AND S.s_id =:s_id";
+$name_info = $pdo->prepare($name);
+$name_info->bindParam(':s_id', $s_id, PDO::PARAM_STR);
+$name_info ->execute();
+
+
+
+
+
+
+
+// $name="SELECT moto.user_name AS 'moto_name', saki.user_name AS 'saki_name'
+// 		FROM shounin S, user moto, user saki
+// 		WHERE S.s_saki = saki.user_id
+// 			AND S.s_moto = moto.user_id";
+// //			AND S.s_id =:s_id";
+// $name_info = $pdo->prepare($name);
+
+// $name_info ->execute();
+//-------------------------------------------------------------------------
+
+
+
+
+//--------進捗を注文書マスター表から取得-------------------
 $sql = "SELECT * FROM tyuumon_master where tm_id = ?";
 $data = $pdo->prepare($sql);
 $data ->execute(array($tm_id));//要らないかも？
@@ -92,16 +142,13 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 		$nouhin = $row['tm_nouhin_flg'];
 		$touroku = $row['tm_touroku_flg'];
 		$houkoku = $row['tm_houkokusho_flg'];
-}
-
-
-
+}//-------------------------------------------------------
 ?>
 
 
 <div id="header">
 			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='../School_Home.php'">
-			<div id="login_name"><?php $user_name?> さん</div>
+			<div id="login_name"><?php echo $user_name;?> さん</div>
 </div>
 
 <div id="select_menu" style="clear:left;">
@@ -120,13 +167,13 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 		</li>
 		<li>書類
 			<ul style="list-style:none;">
-				<li><a href="#">書類閲覧</a></li>
+				<li><a href="../Document_Browsing/Image_selection.php">書類閲覧</a></li>
 				<li><a href="#">製作物画像登録</a></li>
 			</ul>
 		</li>
 		<li>進捗管理
 			<ul style="list-style:none;">
-				<li><a href="#">進捗管理</a></li>
+				<li><a href="Purchase_order_selection.php">進捗管理</a></li>
 			</ul>
 		</li>
 	</ul>
@@ -142,14 +189,51 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 <?php
 
 //注文書名を出力
-echo $t_date."  ・  " .$t_naiyou."  ・  " .$hin_janru;
+echo Date('Y年m月d日', strtotime($t_date))."  ・  " .$t_naiyou."  ・  " .$hin_janru;
 
-echo <<<EOT
-</div>
+echo "</div><div id='shounin'>";
+echo "<div style='text-align:center;'>承認の進捗状況</div><br/>";
+while($app_info1 = $app_info -> fetch(PDO::FETCH_ASSOC)){
+//	$moto_id=$app_info1['s_moto'];
+	$saki_id=$app_info1['s_saki'];
+	$shounin_flg=$app_info1['s_shounin_flg'];
+	$sasimodosi=$app_info1['s_sasimodosi_flg'];
+	$sinseisha_name=$app_info1['user_name'];  //申請者の名前
+	$sakujo_flg=$app_info1['sm_sakujo_flg'];
+	$hizuke=$app_info1['s_date'];
+//	$s_id=$app_info1['s_id'];
 
+	//名前取得
+	$name="SELECT user_name AS 'saki_name'
+		FROM shounin S, user U
+		WHERE S.s_saki = U.user_id
+			AND U.user_id =:saki_id";
+	$name_info = $pdo->prepare($name);
+	$name_info->bindParam(':saki_id', $saki_id, PDO::PARAM_STR);
+	$name_info ->execute();
 
-<div id="img1">
-EOT;
+//名前取得
+	while($name_info1 = $name_info -> fetch(PDO::FETCH_ASSOC)){
+		$saki_name=$name_info1['saki_name'];
+	}
+
+//条件によって表示切替
+echo "<div style='margin-left:1em;'>";
+	if($shounin_flg==0){
+		if($sasimodosi==0){ echo $hizuke,"　　",$saki_name,"さんの承認待ちです。";
+	}else{ echo $hizuke,"　　",$saki_name,"さんから差し戻しされました。";
+	}
+}else{
+	echo $hizuke,"　　",$saki_name,"さんが承認しました。";
+}
+
+if($sakujo_flg==1){
+	echo "削除されました";
+}
+echo "<br/></div>";
+}
+echo "</div><div id='img1'>";
+
 //進捗を判定して画像貼り付け
 switch ($hattyu){
 	case 0: echo '<img src="img/hattyuu2.jpg"/>';
@@ -220,13 +304,13 @@ echo <<<EOT
 <div id="nouhin_button">
 	<table>
 		<tr><td>
-			<form action="sintyoku_update.php" method="post">
-				<input type="submit" value="取消" name="delete"/>
+			<form action="sintyoku_update.php" method="get" onSubmit="return check()">
+				<input type="submit" value="取消" name="delete">
 				<input type="hidden" name="flg_name" value="tm_nouhin_flg">
 				<input type="hidden" name="what" value="0">
-		</form>
+			</form>
 			</td><td>
-			<form action="sintyoku_update.php" method="post">
+			<form action="sintyoku_update.php" method="get" onSubmit="return check()">
 				<input type="submit" value="OK" name="ok"/>
 				<input type="hidden" name="flg_name" value="tm_nouhin_flg">
 				<input type="hidden" name="what" value="1">
@@ -235,6 +319,7 @@ echo <<<EOT
 	</table>
 </div>
 EOT;
+
 ?>
 </body>
 </html>

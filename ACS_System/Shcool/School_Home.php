@@ -1,11 +1,11 @@
-<?php session_start();?>
+<?php session_start()?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../css.css"></link>
 
-<title>学校ホームページ</title>
+<title>学校トップページ</title>
 <script type="text/javascript" src="../js/jquery-3.0.0.min.js"></script>
 <script src="../js/jquery.focused.min.js"></script>
 <script type="text/javascript">
@@ -24,13 +24,13 @@
 <body>
 	<?php
 		//DB接続を行うPHPファイルを読み込み。同一フォルダにDB.phpを保存しておく
-//		require "../DB.php";
+		require_once "../DB.php";
 		//セッションデータ取得
 		$user_id = $_SESSION['user_id'];	//ユーザ表.ユーザid
-	  	$user_name = $_SESSION['user_name'];//ログイン者名
-//		$user_name="高塚";
-//		$user_id="2";
-		?>
+//		$user_id = 2;
+ 		$user_name = $_SESSION['user_name'];//ログイン者名
+
+	?>
 	<?php
 		class page{
 			//プロパティを定義
@@ -41,7 +41,7 @@
 
 
 			//メソッドを定義
-			function _construct($pdo){
+			function __construct($pdo){
 				$this->pdo = $pdo;
 			}
 			function Count(){
@@ -58,22 +58,22 @@
 				$result_count->execute();
 				$result_set = $result_count->fetchAll();
 				$count = count($result_set);
-
 				return $count;
 			}
 
 			function Date(){
 				//MySQL 問い合わせ(更新降順の注文書)
 				$sql_tyuumon = "SELECT TY.t_date, TY.t_naiyou, HI.hin_janru
-								FROM ((tyuumon TY inner join hinmei HI on TY.hin_id = HI.hin_id)
+								FROM ((tyuumon TY inner join hinmei HI on TY.t_hin_name = HI.hin_id)
 									inner join tyuumon_master TM on TY.tm_id = TM.tm_id)
 									inner join user USER on TM.user_id = USER.user_id
 								WHERE ". $this->True_Flg. " = true and ". $this->False_Flg. " = false
 									and TM.tm_sakujo_flg = false and TM.user_id =".$this->User_Id
-								." ORDER BY TY.t_date DESC LIMIT 10";
+									." ORDER BY TY.t_date DESC LIMIT 10";
 				if (!($result_tyuumon = $this->pdo->prepare($sql_tyuumon))) {
 					echo "クエリ失敗(tyuumon)";
 					die;
+
 				}
 
 				$result_tyuumon->execute();
@@ -81,48 +81,44 @@
 			}
 		}
 	?>
-	<div id="header">
-			<input type="button" name="top" value="TOP" onclick="location.href='School_Home.php'"/>
-		<div id="login_name"><?php echo $user_name;?>さん</div>
-	</div></div>
-	<div id="select_menu" style="clear:left;">
-		<ul id="menu">
-			<li>ログアウト
-				<ul style="list-style:none;">
-					<li><a href="../Login/Logout.php">ログアウト</a></li>
-				</ul>
-			</li>
-			<li>注文書
-				<ul style="list-style:none;">
-					<li><a href="#">新規注文書</a></li>
-					<li><a href="#">注文書選択</a></li>
-				</ul>
-			</li>
-			<li>書類
-				<ul style="list-style:none;">
-					<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
-					<li><a href="#">製作物画像登録</a></li>
-				</ul>
-			</li>
-			<li>進捗管理
-				<ul style="list-style:none;">
-					<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
+<div id="header">
+			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='School_Home.php'">
+			<div id="login_name"><?php echo $user_name;?> さん</div>
+</div>
 
-	<div id="main">
-	<div id="border"></div>
-	<div id="title">トップページ</div>
-		<table border="1" width="500" align="center">
+<div id="select_menu" style="clear:left;">
+
+	<ul id="menu">
+		<li>ログアウト
+			<ul style="list-style:none;">
+				<li><a href="../Login/Logout.php">ログアウト</a></li>
+			</ul>
+		</li>
+		<li>注文機能
+			<ul style="list-style:none;">
+				<li><a href="#">新規注文書</a></li>
+				<li><a href="#">注文書選択</a></li>
+			</ul>
+		</li>
+		<li>書類
+			<ul style="list-style:none;">
+				<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
+				<li><a href="#">製作物画像登録</a></li>
+			</ul>
+		</li>
+		<li>進捗管理
+			<ul style="list-style:none;">
+				<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
+			</ul>
+		</li>
+	</ul>
+
+</div>
+<div id="main">
+<div id="border"></div>
+<div id="title">学校トップページ</div>
+	<table border="1" width="500" align="center">
 			<tr><th><?php echo $user_name;?>さんの進捗状況</th></tr>
-		<tr><td>
- 			<form action="" method="post">
-				<input type="submit" name="TOP" value="進捗管理"></input>
-			</form>
-		</td></tr>
-
 		<?php
 			//START_折りたたみページ1(発注済み)
 				//クラスオブジェクト作成
@@ -230,7 +226,7 @@
 			<div id="open01" style="display:none;clear:both;">
 				<?php
 					while($sql01 = $tyuumon01->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql01['t_date'])), "　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
+						echo $sql01['t_date'], "　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -249,7 +245,7 @@
 			<div id="open02" style="display:none;clear:both;">
 				<?php
 					while($sql02 = $tyuumon02->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql02['t_date'])), "　・　", $sql02['hin_janru'], "　・　", $sql02['t_naiyou'], "<br />";
+						echo $sql02['t_date'], "　・　", $sql02['hin_janru'], "　・　", $sql02['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -268,7 +264,7 @@
 			<div id="open03" style="display:none;clear:both;">
 				<?php
 					while($sql03 = $tyuumon03->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql03['t_date'])), "　・　", $sql03['hin_janru'], "　・　", $sql03['t_naiyou'], "<br />";
+						echo $sql03['t_date'], "　・　", $sql03['hin_janru'], "　・　", $sql03['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -287,7 +283,7 @@
 			<div id="open04" style="display:none;clear:both;">
 				<?php
 					while($sql04 = $tyuumon04->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql04['t_date'])), "　・　", $sql04['hin_janru'], "　・　", $sql04['t_naiyou'], "<br />";
+						echo $sql04['t_date'], "　・　", $sql04['hin_janru'], "　・　", $sql04['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -306,7 +302,7 @@
 			<div id="open05" style="display:none;clear:both;">
 				<?php
 					while($sql05 = $tyuumon05->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql05['t_date'])), "　・　", $sql05['hin_janru'], "　・　", $sql05['t_naiyou'], "<br />";
+						echo $sql05['t_date'], "　・　", $sql05['hin_janru'], "　・　", $sql05['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -326,7 +322,7 @@
 			<div id="open06" style="display:none;clear:both;">
 				<?php
 					while($sql06 = $tyuumon06->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql06['t_date'])), "　・　", $sql06['hin_janru'], "　・　", $sql06['t_naiyou'], "<br />";
+						echo $sql06['t_date'], "　・　", $sql06['hin_janru'], "　・　", $sql06['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
@@ -345,7 +341,7 @@
 			<div id="open07" style="display:none;clear:both;">
 				<?php
 					while($sql07 = $tyuumon07->fetch(PDO::FETCH_ASSOC)){
-						echo date('Y年m月d日', strtotime($sql07['t_date'])), "　・　", $sql07['hin_janru'], "　・　", $sql07['t_naiyou'], "<br />";
+						echo $sql07['t_date'], "　・　", $sql07['hin_janru'], "　・　", $sql07['t_naiyou'], "<br />";
 					}
 				?>
 			</div>

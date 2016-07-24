@@ -23,7 +23,7 @@
     //未記入項目があったかを判定
     function OnButtonClick(Flg, id){//送信ボタンを押したらURLにget送信
 		if(Flg == 'True'){
-        	location.href = "Successful_transmission.php?id=" + id;
+        	location.href = "Send_mail_success.php?id=" + id;
         	return false;
 		}
 		else{

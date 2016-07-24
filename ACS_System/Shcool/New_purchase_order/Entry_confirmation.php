@@ -21,30 +21,6 @@ mso-footer-margin:.3in;}
 <script src="js/jquery.focused.min.js"></script>
 
 <script type="text/javascript">
-function check(){
-	var flag = 0;
-	// 設定開始（必須にする項目を設定してください）
-	if(document.form1.year.value == ""){ // 「年」の入力をチェック
-		flag = 1;
-	}
-	else if(document.form1.month.value == ""){ // 「月」の入力をチェック
-		flag = 1;
-	}
-	else if(document.form1.date.value == ""){ // 「日」の入力をチェック
-		flag = 1;
-	}
-	// 設定終了
-	if(flag){
-		window.alert('必須項目に未入力がありました'); // 入力漏れがあれば警告ダイアログを表示
-		return false; // 送信を中止
-	}
-	else{
-		return true; // 送信を実行
-	}
-}
-</script>
-
-<script type="text/javascript">
 jQuery(document).ready(function($){
 
 	$("#menu li").hover(function() {
@@ -56,6 +32,7 @@ jQuery(document).ready(function($){
 	});
 
 });
+
 </script>
 </head>
 <body>
@@ -64,6 +41,7 @@ jQuery(document).ready(function($){
 			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../Select_Report/School_Home.psp'">
 			<div id="login_name">担当者さん</div>
 </div>
+
 <div id="select_menu" style="clear:left;">
 		<ul id="menu">
 			<li>ログアウト
@@ -92,15 +70,175 @@ jQuery(document).ready(function($){
 </div>
 
 
-
 <div id="main">
 <div id = "border"></div>
 <p></p>
-<h1><center>注文書作成</center></h1>
-<br>
-<br>
-<h3><center>項目に記入してください。</center></h3>
-<form action="Entry_confirmation.php" method="POST" name = "form1"  onSubmit="return check()">
+<h1><center>以下の内容で保存してよろしいですか？</center></h1>
+<table align = center>
+<tr>
+<td>
+<form action="Save_success.php" method="POST" name = "form1">
+<input type="submit" value="保存" class ="nine">
+</form>
+</td>
+<td>
+<form action="newfile1.php" method="POST" name = "form2">
+<input type="submit" value="戻る" class ="nine">
+</form>
+</td>
+</tr>
+</table>
+
+<?php
+//入力値の取得
+$year = $_POST["year"];
+$month = $_POST["month"];
+$date = $_POST["date"];
+$t_naiyou = $_POST["t_naiyou"];
+$school_name = $_POST["school_name"];
+$busho = $_POST["busho"];
+$user_name = $_POST["user_name"];
+$user_tel = $_POST["user_tel"];
+$hin_janru = $_POST["hin_janru"];
+$t_bikou = $_POST["t_bikou"];
+$gakubu_name = $_POST["gakubu_name"];
+$t_mokuteki = $_POST["t_mokuteki"];
+$t_size = $_POST["t_size"];
+$t_page = $_POST["t_page"];
+$t_color = $_POST["t_color"];
+$t_men = $_POST["t_men"];
+$t_kami = $_POST["t_kami"];
+$t_orikata = $_POST["t_orikata"];
+$t_busu = $_POST["t_busu"];
+$t_kiboubi = $_POST["t_kiboubi"];
+$t_basho = $_POST["t_basho"];
+$t_money = $_POST["t_money"];
+$t_youbou = $_POST["t_youbou"];
+$t_sakunen_jisseki = $_POST["t_sakunen_jisseki"];
+
+$t_sakunen_money = $_POST["t_sakunen_money"];
+$t_zei_hantei = $_POST["t_zei_hantei"];
+$t_sakunen_busu = $_POST["t_sakunen_busu"];
+$t_sakunen_size = $_POST["t_sakunen_size"];
+$t_sakunen_page = $_POST["t_sakunen_page"];
+$t_sakunen_color = $_POST["t_sakunen_color"];
+$t_sakunen_men = $_POST["t_sakunen_men"];
+$t_sakunen_kami = $_POST["t_sakunen_kami"];
+$t_sakunen_orikata = $_POST["t_sakunen_orikata"];
+$t_sakunen_basho = $_POST["t_sakunen_basho"];
+$t_sakunen_tantou = $_POST["t_sakunen_tantou"];
+
+$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" disabled = \"disabled\">見積もり</td>";
+$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" disabled = \"disabled\">発注</td>";
+switch ($t_naiyou){
+case 'mi':
+	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked disabled = \"disabled\">見積もり</td>";
+	break;
+case 'ha':
+	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked disabled = \"disabled\">発注</td>";
+	break;
+}
+
+switch ($school_name){
+	case '1':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生情報ビジネス専門学校福岡校\" readonly>";
+		break;
+	case '2':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生外語観光＆製菓専門学校\" readonly>";
+		break;
+	case'3':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生医療福祉専門学校福岡校\" readonly>";
+		break;
+	case'4':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生建築＆デザイン専門学校\" readonly>";
+		break;
+	case'5':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生公務員専門学校福岡校\" readonly>";
+		break;
+	case'6':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生リハビリテーション大学校\" readonly>";
+		break;
+	case'7':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生工科自動車大学校\" readonly>";
+		break;
+	case'8':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生ビューティーカレッジ\" readonly>";
+		break;
+	case'9':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生情報ビジネス専門学校北九州校\" readonly>";
+		break;
+	case'10':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生公務員専門学校北九州校\" readonly>";
+		break;
+	case'11':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生医療福祉＆観光カレッジ\" readonly>";
+		break;
+	case'12':
+		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生看護大学校\" readonly>";
+		break;
+}
+
+switch ($hin_janru){
+case '1':
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"パンフレット\" readonly>";
+	break;
+case '2':
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"ポスター\" readonly>";
+	break;
+case'3':
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"看板\" readonly>";
+	break;
+case'4':
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"その他\" readonly>";
+	break;
+}
+
+$kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" disabled = \"disabled\">片面</td>";
+$ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" disabled = \"disabled\">両面</td>";
+switch ($t_men){
+	case '1':
+		$kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" checked disabled = \"disabled\">片面</td>";
+		break;
+	case '2':
+		$ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" checked disabled = \"disabled\">両面</td>";
+		break;
+}
+
+$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" disabled = \"disabled\">あり</td>";
+$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" disabled = \"disabled\">なし</td>";
+switch ($t_sakunen_jisseki){
+	case '1':
+		$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" checked disabled = \"disabled\">あり</td>";
+		break;
+	case '2':
+		$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" checked disabled = \"disabled\">なし</td>";
+		break;
+}
+
+$komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" disabled = \"disabled\">(税込み)</td>";
+$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" disabled = \"disabled\">(税抜き)</td>";
+switch ($t_zei_hantei){
+	case '1':
+		$komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" checked disabled = \"disabled\">(税込み)</td>";
+		break;
+	case '2':
+		$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" checked disabled = \"disabled\">(税抜き)</td>";
+		break;
+}
+
+$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" disabled = \"disabled\">片面</td>";
+$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" disabled = \"disabled\">両面</td>";
+switch ($t_sakunen_men){
+	case '1':
+		$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" checked disabled = \"disabled\">片面</td>";
+		break;
+	case '2':
+		$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" checked disabled = \"disabled\">両面</td>";
+		break;
+}
+?>
+
+<form action="newfile3.php" method="POST">
 <table border=0 width=713 style='border-collapse:
  collapse;table-layout:fixed;width:529pt' align = center>
  <col width=31 span=23 style='width:23pt'>
@@ -196,15 +334,15 @@ jQuery(document).ready(function($){
  <td></td>
  <td></td>
  <td colspan ="2">
- <INPUT type="text" name="year" size = "1" maxlength = "4" >
+ <INPUT type="text" name="year" size = "1" maxlength = "4" readonly value =  <?php echo $year; ?> >
  </td>
  <td>年</td>
  <td>
- <INPUT type="text" name="month" size = "2" maxlength = "2" class = "two">
+ <INPUT type="text" name="month" size = "2" maxlength = "2" class = "two" readonly value =  <?php echo $month; ?>>
  </td>
  <td>月</td>
  <td>
- <INPUT type="text" name="date" size = "2" maxlength = "2" class = "two">
+ <INPUT type="text" name="date" size = "2" maxlength = "2" class = "two" readonly value =  <?php echo $date; ?>>
  </td>
  <td>日</td>
  <td class=xl69></td>
@@ -216,16 +354,16 @@ jQuery(document).ready(function($){
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>注文内容</td>
  <td class=xl71>　</td>
  <td class=xl71>　</td>
- <td class=xl71 colspan=3 style='mso-ignore:colspan'>
- <input type="radio" name="t_naiyou" value="mi" >見積もり
- </td>
+ <?php
+ echo "<td class=xl71 colspan=3 style='mso-ignore:colspan'>";
+ echo $estimate?>
  <td class=xl71>　</td>
  <td class=xl71>　</td>
  <td class=xl71>　</td>
  <td class=xl71>　</td>
- <td class=xl71 colspan=2 style='mso-ignore:colspan'>
- <input type="radio" name="t_naiyou" value="ha" checked>発注
- </td>
+ <?php
+ echo "<td class=xl71 colspan=2 style='mso-ignore:colspan'>";
+ echo $order?>
  <td class=xl71>　</td>
  <td class=xl71>　</td>
  <td class=xl71>　</td>
@@ -239,24 +377,11 @@ jQuery(document).ready(function($){
  <td class=xl68>　</td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>学校名</td>
  <td colspan=8 class=xl113 style='border-right:.5pt solid black;border-left:none'>
-  <SELECT name="school_name" class = "two">
- <OPTION value="1" selected>麻生情報ビジネス専門学校福岡校</OPTION>
- <OPTION value="2">麻生外語観光＆製菓専門学校</OPTION>
- <OPTION value="3">麻生医療福祉専門学校福岡校</OPTION>
- <OPTION value="4">麻生建築＆デザイン専門学校</OPTION>
- <OPTION value="5">麻生公務員専門学校福岡校</OPTION>
- <OPTION value="6">麻生リハビリテーション大学校</OPTION>
- <OPTION value="7">麻生工科自動車大学校</OPTION>
- <OPTION value="8">麻生ビューティーカレッジ</OPTION>
- <OPTION value="9">麻生情報ビジネス専門学校北九州校</OPTION>
- <OPTION value="10">麻生公務員専門学校北九州校</OPTION>
- <OPTION value="11">麻生医療福祉＆観光カレッジ</OPTION>
- <OPTION value="12">麻生看護大学校</OPTION>
- </SELECT>
+ <?php echo $school; ?>
  </td>
  <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>部署名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <input type="text" name="busho" maxlength="15" class = "one">
+ <input type="text" name="name" maxlength="15" class = "one" readonly value =  <?php echo $busho; ?>>
  </td>
  <td class=xl69>　</td>
  </tr>
@@ -266,11 +391,11 @@ jQuery(document).ready(function($){
  <td class=xl68>　</td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>ご担当者名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <input type="text" name="user_name" maxlength="15" class = "one">
+ <input type="text" name="user_name" maxlength="15" class = "one" readonly value =  <?php echo $user_name; ?>>
  </td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black;border-left:none'>お電話番号</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <input type="text" name="user_tel" maxlength="11" class = "one">
+ <input type="number" name="user_tel" maxlength="11" class = "one" readonly value =  <?php echo $user_tel; ?>>
  </td>
  <td class=xl69>　</td>
  </tr>
@@ -280,16 +405,12 @@ jQuery(document).ready(function($){
  <td class=xl68>　</td>
  <td colspan=4 class=xl114 style='border-right:.5pt solid black'>品名</td>
  <td colspan=6>
- <SELECT name="hin_janru" class = "one">
- <OPTION value="1" selected>パンフレット</OPTION>
- <OPTION value="2">ポスター</OPTION>
- <OPTION value="3">看板</OPTION>
- <OPTION value="4">その他</OPTION>
- </SELECT>
+ <?php echo $hin_janru_mei ?>
  </td>
  <td colspan=3 class=xl114 style='border-right:.5pt solid black'>備考</td>
  <td colspan=7 class=xl114 style='border-right:.5pt solid black;border-bottom:border-left:none'>
- <textarea name="t_bikou" rows="2" wrap="soft" maxlength = "255" class = "one">
+ <textarea name="t_bikou" rows="2" wrap="soft" maxlength = "255" class = "one" readonly>
+ <?php echo $t_bikou ?>
  </textarea>
  </td>
  <td class=xl69>　</td>
@@ -300,11 +421,12 @@ jQuery(document).ready(function($){
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>利用する学部系</td>
   <td colspan=6 class=xl89 style='border-left:none'>
-  <input type="text" name="gakubu_name" maxlength="20" class = "one">
+  <input type="text" name="gakubu_name" maxlength="20" class = "one" readonly value =  <?php echo $gakubu_name; ?>>
   </td>
   <td colspan=3 class=xl111 style='border-right:.5pt solid black'>利用目的</td>
   <td colspan=7 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <textarea name="t_mokuteki" rows="2" wrap="soft" maxlength = "255" class = "one">
+  <textarea name="t_mokuteki" rows="2" wrap="soft" maxlength = "255" class = "one" readonly>
+  <?php echo $t_mokuteki; ?>
   </textarea>
   </td>
   <td class=xl69>　</td>
@@ -319,15 +441,15 @@ jQuery(document).ready(function($){
   none'>サイズ</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>
-  <input type="text" name="t_size" maxlength="2" class = "three">
+  <input type="text" name="t_size" maxlength="2" class = "three" readonly value = <?php echo $t_size; ?>>
   </td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:none'>ページ数</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_page" maxlength="3" class = "three">
+  <input type="text" name="t_page" maxlength="3" class = "three" readonly value = <?php echo $t_page; ?>>
   </td>
   <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>色数</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_color" maxlength="3" class = "three">
+  <input type="text" name="t_color" maxlength="3" class = "three" readonly value = <?php echo $t_color; ?>>
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -336,18 +458,22 @@ jQuery(document).ready(function($){
   <td height=36 style='height:27.0pt'></td>
   <td class=xl68>　</td>
   <td colspan=3 class=xl90>
-  <input type="radio" name="t_men" value="1" checked>片面
+  <?php
+  echo $kata
+  ?>
   </td>
   <td colspan=3 class=xl90 style='border-right:.5pt solid black'>
-  <input type="radio" name="t_men" value="2">両面
+  <?php
+  echo $ryo
+  ?>
   </td>
   <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>紙</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_kami" maxlength="10" class = "one">
+  <input type="text" name="t_kami" maxlength="10" class = "one" readonly value = <?php echo $t_kami; ?>>
   </td>
   <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>折り方</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_orikata" maxlength="10" class = "one">
+  <input type="text" name="t_orikata" maxlength="10" class = "one" readonly value = <?php echo $t_orikata; ?>>
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -357,10 +483,10 @@ jQuery(document).ready(function($){
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>部数</td>
   <td colspan=6 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_busu" maxlength="7" class = "five">部</td>
+  <input type="text" name="t_busu" maxlength="7" class = "five" readonly value = <?php echo $t_busu; ?>>部</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black;border-left:none'>納品希望日</td>
   <td colspan=6 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_kiboubi" maxlength="20" class = "one">
+  <input type="text" name="t_kiboubi" maxlength="20" class = "one" readonly value = <?php echo $t_kiboubi; ?>>
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -370,7 +496,7 @@ jQuery(document).ready(function($){
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>希望納品場所</td>
   <td colspan=16 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_basho" maxlength="60" class = "one">
+  <input type="text" name="t_basho" maxlength="60" class = "one" readonly value = <?php echo $t_basho; ?>>
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -381,7 +507,7 @@ jQuery(document).ready(function($){
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>希望金額</td>
   <td colspan=16 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>
-  <input type="text" name="t_money" maxlength="8" class = "six money">円
+  <input type="text" name="t_money" maxlength="8" class = "six money" readonly value = <?php echo $t_money; ?>>円
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -391,7 +517,7 @@ jQuery(document).ready(function($){
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>仕様の要望</td>
   <td colspan=16 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_youbou" class = "one">
+  <input type="text" name="t_youbou" class = "one" readonly value = <?php echo $t_youbou; ?>>
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -403,11 +529,15 @@ jQuery(document).ready(function($){
   <td class=xl73 style='border-top:none;border-left:none'>　</td>
   <td class=xl71 style='border-top:none'>　</td>
   <td colspan=5 class=xl90>
-  <input type="radio" name="t_sakunen_jisseki" value="1" >あり
+  <?php
+  echo $yes
+  ?>
   </td>
   <td class=xl71 style='border-top:none'>　</td>
   <td colspan=5 class=xl90>
-  <input type="radio" name="t_sakunen_jisseki" value="2" checked>なし
+  <?php
+  echo $no
+  ?>
   </td>
   <td class=xl71 style='border-top:none'>　</td>
   <td class=xl71 style='border-top:none'>　</td>
@@ -447,17 +577,21 @@ jQuery(document).ready(function($){
   <td colspan=4 rowspan=2 class=xl94 style='border-bottom:.5pt solid black'>昨年実績費用</td>
   <td colspan=8 rowspan=2 class=xl94 style='border-right:.5pt solid black;
   border-bottom:.5pt solid black'>
-  <input type="text" name="t_sakunen_money" maxlength="8" class = "seven">
+  <input type="text" name="t_sakunen_money" maxlength="8" class = "seven" readonly value = <?php echo $t_sakunen_money; ?>>
   </td>
   <td rowspan=2 class=xl94 style='border-bottom:.5pt solid black'>　</td>
   <td colspan=3 rowspan=2 class=xl95 style='border-right:.5pt solid black;
   border-bottom:.5pt solid black'>
-  <input type="radio" name="t_zei_hantei" value="1">(税込み)
+  <?php
+  echo $komi
+  ?>
   </td>
   <td rowspan=2 class=xl95 style='border-bottom:.5pt solid black'>　</td>
   <td colspan=3 rowspan=2 class=xl95 style='border-right:.5pt solid black;
   border-bottom:.5pt solid black'>
-  <input type="radio" name="t_zei_hantei" value="2" checked>(税抜き)
+  <?php
+  echo $nuki
+  ?>
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -475,7 +609,7 @@ jQuery(document).ready(function($){
   border-bottom:.5pt solid black'>昨年部数</td>
   <td colspan=10 rowspan=2 class=xl100 style='border-right:.5pt solid black;
   border-bottom:.5pt solid black'>
-  <input type="text" name="t_sakunen_busu" class = "four">部
+  <input type="text" name="t_sakunen_busu" class = "four" readonly value = <?php echo $t_sakunen_busu; ?>>部
   </td>
   <td colspan=6 rowspan=2 class=xl102 style='border-right:.5pt solid black;
   border-bottom:.5pt solid black'>※↑必ずどちらか解る様にしてください。</td>
@@ -496,19 +630,19 @@ jQuery(document).ready(function($){
   none'>サイズ</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>
-  <input type="text" name="t_sakunen_size" maxlength="2" class = "three">
+  <input type="text" name="t_sakunen_size" maxlength="2" class = "three" readonly value = <?php echo $t_sakunen_size; ?>>
   </td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>ページ数</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>
-  <input type="text" name="t_sakunen_page" maxlength="3" class = "three">
+  <input type="text" name="t_sakunen_page" maxlength="3" class = "three" readonly value = <?php echo $t_sakunen_page; ?>>
   </td>
   <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>色数</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>
-  <input type="text" name="t_sakunen_color" maxlength="3" class = "three">
+  <input type="text" name="t_sakunen_color" maxlength="3" class = "three" readonly value = <?php echo $t_sakunen_color; ?>>
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -517,22 +651,26 @@ jQuery(document).ready(function($){
   <td height=36 style='height:27.0pt'></td>
   <td class=xl68>　</td>
   <td colspan=3 class=xl90>
-  <input type="radio" name="t_sakunen_men" value="1" checked>片面
+  <?php
+  echo $l_kata
+  ?>
   </td>
   <td colspan=3 class=xl90 style='border-right:.5pt solid black'>
-  <input type="radio" name="t_sakunen_men" value="2">両面
+  <?php
+  echo $l_ryo
+  ?>
   </td>
   <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>紙</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>
-  <input type="text" name="t_sakunen_kami" maxlength="10" class = "one">
+  <input type="text" name="t_sakunen_kami" maxlength="10" class = "one" readonly value = <?php echo $t_sakunen_kami; ?>>
   </td>
   <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>折り方</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:
   none'>
-  <input type="text" name="t_sakunen_orikata" maxlength="10" class = "one">
+  <input type="text" name="t_sakunen_orikata" maxlength="10" class = "one" readonly value = <?php echo $t_sakunen_orikata; ?>>
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -542,11 +680,11 @@ jQuery(document).ready(function($){
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>昨年発注先</td>
   <td colspan=8 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_sakunen_basho" maxlength = "60" class = "one">
+  <input type="text" name="t_sakunen_basho" maxlength = "60" class = "one" readonly value = <?php echo $t_sakunen_basho; ?>>
   </td>
   <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>担当者</td>
   <td colspan=6 class=xl89 style='border-right:.5pt solid black;border-left:none'>
-  <input type="text" name="t_sakunen_tantou" maxlength = "15" class = "one">
+  <input type="text" name="t_sakunen_tantou" maxlength = "15" class = "one" readonly value = <?php echo $t_sakunen_tantou; ?>>
   </td>
   <td class=xl69>　</td>
   </tr>
@@ -619,7 +757,7 @@ jQuery(document).ready(function($){
   <td class=xl84>　</td>
   <td class=xl84>　</td>
   <td class=xl84>　</td>
-  <td colspan = "5" class=xl84><input type="submit" value="保存" class ="eight"></td>
+  <td colspan = "5" class=xl84>
   <td class=xl84>　</td>
   <td class=xl84>　</td>
   <td class=xl84>　</td>
