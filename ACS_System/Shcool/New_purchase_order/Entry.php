@@ -100,7 +100,7 @@ jQuery(document).ready(function($){
 <br>
 <br>
 <h3><center>項目に記入してください。</center></h3>
-<form action="newfile2.php" method="POST" name = "form1"  onSubmit="return check()">
+<form action="Entry_confirmation.php" method="POST" name = "form1"  onSubmit="return check()">
 <table border=0 width=713 style='border-collapse:
  collapse;table-layout:fixed;width:529pt' align = center>
  <col width=31 span=23 style='width:23pt'>
