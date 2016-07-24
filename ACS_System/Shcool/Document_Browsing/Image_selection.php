@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" type="text/css" href="../../css.css"/>
 <link rel="stylesheet" type="text/css" href="css.css"/>
-<title>書類閲覧</title>
+<title>学校_書類閲覧</title>
 
 
 <script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
@@ -109,8 +109,9 @@ $user_name=$_SESSION['user_name'];   //ユーザー名取得
 	}
 
 
-$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru, G.gazou_path FROM ((tyuumon TY
+$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu FROM (((tyuumon TY
 				INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
+				INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
 				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)ORDER BY TY.t_date ASC LIMIT 9");
 
 $result->execute();
@@ -133,13 +134,13 @@ $result->execute();
 		$search_result->bindValue(":keyword", $keyword);
 		$result=$search_result;
 		$result->execute();
-		// 【案件がない場合】
-		$resultSet = $search_result->fetchAll();
-		$resultNum = count($resultSet);
+// 		// 【案件がない場合】
+// 		$resultSet = $search_result->fetchAll();
+// 		$resultNum = count($resultSet);
 
-		if (0 == $resultNum) {
-			$non_oblect="検索に一致する案件はありません。";
-		}
+// 		if (0 == $resultNum) {
+// 			$non_oblect="検索に一致する案件はありません。";
+// 		}
 
 	}
 
@@ -374,9 +375,10 @@ EOT;
 								echo "<br/><br/></div>";
 								$count++;
 		}
-		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'>",$non_oblect,"</div>";
-		?>
-
+ if (empty($non_oblect)){}
+ 		else{echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'>",$non_oblect,"</div>";
+ }
+?>
 
 </div>
 

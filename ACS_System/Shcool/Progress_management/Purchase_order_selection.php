@@ -64,33 +64,41 @@ if (!$pull_hin_janru) {
 	if (select1.options[select1.selectedIndex].value == "99")
 	{
 	select2.options[0] = new Option("項目を選択してください","");
+	<?php if(!isset($_POST['selectName2'])){$_POST['selectName2']=null;?>select2.options[0].selected = true;<?php }?>
 	}
 
 	if (select1.options[select1.selectedIndex].value == "t_naiyou")
 	{
 	select2.options[0] = new Option("見積もり","mi");
+	<?php if($_POST['selectName2']=="mi"){?>select2.options[0].selected = true;<?php }?>
 	select2.options[1] = new Option("発注","ha");
+	<?php if($_POST['selectName2']=="ha"){?>select2.options[1].selected = true;<?php }?>
 	}
+
 
 	else if (select1.options[select1.selectedIndex].value == "hin_janru")
 	{
 	<?php while ($pull_h = $pull_hin_janru -> fetch(PDO::FETCH_ASSOC))  { ?>
 
 	select2.options[<?php echo($count_h); ?>] = new Option("<?php echo($pull_h['hin_janru']); ?>","<?php echo($pull_h['hin_id']);?>");
+	<?php if($_POST['selectName2']==$pull_h['hin_id']){?>select2.options[<?php echo($count_h); ?>].selected = true;<?php }?>
 
 	<?php $count_h++; } ?>
+
 	}
 	else if (select1.options[select1.selectedIndex].value == "school_name")
 	{
 	<?php while ($pull_s = $pull_school_name -> fetch(PDO::FETCH_ASSOC))  { ?>
 
 	select2.options[<?php echo($count_s); ?>] = new Option("<?php echo($pull_s['school_name']); ?>","<?php echo($pull_s['school_id']);?>");
+	<?php if($_POST['selectName2']==$pull_s['school_id']){?>select2.options[<?php echo($count_s); ?>].selected = true;<?php }?>
 
 	<?php $count_s++; }?>
-	}
-	}
 
+	}
+	}
 	</script>
+
 
 	</head>
 <body onload="functionName()">
@@ -100,8 +108,9 @@ if (!$pull_hin_janru) {
 
 
 
-$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru, G.gazou_path FROM ((tyuumon TY
+$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu FROM (((tyuumon TY
 				INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
+				INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
 				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)ORDER BY TY.t_date ASC LIMIT 9");
 $result->execute();
 
@@ -118,19 +127,18 @@ if (!$result) {
 		$search_result= $pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
 				from tyuumon,tyuumon_master,hinmei,gazou
 				where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and tm_seisakubutu
-				LIKE '%' :keyword '%'");
+				LIKE '%:keyword%'");
 		$keyword = $search_word;
-		//$search_result->bindParam(":keyword", $keyword, PDO::PARAM_STR);
-		$search_result->bindValue(":keyword", $keyword);
+		$search_result->bindParam(":keyword", $keyword, PDO::PARAM_STR);
+//		$search_result->bindValue(":keyword", $keyword);
 		$result=$search_result;
 		$result->execute();
 	// 【案件がない場合】
-		$resultSet = $search_result->fetchAll();
-		$resultNum = count($resultSet);
-
-		if (0 == $resultNum) {
-			$non_oblect="検索に一致する案件はありません。";
-		}
+// 		$resultSet = $search_result->fetchAll();
+// 		$resultNum = count($resultSet);
+// 		if (0 >= $resultNum) {
+// 			$non_oblect="検索に一致する案件はありません。";
+// 		}
 	}
 
 
@@ -203,13 +211,13 @@ if (!$result) {
 		$date_result= $pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
 									from tyuumon,tyuumon_master,hinmei,gazou
 									where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id
-									and tyuumon.t_date	LIKE :keyword '%'");
+									and tyuumon.t_date	LIKE ':keyword%'");
 		$keyword = $s_year."-".$s_month;//yearとmonthを結合して検索
 		$date_result->bindValue(":keyword", $keyword);
 		$result=$date_result;
 		$result->execute();
 		// 【案件がない場合】
-		$resultSet = $sort_result->fetchAll();
+		$resultSet = $date_result->fetchAll();
 		$resultNum = count($resultSet);
 
 		if (0 == $resultNum) {
@@ -355,14 +363,20 @@ if (!$date_pull) {
 
 	//書類情報
 echo <<<EOT
-	<div style="float:left; margin-left:6em; text-align:center;">
+	<div style="float:left; margin-left:4em;">
 			<input type="image" src="$img_path" alt="画像" width="140px" height="120px" onclick="location.href='Progress_situation.php?select_id=$tm_id'"/></br>
+
+					<div style="margin-left:5px;">
 EOT;
-								echo "製作物ナンバー:",$row['tm_id'],"<br/>製作日:",$row['t_date'],"<br />品名：",$row['hin_janru'];
+echo "製作物ナンバー:",$row['tm_seisakubutu'],"<br/>製作日:",$row['t_date'],"<br />品名：",$row['hin_janru'];
 								echo "</div>";
 								$count++;
+					echo "</div>";
 		}
-		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'>",$non_oblect,"</div>";
+
+// if (empty($non_oblect)){}
+// 		else{echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'>",$non_oblect,"</div>";
+// }
 		?>
 
 </div>
