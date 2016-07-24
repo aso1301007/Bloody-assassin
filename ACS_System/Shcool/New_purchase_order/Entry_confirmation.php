@@ -379,7 +379,7 @@ switch ($t_sakunen_men){
  </td>
  <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>部署名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <input type="text" name="name" maxlength="15" class = "one" readonly value =  <?php echo $busho; ?>>
+ <input type="text" name="busho" maxlength="15" class = "one" readonly value =  <?php echo $busho; ?>>
  </td>
  <td class=xl69>　</td>
  </tr>

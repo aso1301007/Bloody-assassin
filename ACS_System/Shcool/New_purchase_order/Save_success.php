@@ -37,7 +37,7 @@ $t_sakunen_orikata = $_POST["t_sakunen_orikata"];
 $t_sakunen_basho = $_POST["t_sakunen_basho"];
 $t_sakunen_tantou = $_POST["t_sakunen_tantou"];
 
-require_once "..DB.php";
+require_once "../DB.php";
 
 $stmt = $pdo -> prepare("INSERT INTO tyuumon_master
 		(tm_id,user_id,tm_seisakubutu,seisaku_id,tm_hattyu_flg,tm_kakunin_flg,tm_mitumorityuu_flg,tm_mitumorizumi_flg,tm_nouhin_flg,tm_touroku_flg,tm_houkokusho_flg,tm_sakujo_flg)
