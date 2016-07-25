@@ -242,8 +242,8 @@ switch ($s_zei_hantei){
 
 
 
-$l_kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" disabled = \"disabled\">片面</td>";
-$l_ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" disabled = \"disabled\">両面</td>";
+$l_kata = "<input type=\"radio\" name=\"s_men\" value=\"l_kata\" disabled = \"disabled\">片面</td>";
+$l_ryo = "<input type=\"radio\" name=\"s_men\" value=\"l_ryo\" disabled = \"disabled\">両面</td>";
 switch ($s_men){
 	case '片面':
 		$l_kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" checked disabled = \"disabled\">片面</td>";
