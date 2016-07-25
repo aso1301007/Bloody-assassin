@@ -62,28 +62,25 @@
 	$Flg = True;										//未入力項目を探すときに使う
 	$id = $_POST['id'];									//注文id
 	$date = $_POST['date'];								//日付
-	if(is_null($date) or $date == ""){
+	if(empty($date) or $date == ""){
 		$Flg = False;
 	}
 	$t_naiyou = $_POST['t_naiyou'];						//見積もり・発注
-	$school_name = $_POST['school_name'];				//学校名
+	$school_id = $_POST['school_id'];					//学校名
 	$name = $_POST['name'];								//部署名
 	$user_name = $_POST['user_name'];					//担当者名
-	if(is_null($user_name) or $user_name == ""){
+	if(empty($user_name) or $user_name == ""){
 		$Flg = False;
 	}
 	$user_tel = $_POST['user_tel'];						//電話番号
-	if(is_null($user_tel) or $user_tel == ""){
+	if(empty($user_tel) or $user_tel == ""){
 		$Flg = False;
 	}
-	$hin_janru = $_POST['hin_janru'];					//品名
-	if(is_null($hin_janru) or $hin_janru == ""){
-		$Flg = False;
-	}
+	$hin_id = $_POST['hin_id'];							//品名
 	$t_bikou = $_POST['t_bikou'];						//備考
-	$gakubu_name = $_POST['gakubu_name'];				//利用する学部系
+	$gakubu_id = $_POST['gakubu_id'];					//利用する学部系
 	$t_mokuteki = $_POST['t_mokuteki'];					//利用目的
-	if(is_null($t_mokuteki) or $t_mokuteki == ""){
+	if(empty($t_mokuteki) or $t_mokuteki == ""){
 		$Flg = False;
 	}
 	$t_size = $_POST['t_size'];							//仕様：サイズ
@@ -139,7 +136,7 @@
 	else{
 		$t_sakunen_men = "両面";
 	}
-	if($Flg){//未入力項目がなければ、update文を実行
+//	if($Flg){//未入力項目がなければ、update文を実行
 		$sql = "UPDATE tyuumon
 				SET t_date = :date, t_naiyou = :naiyou, school_id = :school, t_busho = :busho,
 					t_gakubu = :gakubu, t_tantousha = :tantou, t_tel = :tel, t_hin_name = :hin,
@@ -153,8 +150,8 @@
 					t_sakunen_basho = :s_basho, t_sakunen_tantou = :s_tantou
 				WHERE tm_id = :id";
 		$update = $pdo->prepare($sql);
-		$params = array(':date' => $date, ':naiyou' => $t_naiyou, ':school' => $school_name, ':busho' => $name,
-						':gakubu' =>$gakubu_name, ':tantou' => $user_name, ':tel' => $user_tel, ':hin' => $hin_janru,
+		$params = array(':date' => $date, ':naiyou' => $t_naiyou, ':school' => $school_id, ':busho' => $name,
+						':gakubu' =>$gakubu_id, ':tantou' => $user_name, ':tel' => $user_tel, ':hin' => $hin_id,
 						':bikou' => $t_bikou, ':mokuteki' => $t_mokuteki, ':size' => $t_size, ':page' => $t_page,
 						':color' => $t_color, ':men' => $t_men, ':kami' => $t_kami, ':orikata' => $t_orikata,
 						':busu' => $t_busu, ':kiboubi' => $t_kiboubi, ':basho' => $t_basho, ':money' => $t_money,
@@ -166,50 +163,14 @@
 		$success_flg = $update->execute($params);
 
 		if(!$success_flg) var_dump($update->errorInfo());
-	}
-	else{
-		header("Location: ".$_SERVER['HTTP_REFERER']. "&message_error=1");
-	}
+//	}
+//	else{
+//		header("Location: ".$_SERVER['HTTP_REFERER']. "&message_error=1");
+//	}
 ?>
 <div align="center">
 <input type="button" name="can" value="戻る" onclick="location.href='Selection.php'" />
 </div>
-<?php
-echo $id. "<br />";
-echo $date. "<br />";
-echo $t_naiyou. "<br />";
-echo $school_name. "<br />";
-echo $name. "<br />";
-echo $user_name. "<br />";
-echo $user_tel. "<br />";
-echo $hin_janru. "<br />";
-echo $t_bikou. "<br />";
-echo $gakubu_name. "<br />";
-echo $t_mokuteki. "<br />";
-echo $t_size. "<br />";
-echo $t_page. "<br />";
-echo $t_color. "<br />";
-echo $t_men. "<br />";
-echo $t_kami. "<br />";
-echo $t_orikata. "<br />";
-echo $t_busu. "<br />";
-echo $t_kiboubi. "<br />";
-echo $t_basho. "<br />";
-echo $t_money. "<br />";
-echo $t_youbou. "<br />";
-echo $t_sakunen_jisseki. "<br />";
-echo $t_sakunen_money. "<br />";
-echo $t_zei_hantei. "<br />";
-echo $t_sakunen_busu. "<br />";
-echo $t_sakunen_size. "<br />";
-echo $t_sakunen_page. "<br />";
-echo $t_sakunen_color. "<br />";
-echo $t_sakunen_men. "<br />";
-echo $t_sakunen_kami. "<br />";
-echo $t_sakunen_orikata. "<br />";
-echo $t_sakunen_basho. "<br />";
-echo $t_sakunen_tantou. "<br />";
-?>
 </div>
 </body>
 </html>
