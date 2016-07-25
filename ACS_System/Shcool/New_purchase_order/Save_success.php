@@ -96,8 +96,8 @@ $stmt->execute();//INSERT文実行
 */
 $sql = "SELECT MAX('tm_id') FROM tyuumon_master";
 $data = $pdo->prepare($sql);
-$data->execute;
-$tm_id = 'tm_id';
+$data->execute();
+$tm_id = $data;
 
 $stmt2 = $pdo -> prepare("INSERT INTO tyuumon
 		(tm_id,t_date,t_naiyou,school_id,t_busho,t_gakubu,t_tantousha,t_tel,t_hin_name,t_bikou,t_mokuteki,t_size,t_page,t_color,t_men,
