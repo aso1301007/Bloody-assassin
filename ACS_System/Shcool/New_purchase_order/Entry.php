@@ -250,7 +250,7 @@ jQuery(document).ready(function($){
  <td class=xl68>　</td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>学校名</td>
  <td colspan=8 class=xl113 style='border-right:.5pt solid black;border-left:none'>
-  <SELECT name="school_name" class = "two">
+ <SELECT name="school_name" class = "two">
  <OPTION value="1" selected>麻生情報ビジネス専門学校福岡校</OPTION>
  <OPTION value="2">麻生外語観光＆製菓専門学校</OPTION>
  <OPTION value="3">麻生医療福祉専門学校福岡校</OPTION>
@@ -310,8 +310,27 @@ jQuery(document).ready(function($){
   <td height=36 style='height:27.0pt'></td>
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>利用する学部系</td>
+
   <td colspan=6 class=xl89 style='border-left:none'>
   <input type="text" name="gakubu_name" maxlength="20" class = "one">
+  <OPTION value="1" selected>組み込みシステム科</OPTION>
+  <OPTION value="2">情報工学科</OPTION>
+  <OPTION value="3">ネットワーク・セキュリティ科</OPTION>
+  <OPTION value="4">情報システム専攻科</OPTION>
+  <OPTION value="5">情報システム科</OPTION>
+  <OPTION value="6">エアライン科</OPTION>
+  <OPTION value="7">エアポート科</OPTION>
+  <OPTION value="8">製菓パティシエ科</OPTION>
+  <OPTION value="9">医療秘書科</OPTION>
+  <OPTION value="10">医療情報科</OPTION>
+  <OPTION value="11">診療情報管理士科</OPTION>
+  <OPTION value="12">建築工学科</OPTION>
+  <OPTION value="13">建築学科</OPTION>
+  <OPTION value="14">建築士専攻科</OPTION>
+  <OPTION value="15">公務員専攻科</OPTION>
+  <OPTION value="16">公務員総合科</OPTION>
+  <OPTION value="17">高3コース</OPTION>
+  </SELECT>
   </td>
   <td colspan=3 class=xl111 style='border-right:.5pt solid black'>利用目的</td>
   <td colspan=7 class=xl89 style='border-right:.5pt solid black;border-left:none'>

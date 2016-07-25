@@ -45,7 +45,7 @@ $user_name = $_POST["user_name"];
 $user_tel = $_POST["user_tel"];
 $hin_janru = $_POST["hin_janru"];
 $t_bikou = $_POST["t_bikou"];
-$gakubu_name = $_POST["gakubu_name"];
+$gakubu_id = $_POST["gakubu_id"];
 $t_mokuteki = $_POST["t_mokuteki"];
 $t_size = $_POST["t_size"];
 $t_page = $_POST["t_page"];
@@ -107,7 +107,7 @@ $stmt2 = $pdo -> prepare("INSERT INTO tyuumon
 		(tm_id,t_date,t_naiyou,school_id,t_busho,t_gakubu,t_tantousha,t_tel,t_hin_name,t_bikou,t_mokuteki,t_size,t_page,t_color,t_men,
 		t_kami,t_orikata,t_busu,t_kiboubi,t_basho,t_money,t_youbou,t_sakunen_tm_id,t_sakunen_jisseki,t_sakunen_hiyou,t_zei_hantei,t_sakunen_busu,t_sakunen_size,t_sakunen_page,t_sakunen_color,
 		t_sakunen_men,t_sakunen_kami,t_sakunen_orikata,t_sakunen_basho,t_sakunen_tantou)
-		VALUES ('$tm_id','$date3','$t_naiyou','$school_name','$busho','$gakubu_name','$user_name','$user_tel','$hin_janru','$t_bikou',
+		VALUES ('$tm_id','$date3','$t_naiyou','$school_name','$busho','$gakubu_id','$user_name','$user_tel','$hin_janru','$t_bikou',
 		'$t_mokuteki','$t_size','$t_page','$t_color','$t_men','$t_kami','$t_orikata','$t_busu','$t_kiboubi','$t_basho',
 		'$t_money','$t_youbou','null','$t_sakunen_jisseki','$t_sakunen_money','$t_zei_hantei','$t_sakunen_busu','$t_sakunen_size','$t_sakunen_page',
 		'$t_sakunen_color','$t_sakunen_men','$t_sakunen_kami','$t_sakunen_orikata','$t_sakunen_basho','$t_sakunen_tantou')");
