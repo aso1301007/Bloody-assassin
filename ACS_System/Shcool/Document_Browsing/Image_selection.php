@@ -122,16 +122,16 @@ $result->execute();
 
 	//制作ナンバー検索
 	if(isset($_POST['search_text'])){
-	$search_word = $_POST['search_text'];
+//	$search_word = $_POST['search_text'];
 		$search_result=$pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
 				from tyuumon,tyuumon_master,hinmei,gazou
 				where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id
-				and tyuumon_master.tm_seisakubutu LIKE '%:keyword%'");
-		$keyword = $search_word;
-		//$search_result->bindParam(":keyword", $keyword, PDO::PARAM_STR);
-		$search_result->bindValue(":keyword", $keyword);
+				and tyuumon_master.tm_seisakubutu LIKE ?");
+//		$keyword = "%".$search_word."%";
+//		$search_result->bindParam(":keyword", $keyword, PDO::PARAM_STR);
+//		$search_result->bindValue(":keyword", $keyword);
 		$result=$search_result;
-		$result->execute();
+		$result->execute(array("%".$_POST['search_text']."%"));
 		// 【案件がない場合】
 		$resultSet = $search_result->fetchAll();
 		$resultNum = count($resultSet);
@@ -154,7 +154,7 @@ $result->execute();
 			$sort_result= $pdo->prepare("select * from tyuumon,gazou,hinmei,tyuumon_master
 										where tyuumon.t_naiyou=:zyouken and tyuumon.tm_id=gazou.tm_id and hinmei.hin_id=tyuumon.t_hin_name
 										and tyuumon_master.tm_id=tyuumon.tm_id
-										order by'".":zyouken"."'");
+										order by :zyouken ");
 			$sort_result->bindValue(":zyouken",$zyouken);
 			$result=$sort_result;
 			$result->execute();
@@ -172,7 +172,7 @@ $result->execute();
 			$select_Name1="hin_janru";
 			$sort_result= $pdo->prepare("select * from tyuumon,hinmei,gazou,tyuumon_master
 										where tyuumon.t_hin_name=hinmei.hin_id and tyuumon.tm_id=gazou.tm_id and tyuumon.tm_id=tyuumon_master.tm_id and hinmei.hin_id=:zyouken
-										order by '".":zyouken"."'");
+										order by :zyouken ");
 			$sort_result->bindValue(":zyouken",$zyouken);
 			$result=$sort_result;
 			$result->execute();
@@ -191,7 +191,7 @@ $result->execute();
 			$sort_result= $pdo->prepare("select * from tyuumon,tyuumon_master,tyuumonsha,school,hinmei,gazou
 										where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon_master.user_id=tyuumonsha.user_id and
 										tyuumonsha.school_id=school.school_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and
-										 school.school_id=:zyouken order by '".":zyouken"."'");
+										 school.school_id=:zyouken order by :zyouken ");
 			$sort_result->bindValue(":zyouken", $zyouken);
 			$result=$sort_result;
 			$result->execute();

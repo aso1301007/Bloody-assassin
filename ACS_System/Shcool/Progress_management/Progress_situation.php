@@ -130,11 +130,18 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 		$touroku = $row['tm_touroku_flg'];
 		$houkoku = $row['tm_houkokusho_flg'];
 }//-------------------------------------------------------
+
+
+switch($t_naiyou){
+case '0':
+	$naiyou = "見積もり";
+	break;
+case '1':
+	$naiyou = "発注";
+	break;
+}
+
 ?>
-
-
-
-
 
 
 
@@ -142,7 +149,7 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 <?php
 
 //注文書名を出力
-echo Date('Y年m月d日', strtotime($t_date))."  ・  " .$t_naiyou."  ・  " .$hin_janru;
+echo Date('Y年m月d日', strtotime($t_date))."  ・  " .$naiyou."  ・  " .$hin_janru;
 
 echo "</div><div id='shounin'>";
 echo "<div style='text-align:center;'>承認の進捗状況</div><br/>";
