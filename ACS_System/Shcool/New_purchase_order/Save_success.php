@@ -1,5 +1,36 @@
 <!DOCTYPE html>
 <html>
+<link rel=Stylesheet href=stylesheet.css type="text/css">
+<link rel=stylesheet type=text/css href=css.css>
+<style>
+<!--table
+{mso-displayed-decimal-separator:"\.";
+mso-displayed-thousand-separator:"\,";}
+@page
+{margin:.75in .7in .75in .7in;
+mso-header-margin:.3in;
+mso-footer-margin:.3in;}
+-->
+</style>
+
+
+<script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>
+<script src="js/jquery.focused.min.js"></script>
+
+<script type="text/javascript">
+jQuery(document).ready(function($){
+
+	$("#menu li").hover(function() {
+		$(this).children('ul').show();
+		//window.alert('キャンセルされました');
+	}, function() {
+		$(this).children('ul').hide();
+		//window.alert('キャンセルされました');
+	});
+
+});
+
+</script>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
@@ -85,6 +116,43 @@ $stmt2->execute();//INSERT文実行
 ?>
 
 <body>
+<div id="header">
+			<input type = "button" name = "top" value = "TOP" onclick = "location.href='#'">
+			<div id="login_name">担当者さん</div>
+</div>
+
+<div id="select_menu" style="clear:left;">
+		<ul id="menu">
+			<li>ログアウト
+				<ul style="list-style:none;">
+					<li><a href="../../Login/Logout.php">ログアウト</a></li>
+				</ul>
+			</li>
+			<li>注文書
+				<ul style="list-style:none;">
+					<li><a href="#">新規注文書</a></li>
+					<li><a href="#">注文書選択</a></li>
+				</ul>
+			</li>
+			<li>書類
+				<ul style="list-style:none;">
+					<li><a href="Image_selection.php">書類閲覧</a></li>
+					<li><a href="#">製作物画像登録</a></li>
+				</ul>
+			</li>
+			<li>進捗管理
+				<ul style="list-style:none;">
+					<li><a href="../progress/Purchase_order_selection.php">進捗管理</a></li>
+				</ul>
+			</li>
+		</ul>
+</div>
+
+
+<div id="main">
+<div id = "border"></div>
+<p></p>
+<h1><center>注文書の保存が完了しました。</center></h1>
  <?php echo $date3; ?>
  <?php echo $t_naiyou; ?>
  <?php echo $school_name; ?>
@@ -117,4 +185,34 @@ $stmt2->execute();//INSERT文実行
  <?php echo $t_sakunen_kami; ?>
  <?php echo $t_sakunen_orikata; ?>
  <?php echo $t_sakunen_basho; ?>
+ <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<form action="../School_Home.php" method="POST" name = "form1">
+<input type="submit" value="戻る" class ="nine">
+</form>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</div>
 </body>
+</html>
