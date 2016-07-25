@@ -17,8 +17,8 @@ mso-footer-margin:.3in;}
 </style>
 
 
-<script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>
-<script src="js/jquery.focused.min.js"></script>
+<script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
+<script src="../../js/jquery.focused.min.js"></script>
 
 <script type="text/javascript">
 jQuery(document).ready(function($){
@@ -38,7 +38,7 @@ jQuery(document).ready(function($){
 <body>
 
 <div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='#'">
+			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../School_Home.php'">
 			<div id="login_name">担当者さん</div>
 </div>
 
@@ -51,19 +51,19 @@ jQuery(document).ready(function($){
 			</li>
 			<li>注文書
 				<ul style="list-style:none;">
-					<li><a href="#">新規注文書</a></li>
+					<li><a href="Entry.php">新規注文書</a></li>
 					<li><a href="#">注文書選択</a></li>
 				</ul>
 			</li>
 			<li>書類
 				<ul style="list-style:none;">
-					<li><a href="Image_selection.php">書類閲覧</a></li>
+					<li><a href="../Documents_Browsing/Image_selection.php">書類閲覧</a></li>
 					<li><a href="#">製作物画像登録</a></li>
 				</ul>
 			</li>
 			<li>進捗管理
 				<ul style="list-style:none;">
-					<li><a href="../progress/Purchase_order_selection.php">進捗管理</a></li>
+					<li><a href="../progress_management/Purchase_order_selection.php">進捗管理</a></li>
 				</ul>
 			</li>
 		</ul>
@@ -127,8 +127,8 @@ $t_sakunen_orikata = $_POST["t_sakunen_orikata"];
 $t_sakunen_basho = $_POST["t_sakunen_basho"];
 $t_sakunen_tantou = $_POST["t_sakunen_tantou"];
 
-$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" disabled = \"disabled\">見積もり</td>";
-$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" disabled = \"disabled\">発注</td>";
+$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"0\" disabled = \"disabled\">見積もり</td>";
+$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"1\" disabled = \"disabled\">発注</td>";
 switch ($t_naiyou){
 case 'mi':
 	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked>見積もり</td>";
