@@ -59,7 +59,10 @@ jQuery(document).ready(function($){
 </script>
 </head>
 <body>
-
+<?php
+include("../School_header.php")
+?>
+<!--
 <div id="header">
 			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
 			<div id="login_name"><?php echo $user_name;?> さん</div>
@@ -90,7 +93,7 @@ jQuery(document).ready(function($){
 			</li>
 		</ul>
 </div>
-
+-->
 
 
 <div id="main">
