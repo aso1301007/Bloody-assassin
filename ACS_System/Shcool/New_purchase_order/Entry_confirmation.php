@@ -38,8 +38,8 @@ jQuery(document).ready(function($){
 <body>
 
 <div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../School_Home.php'">
-			<div id="login_name">担当者さん</div>
+			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
+			<div id="login_name"><?php echo $user_name;?> さん</div>
 </div>
 
 <div id="select_menu" style="clear:left;">
