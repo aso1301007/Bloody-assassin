@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Insert title here</title>
 <link rel=Stylesheet href=stylesheet.css type="text/css">
-<link rel=stylesheet type=text/css href=css.css>
+<link rel=stylesheet type=text/css href=../../css.css>
 <style>
 <!--table
 {mso-displayed-decimal-separator:"\.";
@@ -38,8 +38,8 @@ jQuery(document).ready(function($){
 <body>
 
 <div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../School_Home.php'">
-			<div id="login_name">担当者さん</div>
+			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
+			<div id="login_name"><?php echo $user_name;?> さん</div>
 </div>
 
 <div id="select_menu" style="clear:left;">
@@ -131,10 +131,10 @@ $estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"0\" disabled = \"di
 $order = "<input type=\"radio\" name=\"t_naiyou\" value=\"1\" disabled = \"disabled\">発注</td>";
 switch ($t_naiyou){
 case 'mi':
-	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked>見積もり</td>";
+	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"0\" checked>見積もり</td>";
 	break;
 case 'ha':
-	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked>発注</td>";
+	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"1\" checked>発注</td>";
 	break;
 }
 
@@ -191,60 +191,64 @@ switch ($school_name){
 
 switch ($hin_janru){
 case '1':
-	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"パンフレット\" readonly>";
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru_mei\" class = \"one\" value=\"パンフレット\" readonly>";
+	$hin="<input type=\"hidden\" name=\"hin_janru\" value=\"1\">";
 	break;
 case '2':
-	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"ポスター\" readonly>";
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru_mei\" class = \"one\" value=\"ポスター\" readonly>";
+	$hin="<input type=\"hidden\" name=\"hin_janru\" value=\"2\">";
 	break;
 case'3':
-	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"看板\" readonly>";
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru_mei\" class = \"one\" value=\"看板\" readonly>";
+	$hin="<input type=\"hidden\" name=\"hin_janru\" value=\"3\">";
 	break;
 case'4':
-	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"その他\" readonly>";
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru_mei\" class = \"one\" value=\"その他\" readonly>";
+	$hin="<input type=\"hidden\" name=\"hin_janru\" value=\"4\">";
 	break;
 }
 
-$kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" disabled = \"disabled\">片面</td>";
-$ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" disabled = \"disabled\">両面</td>";
+$kata = "<input type=\"radio\" name=\"t_men\" value=\"片面\" disabled = \"disabled\">片面</td>";
+$ryo = "<input type=\"radio\" name=\"t_men\" value=\"両面\" disabled = \"disabled\">両面</td>";
 switch ($t_men){
 	case '1':
-		$kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" checked>片面</td>";
+		$kata = "<input type=\"radio\" name=\"t_men\" value=\"片面\" checked>片面</td>";
 		break;
 	case '2':
-		$ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" checked>両面</td>";
+		$ryo = "<input type=\"radio\" name=\"t_men\" value=\"両面\" checked>両面</td>";
 		break;
 }
 
-$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" disabled = \"disabled\">あり</td>";
-$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" disabled = \"disabled\">なし</td>";
+$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"1\" disabled = \"disabled\">あり</td>";
+$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"0\" disabled = \"disabled\">なし</td>";
 switch ($t_sakunen_jisseki){
 	case '1':
-		$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" checked>あり</td>";
+		$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"1\" checked>あり</td>";
 		break;
 	case '2':
-		$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" checked>なし</td>";
+		$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"0\" checked>なし</td>";
 		break;
 }
 
 $komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" disabled = \"disabled\">(税込み)</td>";
-$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" disabled = \"disabled\">(税抜き)</td>";
+$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"0\" disabled = \"disabled\">(税抜き)</td>";
 switch ($t_zei_hantei){
 	case '1':
 		$komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" checked>(税込み)</td>";
 		break;
 	case '2':
-		$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" checked>(税抜き)</td>";
+		$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"0\" checked>(税抜き)</td>";
 		break;
 }
 
-$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" disabled = \"disabled\">片面</td>";
-$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" disabled = \"disabled\">両面</td>";
+$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"片面\" disabled = \"disabled\">片面</td>";
+$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"両面\" disabled = \"disabled\">両面</td>";
 switch ($t_sakunen_men){
 	case '1':
-		$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" checked>片面</td>";
+		$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"片面\" checked>片面</td>";
 		break;
 	case '2':
-		$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" checked>両面</td>";
+		$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"両面\" checked>両面</td>";
 		break;
 }
 ?>

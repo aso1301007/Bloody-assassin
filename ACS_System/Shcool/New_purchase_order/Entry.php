@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Insert title here</title>
 <link rel=Stylesheet href=stylesheet.css type="text/css">
-<link rel=stylesheet type=text/css href=css.css>
+<link rel=stylesheet type=text/css href=../../css.css>
 <style>
 <!--table
 {mso-displayed-decimal-separator:"\.";
@@ -61,8 +61,8 @@ jQuery(document).ready(function($){
 <body>
 
 <div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../School_Home.php'">
-			<div id="login_name">担当者さん</div>
+			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
+			<div id="login_name"><?php echo $user_name;?> さん</div>
 </div>
 <div id="select_menu" style="clear:left;">
 		<ul id="menu">
