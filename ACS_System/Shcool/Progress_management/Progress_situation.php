@@ -42,25 +42,18 @@ jQuery(document).ready(function($){
 <body>
 
 <?php
+//require '../../DB.php';
+include '../School_header.php';
 
-session_start();
+?>
+<div id="title"><a>進捗状況</a></div>
 
-require '../../DB.php';
-
-
-/*//-----前ページで指定された注文書のID受け取り-----
-*/
+<?
+//-----前ページで指定された注文書のID受け取り-----
+$session_start();
 $_SESSION['sintyoku_tm_id']=$_GET['select_id'];
 $tm_id=$_SESSION['sintyoku_tm_id'];
 //---------------------------------------
-
-
-//------ユーザ名取得---------
-$user_name=$_SESSION['user_name'];
-if($user_name==null){
-	header('Location: ../../Login/login.html');
-}
-//-----------------------------
 
 
 //-----------日付と注文書名の取得---------------------
@@ -146,43 +139,9 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 ?>
 
 
-<div id="header">
-			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='../School_Home.php'">
-			<div id="login_name"><?php echo $user_name;?> さん</div>
-</div>
 
-<div id="select_menu" style="clear:left;">
 
-	<ul id="menu">
-		<li>ログアウト
-			<ul style="list-style:none;">
-				<li><a href="../../Login/Logout.php">ログアウト</a></li>
-			</ul>
-		</li>
-		<li>注文機能
-			<ul style="list-style:none;">
-				<li><a href="#">新規注文書</a></li>
-				<li><a href="#">注文書選択</a></li>
-			</ul>
-		</li>
-		<li>書類
-			<ul style="list-style:none;">
-				<li><a href="../Document_Browsing/Image_selection.php">書類閲覧</a></li>
-				<li><a href="#">製作物画像登録</a></li>
-			</ul>
-		</li>
-		<li>進捗管理
-			<ul style="list-style:none;">
-				<li><a href="Purchase_order_selection.php">進捗管理</a></li>
-			</ul>
-		</li>
-	</ul>
 
-</div>
-<div id="main">
-<div id="border"></div>
-
-<div id="title"><a>進捗状況</a></div>
 
 
 <div id="syorui">

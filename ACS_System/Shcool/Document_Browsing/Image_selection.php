@@ -337,10 +337,10 @@ EOT;
 								$count++;
 		}
 //		echo "object:",$non_oblect;
- if ($non_oblect==1){
-  		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
-  		unset($non_oblect);
- 	 }
+//  if ($non_oblect==1){
+//   		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
+//   		unset($non_oblect);
+//  	 }
 
 ?>
 

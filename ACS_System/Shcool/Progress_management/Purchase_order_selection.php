@@ -28,33 +28,26 @@ jQuery(document).ready(function($){
 
 
 <script type="text/javascript">
+<?php require "../../DB.php";?>
+
+<script type="text/javascript">
 function functionName()
 {
-var select1 = document.forms.sort.selectName1; //変数select1を宣言
-var select2 = document.forms.sort.selectName2; //変数select2を宣言
+	var select1 = document.forms.sort.selectName1; //変数select1を宣言
+	var select2 = document.forms.sort.selectName2; //変数select2を宣言
 
-select2.options.length = 0; // 選択肢の数がそれぞれに異なる場合、これが重要
+	select2.options.length = 0; // 選択肢の数がそれぞれに異なる場合、これが重要
 
-<?php
-session_start();
-require '../../DB.php';
-require '../../user_name.php';
-
-$user_name=$_SESSION['user_name'];
-if($user_name==null){
-	header("Location: ../../Login/login.html");
-}
+	<?php
 
 
-
-$pull_hin_janru = $pdo->prepare("SELECT * FROM hinmei");
-$pull_hin_janru->execute();
-$pull_school_name = $pdo->prepare("SELECT * FROM school");
-$pull_school_name ->execute();
-$count_h=0;
-$count_s=0;
-
-if (!$pull_hin_janru) {
+	$pull_hin_janru = $pdo->prepare("SELECT * FROM hinmei");
+	$pull_hin_janru->execute();
+	$pull_school_name = $pdo->prepare("SELECT * FROM school");
+	$pull_school_name ->execute();
+	$count_h=0;
+	$count_s=0;
+	if (!$pull_hin_janru) {
 		exit('データを登録できませんでした。');
 	}
 	if (!$pull_school_name) {
@@ -99,46 +92,53 @@ if (!$pull_hin_janru) {
 	}
 	</script>
 
-
 	</head>
+
+
 <body onload="functionName()">
 
 <?php
+include '../School_header.php';
+?>
+<div id="title">進捗管理</div>
+<?php
 
-
-
-
-$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu FROM (((tyuumon TY
+$non_oblect=0;
+$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name FROM ((((tyuumon TY
 				INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
 				INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
-				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)ORDER BY TY.t_date ASC LIMIT 9");
+				INNER JOIN school SC ON TY.school_id=SC.school_id)
+				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
+				ORDER BY TY.t_date ASC LIMIT 10");
+
 $result->execute();
 
+	if (!$result) {
+		exit('データを登録できませんでした。');
+	}
 
-
-if (!$result) {
-	exit('データを登録できませんでした。');
-}
 
 
 	//制作ナンバー検索
 	if(isset($_POST['search_text'])){
 	$search_word = $_POST['search_text'];
-		$search_result= $pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
+		$search_result=$pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
 				from tyuumon,tyuumon_master,hinmei,gazou
-				where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and tm_seisakubutu
-				LIKE '%:keyword%'");
+				where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id
+				and tyuumon_master.tm_seisakubutu LIKE '%:keyword%'");
 		$keyword = $search_word;
-		$search_result->bindParam(":keyword", $keyword, PDO::PARAM_STR);
-//		$search_result->bindValue(":keyword", $keyword);
+		//$search_result->bindParam(":keyword", $keyword, PDO::PARAM_STR);
+		$search_result->bindValue(":keyword", $keyword);
 		$result=$search_result;
 		$result->execute();
-	// 【案件がない場合】
+// 		// 【案件がない場合】
 // 		$resultSet = $search_result->fetchAll();
 // 		$resultNum = count($resultSet);
-// 		if (0 >= $resultNum) {
+
+// 		if (0 == $resultNum) {
 // 			$non_oblect="検索に一致する案件はありません。";
 // 		}
+
 	}
 
 
@@ -149,6 +149,7 @@ if (!$result) {
 
 		//見積もりor発注
 		if($koumoku=='t_naiyou'){
+			$select_Name1="t_naiyou";
 			$sort_result= $pdo->prepare("select * from tyuumon,gazou,hinmei,tyuumon_master
 										where tyuumon.t_naiyou=:zyouken and tyuumon.tm_id=gazou.tm_id and hinmei.hin_id=tyuumon.t_hin_name
 										and tyuumon_master.tm_id=tyuumon.tm_id
@@ -167,6 +168,7 @@ if (!$result) {
 
 		//品名ジャンル
 		if($koumoku=='hin_janru'){
+			$select_Name1="hin_janru";
 			$sort_result= $pdo->prepare("select * from tyuumon,hinmei,gazou,tyuumon_master
 										where tyuumon.t_hin_name=hinmei.hin_id and tyuumon.tm_id=gazou.tm_id and tyuumon.tm_id=tyuumon_master.tm_id and hinmei.hin_id=:zyouken
 										order by '".":zyouken"."'");
@@ -180,11 +182,11 @@ if (!$result) {
 			if (0 == $resultNum) {
 				$non_oblect="検索に一致する案件はありません。";
 			}
-
 		}
 
 		//学校名
 		if($koumoku=='school_name'){
+			$select_Name1="school_name";
 			$sort_result= $pdo->prepare("select * from tyuumon,tyuumon_master,tyuumonsha,school,hinmei,gazou
 										where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon_master.user_id=tyuumonsha.user_id and
 										tyuumonsha.school_id=school.school_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and
@@ -200,7 +202,6 @@ if (!$result) {
 			if (0 == $resultNum) {
 				$non_oblect="検索に一致する案件はありません。";
 			}
-
 		}
 
 //日付検索
@@ -223,7 +224,6 @@ if (!$result) {
 		if (0 == $resultNum) {
 			$non_oblect="検索に一致する案件はありません。";
 		}
-
 		}
 
 //日付プルダウンに挿入する西暦の取得
@@ -232,48 +232,7 @@ $date_pull->execute();
 if (!$date_pull) {
 	exit('データを登録できませんでした。');
 }
-
-
-	?>
-
-<div id="header">
-			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
-			<div id="login_name"><?php echo $user_name;?> さん</div>
-
-</div>
-
-<div id="select_menu" style="clear:left;">
-		<ul id="menu">
-			<li>ログアウト
-				<ul style="list-style:none;">
-					<li><a href="../../Login/Logout.php">ログアウト</a></li>
-				</ul>
-			</li>
-			<li>注文書
-				<ul style="list-style:none;">
-					<li><a href="#">新規注文書</a></li>
-					<li><a href="#">注文書選択</a></li>
-				</ul>
-			</li>
-			<li>書類
-				<ul style="list-style:none;">
-					<li><a href="../Document_Browsing/Image_selection.php">書類閲覧</a></li>
-					<li><a href="#">製作物画像登録</a></li>
-				</ul>
-			</li>
-			<li>進捗管理
-				<ul style="list-style:none;">
-					<li><a href="Purchase_order_selection.php">進捗管理</a></li>
-				</ul>
-			</li>
-		</ul>
-</div>
-
-
-<div id="main">
-<div id="border"></div>
-<div id="title">進捗管理</div>
-
+?>
 
 
 
@@ -330,10 +289,10 @@ if (!$date_pull) {
 		<b>項目と条件を選択してください。</b>
 		<p>項目：
 		<select name = "selectName1" onchange="functionName()">
-			<option value="t_naiyou" label="注文内容" 		<?php if(isset($_POST['select_Name1'])){if($_POST['select_Name1'] == "t_naiyou") { print 'selected';}} ?>>注文内容</option>
-			<option value="hin_janru" label="品名ジャンル" 	<?php if(isset($_POST['select_Name1'])){if($_POST['select_Name1'] == "hin_janru") { print 'selected';}} ?>>品名ジャンル</option>
-			<option value="school_name" label="学校名" 		<?php if(isset($_POST['select_Name1'])){if($_POST['select_Name1'] == "school_name") { print 'selected';}} ?>>学校名</option>
- 			<option value="99" <?php if(!isset($_POST['select_Name1'])) { print 'selected';} ?>>選択してください</option>
+			<option value="t_naiyou" label="注文内容" 	<?php if(isset($select_Name1)){if($select_Name1 == "t_naiyou") { print 'selected';}} ?>>注文内容</option>
+			<option value="hin_janru" label="品名ジャンル" 	<?php if(isset($select_Name1)){if($select_Name1 == "hin_janru") { print 'selected';}} ?>>品名ジャンル</option>
+			<option value="school_name" label="学校名" 	<?php if(isset($select_Name1)){if($select_Name1 == "school_name") { print 'selected';}} ?>>学校名</option>
+ 			<option value="99" <?php if(!isset($select_Name1)) { print 'selected';} ?>>選択してください</option>
 		</select><span style="margin-right: 1em;"></span>
 
 		<a>条件：</a>
@@ -344,8 +303,10 @@ if (!$date_pull) {
 	</form>
 </div>
 
+</div>
 
-<div id="syoruiitiran" style="clear:right;clear:left;">
+
+<div id="syoruiitiran" style="clear:right;clear:left; margin-top:15em;">
 
 <ul class="ul-list-02" >
 	<?php
@@ -354,29 +315,28 @@ if (!$date_pull) {
 			$img_path=$row['gazou_path'];
 
 			if($img_path==null){   //画像がないときNoImage.png
-				$img_path="NoImage.png";
+				$img_path="img/NoImage.png";
 			}
 			$tm_id =$row['tm_id'];
-			if($count%3==0){
+			if($count%2==0){
 				echo"<br clear='left'>";
 			}
-
+//			text-align:center;
 	//書類情報
-echo <<<EOT
-	<div style="float:left; margin-left:4em;">
+		echo <<<EOT
+	<div style="float:left; margin-left:6em; text-align:center;">
 			<input type="image" src="$img_path" alt="画像" width="140px" height="120px" onclick="location.href='Progress_situation.php?select_id=$tm_id'"/></br>
-
-					<div style="margin-left:5px;">
 EOT;
-echo "製作物ナンバー:",$row['tm_seisakubutu'],"<br/>製作日:",$row['t_date'],"<br />品名：",$row['hin_janru'];
-								echo "</div>";
+								echo "製作物ナンバー：",$row['tm_seisakubutu'],"<br/>製作日：",$row['t_date'],"<br />品名：",$row['hin_janru'],"<br/>学校名：",$row['school_name'];
+								echo "<br/><br/></div>";
 								$count++;
-					echo "</div>";
 		}
+//		echo "object:",$non_oblect;
+//  if ($non_oblect==1){
+//   		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
+//   		unset($non_oblect);
+//  	 }
 
-// if (empty($non_oblect)){}
-// 		else{echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'>",$non_oblect,"</div>";
-// }
 		?>
 
 </div>
