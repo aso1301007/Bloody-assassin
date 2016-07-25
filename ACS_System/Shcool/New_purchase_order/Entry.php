@@ -93,11 +93,10 @@ include("../School_header.php")
 			</li>
 		</ul>
 </div>
--->
-
-
 <div id="main">
 <div id = "border"></div>
+-->
+
 <p></p>
 <h1><center>注文書作成</center></h1>
 <br>
