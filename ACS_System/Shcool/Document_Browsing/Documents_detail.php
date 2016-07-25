@@ -76,28 +76,29 @@ session_start();
 require '../../DB.php';
 require '../../user_name.php';
 
-// $user_name=$_SESSION['user_name'];   //ユーザー名取得
-// $tm_id=$_POST['eturan_tm_id'];     //選んだ注文書id
-$user_name="福田崇";
-$tm_id="1";
+$user_name=$_SESSION['user_name'];   //ユーザー名取得
+$tm_id=$_POST['eturan_tm_id'];     //選んだ注文書id
+// $user_name="福田崇";
+// $tm_id="1";
 
 //ログインしていないorセッションが切れた場合------------
 if($user_name==null){
 	header("Location: ../../Login/login.html");
 }
 //-------------------------------------------------------
-echo "tm_id:".$tm_id;
+//echo "tm_id:".$tm_id;
 
 //-----注文書内容をDBから受け取る-----------------------
 
 
-$tm_id="1";
-$sql = "SELECT * FROM ((((((tyuumon TY
+//$tm_id="1";
+$sql = "SELECT * FROM (((((((tyuumon TY
 		INNER JOIN school SC ON TY.school_id = SC.school_id)
 		INNER JOIN tyuumon_master TM ON TY.tm_id=TM.tm_id)
 		INNER JOIN tyuumonsha TS ON TM.user_id=TS.user_id)
 		INNER JOIN user U ON TM.user_id=U.user_id)
-		INNER JOIN gakubu GK ON TY.school_id=GK.school_id)
+		INNER JOIN gakubu GK ON TY.t_gakubu=GK.gakubu_id)
+		INNER JOIN hinmei HI ON HI.hin_id=TY.t_hin_name)
 		LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
 		WHERE TY.tm_id =:tm_id";
 $data = $pdo->prepare($sql);
@@ -107,8 +108,8 @@ $data->execute();
 <body>
 
 <div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../Select_Report/School_Home.psp'">
-			<div id="login_name">担当者さん</div>
+			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../School_Home.psp'">
+			<div id="login_name" ><?php echo $user_name;?>さん</div>
 </div>
 
 <div id="select_menu" style="clear:left;">
@@ -120,8 +121,8 @@ $data->execute();
 			</li>
 			<li>注文書
 				<ul style="list-style:none;">
-					<li><a href="#">新規注文書</a></li>
-					<li><a href="#">注文書選択</a></li>
+					<li><a href="../New_purchase_order/Entry.php">新規注文書</a></li>
+					<li><a href="../Purchase_order_selection/Selection.php">注文書選択</a></li>
 				</ul>
 			</li>
 			<li>書類
@@ -132,7 +133,7 @@ $data->execute();
 			</li>
 			<li>進捗管理
 				<ul style="list-style:none;">
-					<li><a href="../progress/Purchase_order_selection.php">進捗管理</a></li>
+					<li><a href="../Progress_management/Purchase_order_selection.php">進捗管理</a></li>
 				</ul>
 			</li>
 		</ul>
@@ -141,140 +142,81 @@ $data->execute();
 
 <div id="main">
 <div id = "border"></div>
-<p></p>
-<h1><center>以下の内容で保存してよろしいですか？</center></h1>
-<table align = center>
-<tr>
-<td>
-<form action="Save_success.php" method="post" name = "form1">
-<input type="submit" value="保存" class ="nine">
-</form>
-</td>
-<td>
-<form action="newfile1.php" method="post" name = "form2">
-<input type="submit" value="戻る" class ="nine">
-</form>
-</td>
-</tr>
-</table>
+<div id="title">書類閲覧</div>
+
 
 <?php
 while($row = $data ->fetch(PDO::FETCH_ASSOC)){
 	$user_name=$row['user_name'];
 	$user_tel=$row['user_tel'];
-	$t_user_id=$row['user_id'];    //注文マスターテーブルを主にする為の取得
-	$t_date = $row['t_date'];
+//	$t_user_id=$row['user_id'];    //注文マスターテーブルを主にする為の取得
+	$t_date = $row['t_date'];      //日付
 	$t_naiyou = $row['t_naiyou'];     //見積りor発注
 	$school_name=$row['school_name']; //学校名
-	$gakubu=$row['t_gakubu'];
-	$hin_name = $row['t_hin_name'];      //品名
-	$tyuumonsha_busho_name=$row['tyuumonsha_busho_name'];  //利用する学部名
-	echo $tyuumonsha_busho_name;
-	$bikou = $row['t_bikou'];
-	$mokuteki = $row['t_mokuteki'];
-	$size=$row['t_size'];
-	$page = $row['t_page'];
-	$color = $row['t_color'];
-	$men = $row['t_men'];
-	$kami = $row['t_kami'];
-	$orikata = $row['t_orikata'];
-	$busu = $row['t_busu'];
-	$kiboubi = $row['t_kiboubi'];
-	$basyo = $row['t_basho'];
-	$money = $row['t_money'];
-	$youbou = $row['t_youbou'];
-	$s_tm_id = $row['t_sakunen_tm_id'];
-	$s_jisseki = $row['t_sakunen_jisseki'];
-	$s_hiyou = $row['t_sakunen_hiyou'];
-	$s_zei_hantei = $row['t_zei_hantei'];
-	$s_busu = $row['t_sakunen_busu'];
-	$s_size = $row['t_sakunen_size'];
-	$s_page = $row['t_sakunen_page'];
-	$s_color = $row['t_sakunen_color'];
-	$s_men = $row['t_sakunen_men'];
-	$s_kami = $row['t_sakunen_kami'];
-	$s_orikata = $row['t_sakunen_orikata'];
-	$s_basyo = $row['t_sakunen_basho'];
+	$tantousha=$row['t_tantousha'];        //担当者
+	$busyo= $row['t_busho'];     //部署
+	$gakubu=$row['gakubu_name'];       //学部
+	$hin_name = $row['hin_janru'];      //品名
+//	$tyuumonsha_busho_name=$row['tyuumonsha_busho_name'];  //利用する学部名
+	$bikou = $row['t_bikou'];     //備考
+	$mokuteki = $row['t_mokuteki'];  //目的
+	$size=$row['t_size'];   //サイズ
+	$page = $row['t_page'];  //ページ
+	$color = $row['t_color'];  //色
+	$men = $row['t_men'];  //両面・片面
+	$kami = $row['t_kami'];  //   かみ
+	$orikata = $row['t_orikata'];  //折り方
+	$busu = $row['t_busu'];      //部数
+	$kiboubi = $row['t_kiboubi'];   //希望日
+	$basyo = $row['t_basho'];    //納品場所
+	$money = $row['t_money'];   //費用
+	$youbou = $row['t_youbou'];   //要望
+	$s_tm_id = $row['t_sakunen_tm_id'];   //昨年のtm_id
+	$s_jisseki = $row['t_sakunen_jisseki'];  //昨年実績
+	$s_hiyou = $row['t_sakunen_hiyou'];    //昨年費用
+	$s_zei_hantei = $row['t_zei_hantei'];  //税込みor税抜き
+	$s_busu = $row['t_sakunen_busu'];    //昨年部数
+	$s_size = $row['t_sakunen_size'];   //昨年サイズ
+	$s_page = $row['t_sakunen_page'];   //昨年ページ
+	$s_color = $row['t_sakunen_color'];  //昨年色
+	$s_men = $row['t_sakunen_men'];     //昨年片面or両面
+	$s_kami = $row['t_sakunen_kami'];       //昨年かみ
+	$s_orikata = $row['t_sakunen_orikata'];   //昨年折り方
+	$s_basyo = $row['t_sakunen_basho'];     //昨年納品場所
 	$s_tantou = $row['t_sakunen_tantou'];  //昨年担当者名
 	$img_path=$row['gazou_path'];     //画像
 }
+
 list($year, $month, $date) = explode('-', $t_date);  // 文字列の分解
 
 $estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" disabled = \"disabled\">見積もり</td>";
 $order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" disabled = \"disabled\">発注</td>";
 switch ($t_naiyou){
-case 'mi':
+case '0':
 	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked disabled = \"disabled\">見積もり</td>";
 	break;
-case 'ha':
+case '1':
 	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked disabled = \"disabled\">発注</td>";
 	break;
 }
 
-switch ($school_name){
-	case '1':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生情報ビジネス専門学校福岡校\" readonly>";
-		break;
-	case '2':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生外語観光＆製菓専門学校\" readonly>";
-		break;
-	case'3':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生医療福祉専門学校福岡校\" readonly>";
-		break;
-	case'4':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生建築＆デザイン専門学校\" readonly>";
-		break;
-	case'5':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生公務員専門学校福岡校\" readonly>";
-		break;
-	case'6':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生リハビリテーション大学校\" readonly>";
-		break;
-	case'7':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生工科自動車大学校\" readonly>";
-		break;
-	case'8':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生ビューティーカレッジ\" readonly>";
-		break;
-	case'9':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生情報ビジネス専門学校北九州校\" readonly>";
-		break;
-	case'10':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生公務員専門学校北九州校\" readonly>";
-		break;
-	case'11':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生医療福祉＆観光カレッジ\" readonly>";
-		break;
-	case'12':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生看護大学校\" readonly>";
-		break;
-}
 
-switch ($hin_name){
-case '1':
-	$hin_janru_mei = "<input type=\"text\" name=\"t_hin_name\" class = \"one\" value=\"パンフレット\" readonly>";
-	break;
-case '2':
-	$hin_janru_mei = "<input type=\"text\" name=\"t_hin_name\" class = \"one\" value=\"ポスター\" readonly>";
-	break;
-case'3':
-	$hin_janru_mei = "<input type=\"text\" name=\"t_hin_name\" class = \"one\" value=\"看板\" readonly>";
-	break;
-case'4':
-	$hin_janru_mei = "<input type=\"text\" name=\"t_hin_name\" class = \"one\" value=\"その他\" readonly>";
-	break;
-}
+
+
+
 
 $kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" disabled = \"disabled\">片面</td>";
 $ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" disabled = \"disabled\">両面</td>";
 switch ($men){
-	case '1':
+	case '片面':
 		$kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" checked disabled = \"disabled\">片面</td>";
 		break;
-	case '2':
+	case '両面':
 		$ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" checked disabled = \"disabled\">両面</td>";
 		break;
 }
+
+
 
 $yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" disabled = \"disabled\">あり</td>";
 $no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" disabled = \"disabled\">なし</td>";
@@ -282,7 +224,7 @@ switch ($s_jisseki){
 	case '1':
 		$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" checked disabled = \"disabled\">あり</td>";
 		break;
-	case '2':
+	case '0':
 		$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" checked disabled = \"disabled\">なし</td>";
 		break;
 }
@@ -293,26 +235,43 @@ switch ($s_zei_hantei){
 	case '1':
 		$komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" checked disabled = \"disabled\">(税込み)</td>";
 		break;
-	case '2':
+	case '0':
 		$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" checked disabled = \"disabled\">(税抜き)</td>";
 		break;
 }
 
-$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" disabled = \"disabled\">片面</td>";
-$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" disabled = \"disabled\">両面</td>";
+
+
+$l_kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" disabled = \"disabled\">片面</td>";
+$l_ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" disabled = \"disabled\">両面</td>";
 switch ($s_men){
-	case '1':
-		$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" checked disabled = \"disabled\">片面</td>";
+	case '片面':
+		$l_kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" checked disabled = \"disabled\">片面</td>";
 		break;
-	case '2':
-		$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" checked disabled = \"disabled\">両面</td>";
+	case '両面':
+		$l_ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" checked disabled = \"disabled\">両面</td>";
 		break;
 }
+
 ?>
 
-<form action="newfile3.php" method="post">
-<table border=0 width=713 style='border-collapse:
- collapse;table-layout:fixed;width:529pt' align = center>
+<div style="align:center;">
+			<!-- 折り畳み展開ポインタ -->
+			<div onclick="obj=document.getElementById('open01').style; obj.display=(obj.display=='none')?'block':'none';">
+				<a style="cursor:pointer;"><input type="button" value="▼注文書"></input></a>
+			</div>
+			<!--// 折り畳み展開ポインタ -->
+
+			<!-- 折り畳まれ部分 -->
+
+			<div id="open01" style="display:none;clear:both;">
+
+
+
+
+
+
+<table border="0" width="713" style='border-collapse:collapse;table-layout:fixed;width:529pt;align:center;'>
  <col width=31 span=23 style='width:23pt'>
  <tr height=36 style='height:27.0pt'>
  <td height=36 width=31 style='height:27.0pt;width:23pt'></td>
@@ -453,7 +412,7 @@ switch ($s_men){
  </td>
  <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>部署名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <input type="text" name="name" maxlength="15" class = "one" readonly value =  <?php echo $tyuumonsha_busho_name; ?>>
+ <input type="text" name="name" maxlength="15" class = "one" readonly value =  <?php echo $busyo; ?>>
  </td>
  <td class=xl69>　</td>
  </tr>
@@ -463,7 +422,7 @@ switch ($s_men){
  <td class=xl68>　</td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>ご担当者名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <input type="text" name="user_name" maxlength="15" class = "one" readonly value =  <?php echo $user_name; ?>>
+ <input type="text" name="user_name" maxlength="15" class = "one" readonly value =  <?php echo $tantousha; ?>>
  </td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black;border-left:none'>お電話番号</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
@@ -477,12 +436,12 @@ switch ($s_men){
  <td class=xl68>　</td>
  <td colspan=4 class=xl114 style='border-right:.5pt solid black'>品名</td>
  <td colspan=6>
- <?php echo $hin_janru_mei ?>
+ <?php echo $hin_name;?>
  </td>
  <td colspan=3 class=xl114 style='border-right:.5pt solid black'>備考</td>
  <td colspan=7 class=xl114 style='border-right:.5pt solid black;border-bottom:border-left:none'>
  <textarea name="t_bikou" rows="2" wrap="soft" maxlength = "255" class = "one" readonly>
- <?php echo $t_bikou ?>
+ <?php echo $bikou ?>
  </textarea>
  </td>
  <td class=xl69>　</td>
@@ -493,12 +452,12 @@ switch ($s_men){
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>利用する学部系</td>
   <td colspan=6 class=xl89 style='border-left:none'>
-  <input type="text" name="gakubu_name" maxlength="20" class = "one" readonly value =  <?php echo $gakubu; ?>>
+  <?php echo $gakubu; ?>
   </td>
   <td colspan=3 class=xl111 style='border-right:.5pt solid black'>利用目的</td>
   <td colspan=7 class=xl89 style='border-right:.5pt solid black;border-left:none'>
   <textarea name="t_mokuteki" rows="2" wrap="soft" maxlength = "255" class = "one" readonly>
-  <?php echo $t_mokuteki; ?>
+  <?php echo $mokuteki; ?>
   </textarea>
   </td>
   <td class=xl69>　</td>
@@ -530,14 +489,10 @@ switch ($s_men){
   <td height=36 style='height:27.0pt'></td>
   <td class=xl68>　</td>
   <td colspan=3 class=xl90>
-  <?php
-  echo $kata
-  ?>
+  <?php echo $kata;?>
   </td>
   <td colspan=3 class=xl90 style='border-right:.5pt solid black'>
-  <?php
-  echo $ryo
-  ?>
+  <?php echo $ryo;?>
   </td>
   <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>紙</td>
   <td colspan=3 class=xl89 style='border-right:.5pt solid black;border-left:none'>
@@ -868,7 +823,46 @@ switch ($s_men){
   </tr>
 
   </table>
-  </form>
-  </div>
+
+</div>
+<div>
+			<!--// 折り畳まれ部分 -->
+		</td></tr><!-- //折りたたみページ1  -->
+
+
+ 		<tr><td><!-- 折りたたみページ1  -->
+			<!-- 折り畳み展開ポインタ -->
+			<div onclick="obj=document.getElementById('open02').style; obj.display=(obj.display=='none')?'block':'none';">
+				<a style="cursor:pointer;"><input type="button" value="▼報告書"></input></a>
+			</div>
+			<!--// 折り畳み展開ポインタ -->
+
+			<!-- 折り畳まれ部分 -->
+
+			<div id="open02" style="display:none;clear:both;">
+				報告書表示
+			</div>
+			<!--// 折り畳まれ部分 -->
+		</td></tr><!-- //折りたたみページ1  -->
+
+</div>
+<div>
+
+		<tr><td><!-- 折りたたみページ3  -->
+			<!-- 折り畳み展開ポインタ -->
+			<div onclick="obj=document.getElementById('open03').style; obj.display=(obj.display=='none')?'block':'none';">
+				<a style="cursor:pointer;"><input type="button" value="▼画像" text-align='center'></input></a>
+			</div>
+			<!--// 折り畳み展開ポインタ -->
+
+			<!-- 折り畳まれ部分 -->
+			<div id="open03" style="display:none;clear:both;">
+<?php 				echo"<img src='$img_path' alt='画像' width='450px' text-align='center'/>";
+?>
+			</div>
+			<!--// 折り畳まれ部分 -->
+		</td></tr><!-- //折りたたみページ1  -->
+</div>
+</div>
   </body>
 </html>
