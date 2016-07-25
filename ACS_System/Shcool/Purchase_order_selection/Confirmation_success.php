@@ -154,11 +154,11 @@ mso-footer-margin:.3in;}
 	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" disabled />見積もり</td>";
 	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" disabled />発注</td>";
 	switch($SQL['t_naiyou']){
-		case '見積もり':
+		case 0:
 			$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked disabled />見積もり</td>";
 			break;
 
-		case '発注':
+		case 1:
 		$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked disabled />発注</td>";
 		break;
 	}

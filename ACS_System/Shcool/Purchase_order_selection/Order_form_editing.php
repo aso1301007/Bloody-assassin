@@ -93,16 +93,17 @@ mso-footer-margin:.3in;}
 	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" />見積もり</td>";
 	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked />発注</td>";
 	switch($SQL['t_naiyou']){
-		case '見積もり':
+		case 0:
 			$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked />見積もり</td>";
 			break;
 
-		case '発注':
+		case 1:
 		$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked />発注</td>";
 		break;
 	}
 	//学校名
 	$school_id = $SQL['school_id'];
+	if(empty($school_id)){$school_id = 1;}
 	$Yes_school = "SELECT * FROM school WHERE school_id = ". $school_id. "";
 	$yes_school =  $pdo->prepare($Yes_school);
 	$yes_school->execute();
@@ -121,6 +122,7 @@ mso-footer-margin:.3in;}
 
 	//品名
 	$product_id = $SQL['hin_id'];
+	if(empty($product_id)){$product_id = 1;}
 	$Yes_hin = "SELECT * FROM hinmei WHERE hin_id = ".$product_id."";	//選択されていた値を検索
 	$yes_hin = $pdo->prepare($Yes_hin);
 	$yes_hin->execute();
@@ -131,6 +133,7 @@ mso-footer-margin:.3in;}
 	$remarks = $SQL['t_bikou'];
 	//利用する学部系
 	$undergraduate_id = $SQL['gakubu_id'];
+	if(empty($undergraduate_id)){$undergraduate_id = 1;}
 	$Yes_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id = ". $undergraduate_id. "";
 	$yes_undergraduate =  $pdo->prepare($Yes_undergraduate);
 	$yes_undergraduate->execute();

@@ -62,25 +62,25 @@
 	$Flg = True;										//未入力項目を探すときに使う
 	$id = $_POST['id'];									//注文id
 	$date = $_POST['date'];								//日付
-	if(empty($date) or $date == ""){
+	if(empty($date) or $date === ""){
 		$Flg = False;
 	}
 	$t_naiyou = $_POST['t_naiyou'];						//見積もり・発注
 	$school_id = $_POST['school_id'];					//学校名
 	$name = $_POST['name'];								//部署名
 	$user_name = $_POST['user_name'];					//担当者名
-	if(empty($user_name) or $user_name == ""){
+	if(empty($user_name) or $user_name === ""){
 		$Flg = False;
 	}
 	$user_tel = $_POST['user_tel'];						//電話番号
-	if(empty($user_tel) or $user_tel == ""){
+	if(empty($user_tel) or $user_tel === ""){
 		$Flg = False;
 	}
 	$hin_id = $_POST['hin_id'];							//品名
 	$t_bikou = $_POST['t_bikou'];						//備考
 	$gakubu_id = $_POST['gakubu_id'];					//利用する学部系
 	$t_mokuteki = $_POST['t_mokuteki'];					//利用目的
-	if(empty($t_mokuteki) or $t_mokuteki == ""){
+	if(empty($t_mokuteki) or $t_mokuteki === ""){
 		$Flg = False;
 	}
 	$t_size = $_POST['t_size'];							//仕様：サイズ
@@ -106,31 +106,31 @@
 	$t_sakunen_orikata = $_POST['t_sakunen_orikata'];	//昨年：折り方
 	$t_sakunen_basho = $_POST['t_sakunen_basho'];		//昨年：発注先
 	$t_sakunen_tantou = $_POST['t_sakunen_tantou'];		//昨年：担当者
-	if($t_naiyou == 'est'){//ラジオボタンが見積もりを選んだのかを判定
-		$t_naiyou = "見積り";
+	if($t_naiyou === 'est'){//ラジオボタンが見積もりを選んだのかを判定
+		$t_naiyou = 0;
 	}
 	else{
-		$t_naiyou = "発注";
+		$t_naiyou = 1;
 	}
-	if($t_men =='kata'){//ラジオボタンが片面を選んだのかを判定
+	if($t_men ==='kata'){//ラジオボタンが片面を選んだのかを判定
 		$t_men = "片面";
 	}
 	else{
 		$t_men = "両面";
 	}
-	if($t_sakunen_jisseki =='yes'){//ラジオボタンが昨年実績があるを選んだのかを判定
+	if($t_sakunen_jisseki ==='yes'){//ラジオボタンが昨年実績があるを選んだのかを判定
 		$t_sakunen_jisseki = True;
 	}
 	else{
 		$t_sakunen_jisseki = False;
 	}
-	if($t_zei_hantei == 'komi'){//ラジオボタンが税込を選んだのかを判定
+	if($t_zei_hantei === 'komi'){//ラジオボタンが税込を選んだのかを判定
 		$t_zei_hantei = True;
 	}
 	else{
 		$t_zei_hantei = False;
 	}
-	if($t_sakunen_men == 'kata'){//ラジオボタンが片面を選んだのかを判定
+	if($t_sakunen_men === 'kata'){//ラジオボタンが片面を選んだのかを判定
 			$t_sakunen_men = "片面";
 	}
 	else{

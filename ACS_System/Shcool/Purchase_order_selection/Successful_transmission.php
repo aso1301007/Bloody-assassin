@@ -95,18 +95,11 @@ while($SQL02 = $result_sql02->fetch(PDO::FETCH_ASSOC)){
 	}
 
 }
-?>
- <?php
-// echo "http://localhost". $_SERVER["REQUEST_URI"]. "<br />";
-// $id = $_REQUEST['id'];
-// $addres = "http://localhost/acs_system/Shcool/Purchase_order_selection/Confirmation_success.php?id=". $id;
-// //mail("送信先アドレス", "件名", "本文", "送信元アドレス")
-// if(mb_send_mail("1301007@st.asojuku.ac.jp", "卒研テストメール", $addres, "hellsing.10@ezweb.ne.jp")){
-// 	echo "成功";
-// }
-// else{
-// 	echo "失敗";
-// }
+$update = "UPDATE tyuumon_master
+			SET tm_hattyu_flg = True
+			WHERE tm_id = ". $id;
+$update_sql = $pdo->prepare($update);
+$update_sql->execute();
 ?>
 <div align="center">
 <input type="button" name="can" value="戻る" onclick="location.href='Selection.php'" />
