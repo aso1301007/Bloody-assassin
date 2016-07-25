@@ -27,19 +27,19 @@ $user_name=$_SESSION['user_name'];
 		</li>
 		<li>注文機能
 			<ul style="list-style:none;">
-				<li><a href="New_purchase_order/Entry.php">新規注文書</a></li>
-				<li><a href="Purchase_order_selection/Selection.php">注文書選択</a></li>
+				<li><a href="http://localhost/ACS_System/Shcool/New_purchase_order/Entry.php">新規注文書</a></li>
+				<li><a href="http://localhost/ACS_System/Shcool/Purchase_order_selection/Selection.php">注文書選択</a></li>
 			</ul>
 		</li>
 		<li>書類
 			<ul style="list-style:none;">
-				<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
+				<li><a href="http://localhost/ACS_System/Shcool/Document_Browsing/Image_selection.php">書類閲覧</a></li>
 				<li><a href="#">製作物画像登録</a></li>
 			</ul>
 		</li>
 		<li>進捗管理
 			<ul style="list-style:none;">
-				<li><a href="Purchase_order_selection.php">進捗管理</a></li>
+				<li><a href="http://localhost/ACS_System/Shcool/Progress_management/Purchase_order_selection.php">進捗管理</a></li>
 			</ul>
 		</li>
 	</ul>
