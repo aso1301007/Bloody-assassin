@@ -1,5 +1,4 @@
-
-<?php session_start();?>
+<?php session_start()?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
@@ -21,13 +20,9 @@
 </script>
 </head>
 <body>
-<?php
-//	require '../../DB.php';			//DB.php呼び出し
-//	require '../../user_name.php';	//セッションユーザー呼び出し
-?>
 <div id="header">
 	<input type="button" name="top" value="TOP" onclick="location.href='School_Home.php'"/>
-	<div id="login_name"><?php// echo $user_name;?>さん</div>
+	<div id="login_name"><?php $_SESSION['user_name'];?>さん</div>
 </div>
 <div id="select_menu" style="clear:left;">
 	<ul id="menu">
@@ -57,27 +52,51 @@
 </div>
 <div id="main">
 	<div id="border"></div>
-	<div id="title">送信結果：成功</div>
-
+	<div id="title">送信結果</div>
 <?php
+	require '../../DB.php';			//DB.php呼び出し
+?>
+<?php
+$id = $_REQUEST['id'];//注文ID
+$sql = "SELECT t1.t_tantousha, t2.tm_seisakubutu
+			FROM tyuumon t1 inner join tyuumon_master t2 on t1.tm_id = t2.tm_id
+			WHERE t1.tm_id = ". $id;
+$result_sql = $pdo->prepare($sql);
+$result_sql->execute();
+$SQL = $result_sql->fetch(PDO::FETCH_ASSOC);
+//ACS社員2人のアドレス検索
+$sql02 = "SELECT *
+			FROM user
+			WHERE user_kubun = 'ACS社員'";
+$result_sql02 = $pdo->prepare($sql02);
+$result_sql02->execute();
+
 // 1.言語、文字コードを指定
 mb_language("Ja");
 mb_internal_encoding("UTF-8");
 
-// 送信先、件名、本文を変数に格納
-$mailto = "hellsing.10@ezweb.ne.jp";
-$subject = "PHPでのメール送信について";
-$content = "こんにちは。";
-
+// 件名、本文を変数に格納
+$subject = "[ACS_System]注文書が送信されました。";
+$host_name = gethostname();
+$content = "この注文書の製作物ナンバーは、". $SQL['tm_seisakubutu']. "です。\n http://".$host_name ."/acs_system/Shcool/Purchase_order_selection/acs_order_login.php?id=". $id;
 // 2.差出人を日本語表示
-$mailfrom="From:" .mb_encode_mimeheader("富良斗 太郎") ."<hellsing.10@ezweb.ne.jp>";
+$T_name = $SQL['t_tantousha'];
+$mailfrom="From:" .mb_encode_mimeheader($T_name);
 
-// 3.上記(送信先、件名、本文、差出人)を日本語でメール送信実行
-mb_send_mail($mailto, $subject, $content, $mailfrom);
-echo '送信完了!';
+while($SQL02 = $result_sql02->fetch(PDO::FETCH_ASSOC)){
+	$mailto = $SQL02['user_mail'];
+	$Aname = $SQL02['user_name'];
+	// 3.上記(送信先、件名、本文、差出人)を日本語でメール送信実行
+	if(mb_send_mail($mailto, $subject, $content, $mailfrom)){
+		echo "<div align=\"center\"><font size=\"5\">". $Aname. "さんに送信しました。</font></div>";
+	}
+	else{
+		echo "<div align=\"center\"><font size=\"5\">". $Aname. "さんに送信失敗しました。<br />初めからやり直してください。</font><br />";
+	}
+
+}
 ?>
-
-
+ <?php
 // echo "http://localhost". $_SERVER["REQUEST_URI"]. "<br />";
 // $id = $_REQUEST['id'];
 // $addres = "http://localhost/acs_system/Shcool/Purchase_order_selection/Confirmation_success.php?id=". $id;
@@ -89,15 +108,9 @@ echo '送信完了!';
 // 	echo "失敗";
 // }
 ?>
-
-<?php
-// if (mb_send_mail('1301007@st.asojuku.ac.jp', 'aaa', 'test')) {
-// echo ‘送信成功’;
-// } else {
-// echo ‘送信失敗’;
-// }
-// ?>
-
+<div align="center">
+<input type="button" name="can" value="戻る" onclick="location.href='Selection.php'" />
+</div>
 </div>
 </body>
 </html>
