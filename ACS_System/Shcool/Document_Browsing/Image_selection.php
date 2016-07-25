@@ -132,13 +132,13 @@ $result->execute();
 		$search_result->bindValue(":keyword", $keyword);
 		$result=$search_result;
 		$result->execute();
-// 		// 【案件がない場合】
-// 		$resultSet = $search_result->fetchAll();
-// 		$resultNum = count($resultSet);
+		// 【案件がない場合】
+		$resultSet = $search_result->fetchAll();
+		$resultNum = count($resultSet);
 
-// 		if (0 == $resultNum) {
-// 			$non_oblect="検索に一致する案件はありません。";
-// 		}
+		if (0 == $resultNum) {
+			$non_oblect=1;
+		}
 
 	}
 
@@ -158,13 +158,13 @@ $result->execute();
 			$sort_result->bindValue(":zyouken",$zyouken);
 			$result=$sort_result;
 			$result->execute();
-			// 【案件がない場合】
-			$resultSet = $sort_result->fetchAll();
-			$resultNum = count($resultSet);
+				// 【案件がない場合】
+		$resultSet = $sort_result->fetchAll();
+		$resultNum = count($resultSet);
 
-			if (0 == $resultNum) {
-				$non_oblect="検索に一致する案件はありません。";
-			}
+		if (0 == $resultNum) {
+			$non_oblect=1;
+		}
 		}
 
 		//品名ジャンル
@@ -176,13 +176,13 @@ $result->execute();
 			$sort_result->bindValue(":zyouken",$zyouken);
 			$result=$sort_result;
 			$result->execute();
-			// 【案件がない場合】
-			$resultSet = $sort_result->fetchAll();
-			$resultNum = count($resultSet);
+				// 【案件がない場合】
+		$resultSet = $sort_result->fetchAll();
+		$resultNum = count($resultSet);
 
-			if (0 == $resultNum) {
-				$non_oblect="検索に一致する案件はありません。";
-			}
+		if (0 == $resultNum) {
+			$non_oblect=1;
+		}
 		}
 
 		//学校名
@@ -197,13 +197,13 @@ $result->execute();
 			$result->execute();
 			}
 			// 【案件がない場合】
-			$resultSet = $sort_result->fetchAll();
-			$resultNum = count($resultSet);
+		$resultSet = $sort_result->fetchAll();
+		$resultNum = count($resultSet);
 
-			if (0 == $resultNum) {
-				$non_oblect="検索に一致する案件はありません。";
-			}
+		if (0 == $resultNum) {
+			$non_oblect=1;
 		}
+	}
 
 //日付検索
 		if(isset($_POST['select_year'])){
@@ -218,12 +218,12 @@ $result->execute();
 		$date_result->bindValue(":keyword", $keyword);
 		$result=$date_result;
 		$result->execute();
-		// 【案件がない場合】
+					// 【案件がない場合】
 		$resultSet = $date_result->fetchAll();
 		$resultNum = count($resultSet);
 
 		if (0 == $resultNum) {
-			$non_oblect="検索に一致する案件はありません。";
+			$non_oblect=1;
 		}
 		}
 
@@ -337,10 +337,10 @@ EOT;
 								$count++;
 		}
 //		echo "object:",$non_oblect;
-//  if ($non_oblect==1){
-//   		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
-//   		unset($non_oblect);
-//  	 }
+ if ($non_oblect==1){
+  		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
+  		unset($non_oblect);
+ 	 }
 
 ?>
 
