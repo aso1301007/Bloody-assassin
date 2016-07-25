@@ -35,14 +35,18 @@
 }
 
 div.over01{
+	font-size: 20px;
 	width: 200px;
-	height: 100%;
+	height: 40px;
 	overflow: auto;
+	display:table-cell;
+    text-align:center;
+    vertical-align:middle;
 }
 
 div.over02{
 	width: 300px;
-	height: 100%;
+	height: 40px;
 	overflow: auto;
 }
 </style>
@@ -86,8 +90,9 @@ div.over02{
 <?php
 	$user_id = $_SESSION['user_id'];	//ログイン中の人のユーザID
 	//注文ID, 日付, 品名, 備考を検索
-	$sql = "SELECT t1.tm_id, t1.t_date, t1.t_hin_name, t1.t_bikou
-			FROM tyuumon t1 inner join tyuumon_master t2 on t1.tm_id = t2.tm_id
+	$sql = "SELECT t1.tm_id, t1.t_date, h1.hin_janru, t1.t_bikou
+			FROM (tyuumon t1 inner join tyuumon_master t2 on t1.tm_id = t2.tm_id)
+				inner join hinmei h1 on t1.t_hin_name = h1.hin_id
 			WHERE t2.tm_hattyu_flg = false and t2.tm_sakujo_flg = false and t2.user_id = ".$user_id
 			. " ORDER BY t1.t_date DESC";
 	$result_sql = $pdo->prepare($sql);
@@ -114,12 +119,12 @@ div.over02{
 		<?php
 			while($SQL = $result_sql->fetch(PDO::FETCH_ASSOC)){//検索結果を表示
 				echo "<tr><td><div class=\"over01\">" .date('Y年　m月　d日', strtotime($SQL['t_date'])) ."</div></td>";
-				echo "<td><div class=\"over01\"><a href=\"Confirmation_success.php?id=" .$SQL['tm_id'] ."\">" .$SQL['t_hin_name'] ."</div></td>";
+				echo "<td><div class=\"over01\"><a href=\"Confirmation_success.php?id=" .$SQL['tm_id'] ."\">" .$SQL['hin_janru'] ."</div></td>";
 				echo "<td><div class=\"over02\">" .$SQL['t_bikou'] ."</div></td></tr>";
 			}
 			if($count < 10){//案件が10件以下の場合、10件までリスト挿入
 				while($count < 10){
-					echo "<tr><td></td><td>なし</td><td></td></tr>";
+					echo "<tr><td><div class=\"over01\" /></td><td><div class=\"over01\" />なし</td><td><div class=\"over02\"></td></tr>";
 					$count++;
 				}
 			}
