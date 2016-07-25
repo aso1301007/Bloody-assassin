@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <link rel=Stylesheet href=stylesheet.css type="text/css">
-<link rel=stylesheet type=text/css href=css.css>
+<link rel=stylesheet type=text/css href=../../css.css>
 <style>
 <!--table
 {mso-displayed-decimal-separator:"\.";
@@ -120,8 +120,8 @@ $stmt2->execute();//INSERT文実行
 
 <body>
 <div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../School_Home.php'">
-			<div id="login_name">担当者さん</div>
+			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
+			<div id="login_name"><?php echo $user_name;?> さん</div>
 </div>
 
 <div id="select_menu" style="clear:left;">

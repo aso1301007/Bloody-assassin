@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Insert title here</title>
 <link rel=Stylesheet href=stylesheet.css type="text/css">
-<link rel=stylesheet type=text/css href=css.css>
+<link rel=stylesheet type=text/css href=../../css.css>
 <style>
 <!--table
 {mso-displayed-decimal-separator:"\.";
