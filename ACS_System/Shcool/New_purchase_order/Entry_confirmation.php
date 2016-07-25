@@ -508,7 +508,7 @@ switch ($t_sakunen_men){
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>利用する学部系</td>
   <td colspan=6 class=xl89 style='border-left:none'>
-  <input type="text" name="gakubu_name" maxlength="20" class = "one" readonly value =  <?php echo $gakubu_name; ?>>
+  <?php echo $gakubu_name; ?>
   <?php echo $gakubu_id?>
   </td>
   <td colspan=3 class=xl111 style='border-right:.5pt solid black'>利用目的</td>
