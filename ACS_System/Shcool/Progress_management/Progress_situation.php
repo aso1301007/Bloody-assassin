@@ -6,10 +6,6 @@
 <link rel=stylesheet type=text/css href=../../css.css>
 
 
-
-<title>学校_進捗状況</title>
-
-
 <script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
 <script src="../../js/jquery.focused.min.js"></script>
 
@@ -36,21 +32,19 @@ jQuery(document).ready(function($){
 		}
 	}
 </script>
-
+<title>学校_進捗状況</title>
 </head>
 
-<body>
 
+<body>
 <?php
-//require '../../DB.php';
+//session_start();
+require '../../DB.php';
 include '../School_header.php';
 
-?>
-<div id="title"><a>進捗状況</a></div>
-
-<?
+echo "<div id='title'><a>進捗状況</a></div>";
 //-----前ページで指定された注文書のID受け取り-----
-$session_start();
+
 $_SESSION['sintyoku_tm_id']=$_GET['select_id'];
 $tm_id=$_SESSION['sintyoku_tm_id'];
 //---------------------------------------
