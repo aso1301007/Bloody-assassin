@@ -71,26 +71,14 @@ jQuery(document).ready(function($){
 <body>
 
 <?php
-
-session_start();
+include '../School_header.php';
 require '../../DB.php';
-require '../../user_name.php';
-
-$user_name=$_SESSION['user_name'];   //ユーザー名取得
-$tm_id=$_POST['eturan_tm_id'];     //選んだ注文書id
-// $user_name="福田崇";
-// $tm_id="1";
-
-//ログインしていないorセッションが切れた場合------------
-if($user_name==null){
-	header("Location: ../../Login/login.html");
-}
-//-------------------------------------------------------
-//echo "tm_id:".$tm_id;
+?>
+<div id="title">書類閲覧</div>
+<?php
+ $tm_id=$_POST['eturan_tm_id'];     //選んだ注文書id
 
 //-----注文書内容をDBから受け取る-----------------------
-
-
 //$tm_id="1";
 $sql = "SELECT * FROM (((((((tyuumon TY
 		INNER JOIN school SC ON TY.school_id = SC.school_id)
@@ -104,48 +92,8 @@ $sql = "SELECT * FROM (((((((tyuumon TY
 $data = $pdo->prepare($sql);
 $data->bindParam(':tm_id', $tm_id, PDO::PARAM_STR);
 $data->execute();
-?>
-<body>
 
-<div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../School_Home.psp'">
-			<div id="login_name" ><?php echo $user_name;?>さん</div>
-</div>
-
-<div id="select_menu" style="clear:left;">
-		<ul id="menu">
-			<li>ログアウト
-				<ul style="list-style:none;">
-					<li><a href="../../Login/Logout.php">ログアウト</a></li>
-				</ul>
-			</li>
-			<li>注文書
-				<ul style="list-style:none;">
-					<li><a href="../New_purchase_order/Entry.php">新規注文書</a></li>
-					<li><a href="../Purchase_order_selection/Selection.php">注文書選択</a></li>
-				</ul>
-			</li>
-			<li>書類
-				<ul style="list-style:none;">
-					<li><a href="Image_selection.php">書類閲覧</a></li>
-					<li><a href="#">製作物画像登録</a></li>
-				</ul>
-			</li>
-			<li>進捗管理
-				<ul style="list-style:none;">
-					<li><a href="../Progress_management/Purchase_order_selection.php">進捗管理</a></li>
-				</ul>
-			</li>
-		</ul>
-</div>
-
-
-<div id="main">
-<div id = "border"></div>
-<div id="title">書類閲覧</div>
-
-
-<?php
+//------注文書の内容を取得-------------
 while($row = $data ->fetch(PDO::FETCH_ASSOC)){
 	$user_name=$row['user_name'];
 	$user_tel=$row['user_tel'];
