@@ -86,7 +86,7 @@ $user_id=$_SESSION['user_id'];
 		}
 	?>
 
-	<table border="1" width="500" align="center">
+	<table border="1" width="500" align="center" style="margin-bottom:50px;">
 			<tr><th><?php echo $user_name;?>さんの進捗状況</th></tr>
 		<?php
 			//START_折りたたみページ1(発注済み)

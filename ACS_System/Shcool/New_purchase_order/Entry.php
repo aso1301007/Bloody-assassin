@@ -104,7 +104,7 @@ include("../School_header.php")
 <h3><center>項目に記入してください。</center></h3>
 <form action="Entry_confirmation.php" method="POST" name = "form1"  onSubmit="return check()">
 <table border=0 width=713 style='border-collapse:
- collapse;table-layout:fixed;width:529pt' align = center>
+ collapse;table-layout:fixed;width:529pt align:center; margin-bottom:50px;'>
  <col width=31 span=23 style='width:23pt'>
  <tr height=36 style='height:27.0pt'>
  <td height=36 width=31 style='height:27.0pt;width:23pt'></td>
