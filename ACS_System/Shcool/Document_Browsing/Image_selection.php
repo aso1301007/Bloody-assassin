@@ -99,20 +99,18 @@ function functionName()
 	<body onload="functionName()">
 
 	<?php
+include '../School_header.php';
+?>
+<div id="title">書類一覧</div>
+<?php
 
-session_start();
-$user_name=$_SESSION['user_name'];   //ユーザー名取得
-
-	//ログインしていないorセッションが切れた場合------------
-	if($user_name==null){
-		header("Location: ../../Login/login.html");
-	}
-
-
-$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu FROM (((tyuumon TY
+$non_oblect=0;
+$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name FROM ((((tyuumon TY
 				INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
 				INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
-				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)ORDER BY TY.t_date ASC LIMIT 9");
+				INNER JOIN school SC ON TY.school_id=SC.school_id)
+				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
+				ORDER BY TY.t_date ASC LIMIT 10");
 
 $result->execute();
 
@@ -125,10 +123,10 @@ $result->execute();
 	//制作ナンバー検索
 	if(isset($_POST['search_text'])){
 	$search_word = $_POST['search_text'];
-		$search_result= $pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
+		$search_result=$pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
 				from tyuumon,tyuumon_master,hinmei,gazou
-				where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and tm_seisakubutu
-				LIKE '%:keyword%'");
+				where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id
+				and tyuumon_master.tm_seisakubutu LIKE '%:keyword%'");
 		$keyword = $search_word;
 		//$search_result->bindParam(":keyword", $keyword, PDO::PARAM_STR);
 		$search_result->bindValue(":keyword", $keyword);
@@ -235,46 +233,9 @@ $date_pull->execute();
 if (!$date_pull) {
 	exit('データを登録できませんでした。');
 }
+?>
 
 
-	?>
-<div id="header">
-			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
-			<div id="login_name"><?php  echo $user_name;?> さん</div>
-
-</div>
-
-<div id="select_menu" style="clear:left;">
-		<ul id="menu">
-			<li>ログアウト
-				<ul style="list-style:none;">
-					<li><a href="../../Login/Logout.php">ログアウト</a></li>
-				</ul>
-			</li>
-			<li>注文書
-				<ul style="list-style:none;">
-					<li><a href="#">新規注文書</a></li>
-					<li><a href="#">注文書選択</a></li>
-				</ul>
-			</li>
-			<li>書類
-				<ul style="list-style:none;">
-					<li><a href="Image_selection.php">書類閲覧</a></li>
-					<li><a href="#">製作物画像登録</a></li>
-				</ul>
-			</li>
-			<li>進捗管理
-				<ul style="list-style:none;">
-					<li><a href="../progress/Purchase_order_selection.php">進捗管理</a></li>
-				</ul>
-			</li>
-		</ul>
-</div>
-
-
-<div id="main">
-<div id="border"></div>
-<div id="title">書類一覧</div>
 
 <div>
 <!-------製作物ナンバー検索--------------------------->
@@ -356,28 +317,31 @@ if (!$date_pull) {
 			$img_path=$row['gazou_path'];
 
 			if($img_path==null){   //画像がないときNoImage.png
-				$img_path="NoImage.png";
+				$img_path="img/NoImage.png";
 			}
 			$tm_id =$row['tm_id'];
-			if($count%3==0){
+			if($count%2==0){
 				echo"<br clear='left'>";
 			}
 //			text-align:center;
 	//書類情報
 echo <<<EOT
-	<div style="float:left; margin-left:3em;">
+	<div style="float:left; margin-left:5em;">
 								<form action="Documents_detail.php" method="post">
  									<input type="image" src="$img_path" alt="画像" width="140px" height="120px"/>
 									<input type="hidden" name="eturan_tm_id" value="$tm_id" />
 								</form>
 EOT;
-								echo "製作物ナンバー：",$row['tm_seisakubutu'],"<br/>製作日：",$row['t_date'],"<br />品名：",$row['hin_janru'];
+								echo "製作物ナンバー：",$row['tm_seisakubutu'],"<br/>製作日：",$row['t_date'],"<br />品名：",$row['hin_janru'],"<br/>学校名：",$row['school_name'];
 								echo "<br/><br/></div>";
 								$count++;
 		}
- if (empty($non_oblect)){}
- 		else{echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'>",$non_oblect,"</div>";
- }
+//		echo "object:",$non_oblect;
+ if ($non_oblect==1){
+  		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
+  		unset($non_oblect);
+ 	 }
+
 ?>
 
 </div>
