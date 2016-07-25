@@ -33,12 +33,6 @@ mso-footer-margin:.3in;}
 <body>
 <?php
 	require '../../DB.php';			//DB.php呼び出し
-	if(isset($_GET["message_error"])){
-		echo "<script>";
-		echo "alert(\"未記入項目があります。未記入項目に入力してください。\");";
-		echo "</script>";
-	}
-
 ?>
 <div id="header">
 	<div id="top">
@@ -74,15 +68,18 @@ mso-footer-margin:.3in;}
 </div>
 <div id="main">
 	<?php	//DBから発注書の内容を検索
-	$Flg = True;
 	$id = $_REQUEST["id"];	//Selection.phpから選択した項目の注文idを受け取る
 	$sql = "SELECT *
-			FROM ((tyuumon t1 inner join tyuumon_master t2 on t1.tm_id = t2.tm_id)
-				inner join school s1 on t1.school_id = s1.school_id)
+			FROM tyuumon t1 inner join tyuumon_master t2 on t1.tm_id = t2.tm_id
+				inner join school s1 on t1.school_id = s1.school_id
+				inner join hinmei h1 on t1.t_hin_name = h1.hin_id
+				inner join gakubu g1 on t1.t_gakubu = g1.gakubu_id
 			WHERE t1.tm_id = ".$id;
 	$result_sql = $pdo->prepare($sql);
 	$result_sql->execute();
 	$SQL = $result_sql->fetch(PDO::FETCH_ASSOC);
+	echo $SQL['school_id'];
+
 ?>
 
 <?php //検索したデータを加工
@@ -94,7 +91,7 @@ mso-footer-margin:.3in;}
 
 	//見積もり・発注
 	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" />見積もり</td>";
-	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" />発注</td>";
+	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked />発注</td>";
 	switch($SQL['t_naiyou']){
 		case '見積もり':
 			$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked />見積もり</td>";
@@ -105,26 +102,41 @@ mso-footer-margin:.3in;}
 		break;
 	}
 	//学校名
-	$school_name = $SQL['school_name'];
+	$school_id = $SQL['school_id'];
+	$Yes_school = "SELECT * FROM school WHERE school_id = ". $school_id. "";
+	$yes_school =  $pdo->prepare($Yes_school);
+	$yes_school->execute();
+	$No_school = "SELECT * FROM school WHERE school_id <> ".$school_id."";	//選択されていない値を検索
+	$no_school = $pdo->prepare($No_school);
+	$no_school->execute();
 	//部署名
 	$department_name = $SQL['t_busho'];
 	//担当者名
 	$responsible_party = $SQL['t_tantousha'];
 	//電話番号
 	$phone_number = $SQL['t_tel'];
+	if(!$phone_number){
+		$phone_number = "";
+	}
 
 	//品名
-	$product_name = $SQL['t_hin_name'];
-	$hin_sql = "SELECT * FROM hinmei WHERE hin_janru = '".$product_name."'";	//選択されていた値を検索
-	$result_hin = $pdo->prepare($hin_sql);
-	$result_hin->execute();
-	$not_hin = "SELECT * FROM hinmei WHERE hin_janru <> '".$product_name."'";	//選択されていない値を検索
-	$result_not = $pdo->prepare($not_hin);
-	$result_not->execute();
+	$product_id = $SQL['hin_id'];
+	$Yes_hin = "SELECT * FROM hinmei WHERE hin_id = ".$product_id."";	//選択されていた値を検索
+	$yes_hin = $pdo->prepare($Yes_hin);
+	$yes_hin->execute();
+	$No_hin = "SELECT * FROM hinmei WHERE hin_id <> ".$product_id."";	//選択されていない値を検索
+	$no_hin = $pdo->prepare($No_hin);
+	$no_hin->execute();
 	//備考
 	$remarks = $SQL['t_bikou'];
 	//利用する学部系
-	$undergraduate = $SQL['t_gakubu'];
+	$undergraduate_id = $SQL['gakubu_id'];
+	$Yes_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id = ". $undergraduate_id. "";
+	$yes_undergraduate =  $pdo->prepare($Yes_undergraduate);
+	$yes_undergraduate->execute();
+	$No_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id <> ".$undergraduate_id."";	//選択されていない値を検索
+	$no_undergraduate = $pdo->prepare($No_undergraduate);
+	$no_undergraduate->execute();
 	//利用目的
 	$purpose = $SQL['t_mokuteki'];
 	//仕様
@@ -139,7 +151,7 @@ mso-footer-margin:.3in;}
 	//折り方
 	$specification_orikata =  $SQL['t_orikata'];
 	//仕様(ラジオボタン)
-	$k_men = "<input type=\"radio\" name=\"t_men\" value=\"kata\" />片面</td>";
+	$k_men = "<input type=\"radio\" name=\"t_men\" value=\"kata\" checked />片面</td>";
 	$r_men = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" />両面</td>";
 	switch($SQL['t_men']){
 		case '片面':
@@ -169,7 +181,7 @@ mso-footer-margin:.3in;}
 		//昨年費用
 		$last_year_actual_expenses = $SQL['t_sakunen_hiyou'];
 		//税込
-		$tax_included = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"komi\" />(税込み)</td>";
+		$tax_included = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"komi\" checked />(税込み)</td>";
 		//税抜
 		$tax_excluded = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"nuki\" />(税抜き)</td>";
 		if($SQL['t_zei_hantei']){
@@ -191,7 +203,7 @@ mso-footer-margin:.3in;}
 		//昨年仕様(折り方)
 		$last_year_specification_orikata = $SQL['t_sakunen_orikata'];
 		//仕様(ラジオボタン)
-		$last_year_k_men = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"kata\" />片面</td>";
+		$last_year_k_men = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"kata\" checked />片面</td>";
 		$last_year_r_men = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"ryo\" />両面</td>";
 		switch($SQL['t_sakunen_men']){
 			case '片面':
@@ -211,7 +223,7 @@ mso-footer-margin:.3in;}
 		$last_year_F = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" checked />なし</td>";
 		//昨年実績
 		$last_year_actual_expenses = "";		//費用
-		$tax_included = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"komi\" />(税込み)</td>";	//税込
+		$tax_included = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"komi\" checked />(税込み)</td>";	//税込
 		$tax_excluded = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"nuki\" />(税抜き)</td>";	//税抜
 		$last_year_copies_number = "";			//部数
 		$last_year_specification_size = "";		//仕様(サイズ)
@@ -219,7 +231,7 @@ mso-footer-margin:.3in;}
 		$last_year_specification_color = "";	//仕様(色数)
 		$last_year_specification_kami = "";		//仕様(紙)
 		$last_year_specification_orikata = "";	//仕様(折り方)
-		$last_year_k_men = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"kata\" />片面</td>";	//仕様(ラジオボタン)
+		$last_year_k_men = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"kata\" checked />片面</td>";	//仕様(ラジオボタン)
 		$last_year_r_men = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"ryo\" />両面</td>";	//仕様(ラジオボタン)
 		$last_year_ordering_destination = "";	//発注先
 		$the_person_in_charge = "";				//担当者
@@ -334,7 +346,16 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>学校名</td>
 <td colspan="8" class="xl113" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="school_name" maxlength="25" class = "one" value = "<?php echo $school_name;?>" /></td>
+<select name="school_id" class="one">
+<?php
+$YES_SCHOOL = $yes_school->fetch(PDO::FETCH_ASSOC);
+echo "<option value=". $YES_SCHOOL['school_id']. " selected >". $YES_SCHOOL['school_name']. "</option>";
+	while($NO_SCHOOL = $no_school->fetch(PDO::FETCH_ASSOC)){
+		echo "<option value=". $NO_SCHOOL['school_id']. ">". $NO_SCHOOL['school_name']. "</option>";
+	}
+?>
+</select>
+</td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left:none'>部署名</td>
 <td colspan="6" class="xl113" style='border-right:.5pt solid black;border-left:none'>
 <input type="text" name="name" maxlength="15" class = "one" value = "<?php echo $department_name;?>" /></td>
@@ -358,12 +379,12 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl114" style='border-right:.5pt solid black'>品名</td>
 <td colspan="6">
-<select name="hin_janru" class="one">
+<select name="hin_id" class="one">
 <?php
-$re_hin = $result_hin->fetch(PDO::FETCH_ASSOC);
-echo "<option value=". $re_hin['hin_id']. " selected >". $re_hin['hin_janru']. "</option>";
-	while($re_not = $result_not->fetch(PDO::FETCH_ASSOC)){
-		echo "<option value=". $re_not['hin_id']. ">". $re_not['hin_janru']. "</option>";
+$YES_HIN = $yes_hin->fetch(PDO::FETCH_ASSOC);
+echo "<option value=". $YES_HIN['hin_id']. " selected >". $YES_HIN['hin_janru']. "</option>";
+	while($NO_HIN = $no_hin->fetch(PDO::FETCH_ASSOC)){
+		echo "<option value=". $NO_HIN ['hin_id']. ">". $NO_HIN ['hin_janru']. "</option>";
 	}
 ?>
 </select>
@@ -379,7 +400,16 @@ echo "<option value=". $re_hin['hin_id']. " selected >". $re_hin['hin_janru']. "
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>利用する学部系</td>
 <td colspan="6" class="xl89" style='border-left:none'>
-<input type="text" name="gakubu_name" maxlength="20" class = "one" value = "<?php echo $undergraduate;?>" /></td>
+<select name="gakubu_id" class="one">
+<?php
+$YES_UNDERGRADUATE = $yes_undergraduate->fetch(PDO::FETCH_ASSOC);
+echo "<option value=". $YES_UNDERGRADUATE['gakubu_id']. " selected >". $YES_UNDERGRADUATE['gakubu_name']. "</option>";
+	while($NO_UNDERGRADUATE = $no_undergraduate->fetch(PDO::FETCH_ASSOC)){
+		echo "<option value=". $NO_UNDERGRADUATE['gakubu_id']. ">". $NO_UNDERGRADUATE['gakubu_name']. "</option>";
+	}
+?>
+</select>
+</td>
 <td colspan="3" class="xl111" style='border-right:.5pt solid black'>利用目的</td>
 <td colspan="7" class="xl89" style='border-right:.5pt solid black;border-left:none'>
 <textarea name="t_mokuteki" rows="2" wrap="soft" maxlength = "255" class = "one"><?php echo $purpose;?></textarea></td>
