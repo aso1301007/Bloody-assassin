@@ -312,7 +312,7 @@ jQuery(document).ready(function($){
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>利用する学部系</td>
 
   <td colspan=6 class=xl89 style='border-left:none'>
-  <input type="text" name="gakubu_name" maxlength="20" class = "one">
+  <SELECT name="gakubu_name" class = "one">
   <OPTION value="1" selected>組み込みシステム科</OPTION>
   <OPTION value="2">情報工学科</OPTION>
   <OPTION value="3">ネットワーク・セキュリティ科</OPTION>
