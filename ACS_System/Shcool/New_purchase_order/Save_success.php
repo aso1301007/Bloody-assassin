@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
 $year = $_POST["year"];
 $month = $_POST["month"];
@@ -36,31 +40,50 @@ $t_sakunen_kami = $_POST["t_sakunen_kami"];
 $t_sakunen_orikata = $_POST["t_sakunen_orikata"];
 $t_sakunen_basho = $_POST["t_sakunen_basho"];
 $t_sakunen_tantou = $_POST["t_sakunen_tantou"];
+?>
+<?php
+require_once "../../DB.php";
+?>
 
-require_once "../DB.php";
-
+<?php
+/*
 $stmt = $pdo -> prepare("INSERT INTO tyuumon_master
 		(tm_id,user_id,tm_seisakubutu,seisaku_id,tm_hattyu_flg,tm_kakunin_flg,tm_mitumorityuu_flg,tm_mitumorizumi_flg,tm_nouhin_flg,tm_touroku_flg,tm_houkokusho_flg,tm_sakujo_flg)
-		VALUES ('1','$year'.'0001','null','0','0','0','0','0','0','0','0')");
-$name = "あああ";
+		VALUES ('null','1',concat('$year','0001'),'null','0','0','0','0','0','0','0','0')");
 if (!$stmt) {
 	exit('データを登録できませんでした。');
 }
-
+/*
 //-----VALUESに設定する値のセット-------------------
 $stmt->bindParam(':user', $name, PDO::PARAM_STR);//変数を入力するときはこっち:bindParam
 $stmt->bindParam(':img', $img, PDO::PARAM_STR);
 $stmt->bindValue(':good', 0, PDO::PARAM_INT);//変数ではなく値を直接入力する場合はこっち:bindValue
 //---------------------------------------------
-
+*/
+/*
 $stmt->execute();//INSERT文実行
+*/
+$sql = "SELECT MAX('tm_id') FROM tyuumon_master";
+$data = $pdo->prepare($sql);
+$data->execute;
+$tm_id = 'tm_id';
 
-$con = mysql_close($con);
-if (!$con) {
-	exit('データベースとの接続を閉じられませんでした。');
+$stmt2 = $pdo -> prepare("INSERT INTO tyuumon
+		(tm_id,t_date,t_naiyou,school_id,t_busho,t_gakubu,t_tantousha,t_tel,t_hin_name,t_bikou,t_mokuteki,t_size,t_page,t_color,t_men,
+		t_kami,t_orikata,t_busu,t_kiboubi,t_basho,t_money,t_youbou,t_sakunen_tm_id,t_sakunen_jisseki,t_sakunen_hiyou,t_zei_hantei,t_sakunen_busu,t_sakunen_size,t_sakunen_page,t_sakunen_color,
+		t_sakunen_men,t_sakunen_kami,t_sakunen_orikata,t_sakunen_basho,t_sakunen_tantou)
+		VALUES ('$tm_id','$date3',7$t_naiyou,'$school_name','$busho','$gakubu_name','$user_name','$user_tel','$hin_janru','$t_bikou',
+		'$t_mokuteki','$t_size','$t_page','$t_color','$t_men','$t_kami','$t_orikata','$t_busu','$t_kiboubi','$t_basho',
+		'$t_money','$t_youbou','null','$t_sakunen_jisseki','$t_sakunen_money','$t_zei_hantei','$t_sakunen_busu','$t_sakunen_size','$t_sakunen_page',
+		'$t_sakunen_color','$t_sakunen_men','$t_sakunen_kami','$t_sakunen_orikata','$t_sakunen_basho','$t_sakunen_tantou')");
+if (!$stmt2) {
+	exit('データを登録できませんでした。');
 }
 
+$stmt2->execute();//INSERT文実行
+
 ?>
+
 <body>
  <?php echo $date3; ?>
  <?php echo $t_naiyou; ?>

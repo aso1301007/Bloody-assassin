@@ -140,40 +140,52 @@ case 'ha':
 
 switch ($school_name){
 	case '1':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生情報ビジネス専門学校福岡校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生情報ビジネス専門学校福岡校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"1\">";
 		break;
 	case '2':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生外語観光＆製菓専門学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生外語観光＆製菓専門学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"2\">";
 		break;
 	case'3':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生医療福祉専門学校福岡校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生医療福祉専門学校福岡校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"3\">";
 		break;
 	case'4':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生建築＆デザイン専門学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生建築＆デザイン専門学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"4\">";
 		break;
 	case'5':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生公務員専門学校福岡校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生公務員専門学校福岡校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"5\">";
 		break;
 	case'6':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生リハビリテーション大学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生リハビリテーション大学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"6\">";
 		break;
 	case'7':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生工科自動車大学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生工科自動車大学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"7\">";
 		break;
 	case'8':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生ビューティーカレッジ\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生ビューティーカレッジ\" readonly>";
+		"<input type=\"hidden\" name=\"school_name\" value=\"8\">";
 		break;
 	case'9':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生情報ビジネス専門学校北九州校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生情報ビジネス専門学校北九州校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"9\">";
 		break;
 	case'10':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生公務員専門学校北九州校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生公務員専門学校北九州校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"10\">";
 		break;
 	case'11':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生医療福祉＆観光カレッジ\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生医療福祉＆観光カレッジ\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"11\">";
 		break;
 	case'12':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生看護大学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生看護大学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"12\">";
 		break;
 }
 
@@ -376,6 +388,7 @@ switch ($t_sakunen_men){
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>学校名</td>
  <td colspan=8 class=xl113 style='border-right:.5pt solid black;border-left:none'>
  <?php echo $school; ?>
+ <?php echo $school2; ?>
  </td>
  <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>部署名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
