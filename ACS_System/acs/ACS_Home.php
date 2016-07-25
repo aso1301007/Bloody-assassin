@@ -107,7 +107,7 @@
 			</li>
 			<li>DB管理
 				<ul style="list-style:none;">
-					<li><a href="#">注文者マスタ追加</a></li>
+					<li><a href="">注文者マスタ追加</a></li>
 					<li><a href="#">制作会社マスタ追加</a></li>
 				</ul>
 			</li>
@@ -219,7 +219,15 @@
 			<div id="open01" style="display:none;clear:both;">
 				<?php
 					while($sql01 = $tyuumon01->fetch(PDO::FETCH_ASSOC)){
-						echo $sql01['t_date'], "　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
+						$t_naiyou1=$sql01['t_naiyou'];
+						switch($t_naiyou1){
+							case 0:
+								$naiyou1="見積り";
+								break;
+							case 1:
+								$naiyou1="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql01['t_date'])), "　・　", $sql01['hin_janru'], "　・　", $naiyou1, "<br />";
 					}
 				?>
 			</div>
@@ -238,7 +246,15 @@
 			<div id="open02" style="display:none;clear:both;">
 				<?php
 					while($sql02 = $tyuumon02->fetch(PDO::FETCH_ASSOC)){
-						echo $sql02['t_date'], "　・　", $sql02['hin_janru'], "　・　", $sql02['t_naiyou'], "<br />";
+						$t_naiyou2=$sql02['t_naiyou'];
+						switch($t_naiyou2){
+							case 0:
+								$naiyou2="見積り";
+								break;
+							case 1:
+								$naiyou2="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql02['t_date'])), "　・　", $sql02['hin_janru'], "　・　", $naiyou2, "<br />";
 					}
 				?>
 			</div>
@@ -257,7 +273,15 @@
 			<div id="open03" style="display:none;clear:both;">
 				<?php
 					while($sql03 = $tyuumon03->fetch(PDO::FETCH_ASSOC)){
-						echo $sql03['t_date'], "　・　", $sql03['hin_janru'], "　・　", $sql03['t_naiyou'], "<br />";
+						$t_naiyou=$sql03['t_naiyou'];
+						switch($t_naiyou){
+							case 0:
+								$naiyou3="見積り";
+								break;
+							case 1:
+								$naiyou3="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql03['t_date'])), "　・　", $sql03['hin_janru'], "　・　", $naiyou3, "<br />";
 					}
 				?>
 			</div>
@@ -276,7 +300,15 @@
 			<div id="open04" style="display:none;clear:both;">
 				<?php
 					while($sql04 = $tyuumon04->fetch(PDO::FETCH_ASSOC)){
-						echo $sql04['t_date'], "　・　", $sql04['hin_janru'], "　・　", $sql04['t_naiyou'], "<br />";
+						$t_naiyou4=$sql04['t_naiyou'];
+						switch($t_naiyou4){
+							case 0:
+								$naiyou4="見積り";
+								break;
+							case 1:
+								$naiyou4="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql04['t_date'])), "　・　", $sql04['hin_janru'], "　・　", $naiyou4, "<br />";
 					}
 				?>
 			</div>
@@ -295,7 +327,15 @@
 			<div id="open05" style="display:none;clear:both;">
 				<?php
 					while($sql05 = $tyuumon05->fetch(PDO::FETCH_ASSOC)){
-						echo $sql05['t_date'], "　・　", $sql05['hin_janru'], "　・　", $sql05['t_naiyou'], "<br />";
+						$t_naiyou5=$sql05['t_naiyou'];
+						switch($t_naiyou5){
+							case 0:
+								$naiyou5="見積り";
+								break;
+							case 1:
+								$naiyou5="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql04['t_date'])), "　・　", $sql05['hin_janru'], "　・　", $t_naiyou5, "<br />";
 					}
 				?>
 			</div>
@@ -315,7 +355,15 @@
 			<div id="open06" style="display:none;clear:both;">
 				<?php
 					while($sql06 = $tyuumon06->fetch(PDO::FETCH_ASSOC)){
-						echo $sql06['t_date'], "　・　", $sql06['hin_janru'], "　・　", $sql06['t_naiyou'], "<br />";
+						$t_naiyou6=$sql06['t_naiyou'];
+						switch($t_naiyou6){
+							case 0:
+								$naiyou6="見積り";
+								break;
+							case 1:
+								$naiyou6="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql06['t_date'])), "　・　", $sql06['hin_janru'], "　・　", $naiyou6, "<br />";
 					}
 				?>
 			</div>
@@ -334,7 +382,15 @@
 			<div id="open07" style="display:none;clear:both;">
 				<?php
 					while($sql07 = $tyuumon07->fetch(PDO::FETCH_ASSOC)){
-						echo $sql07['t_date'], "　・　", $sql07['hin_janru'], "　・　", $sql07['t_naiyou'], "<br />";
+						$t_naiyou7=$sql07['t_naiyou'];
+						switch($t_naiyou7){
+							case 0:
+								$naiyou7="見積り";
+								break;
+							case 1:
+								$naiyou7="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql07['t_date'])), "　・　", $sql07['hin_janru'], "　・　", $naiyou7, "<br />";
 					}
 				?>
 			</div>
