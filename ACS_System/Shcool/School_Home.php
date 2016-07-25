@@ -81,12 +81,6 @@
 			}
 		}
 	?>
-
-<?php
-include("School_header.php")
-?>
-
-	<!--
 <div id="header">
 			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='School_Home.php'">
 			<div id="login_name"><?php echo $user_name;?> さん</div>
@@ -122,7 +116,6 @@ include("School_header.php")
 </div>
 <div id="main">
 <div id="border"></div>
--->
 <div id="title">学校トップページ</div>
 	<table border="1" width="500" align="center">
 			<tr><th><?php echo $user_name;?>さんの進捗状況</th></tr>
