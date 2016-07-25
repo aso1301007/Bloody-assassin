@@ -96,8 +96,8 @@
 		</li>
 		<li>注文機能
 			<ul style="list-style:none;">
-				<li><a href="New_purchase_order/Entry.php>新規注文書</a></li>
-				<li><a href="Purchase_order_selection/Selection.php">注文書選択</a></li>
+				<li><a href="#">新規注文書</a></li>
+				<li><a href="#">注文書選択</a></li>
 			</ul>
 		</li>
 		<li>書類
@@ -227,9 +227,14 @@
 				<?php
 					while($sql01 = $tyuumon01->fetch(PDO::FETCH_ASSOC)){
 						$t_naiyou=$sql01['t_naiyou'];
-						switch()
-
-						echo Date('Y年m月d日', strtotime($sql01['t_date']))," 　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
+						switch($t_naiyou){
+							case 0:
+								$naiyou="見積り";
+								break;
+							case 1:
+								$naiyou="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql01['t_date'])), "　・　", $sql01['hin_janru'], "　・　", $naiyou, "<br />";
 					}
 				?>
 			</div>
@@ -248,7 +253,15 @@
 			<div id="open02" style="display:none;clear:both;">
 				<?php
 					while($sql02 = $tyuumon02->fetch(PDO::FETCH_ASSOC)){
-						echo $sql02['t_date'], "　・　", $sql02['hin_janru'], "　・　", $sql02['t_naiyou'], "<br />";
+						$t_naiyou=$sql02['t_naiyou'];
+						switch($t_naiyou){
+							case 0:
+								$naiyou="見積り";
+								break;
+							case 1:
+								$naiyou="発注";
+						}
+						echo Date('Y年m月d日', strtotime($sql01['t_date'])), "　・　", $sql02['hin_janru'], "　・　", $naiyou, "<br />";
 					}
 				?>
 			</div>
@@ -267,7 +280,15 @@
 			<div id="open03" style="display:none;clear:both;">
 				<?php
 					while($sql03 = $tyuumon03->fetch(PDO::FETCH_ASSOC)){
-						echo $sql03['t_date'], "　・　", $sql03['hin_janru'], "　・　", $sql03['t_naiyou'], "<br />";
+						$t_naiyou=$sql03['t_naiyou'];
+						switch($t_naiyou){
+							case 0:
+								$naiyou="見積り";
+								break;
+							case 1:
+								$naiyou="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql03['t_date'])), "　・　", $sql03['hin_janru'], "　・　", $naiyou, "<br />";
 					}
 				?>
 			</div>
@@ -286,7 +307,15 @@
 			<div id="open04" style="display:none;clear:both;">
 				<?php
 					while($sql04 = $tyuumon04->fetch(PDO::FETCH_ASSOC)){
-						echo $sql04['t_date'], "　・　", $sql04['hin_janru'], "　・　", $sql04['t_naiyou'], "<br />";
+						$t_naiyou=$sql04['t_naiyou'];
+						switch($t_naiyou){
+							case 0:
+								$naiyou="見積り";
+								break;
+							case 1:
+								$naiyou="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql04['t_date'])), "　・　", $sql04['hin_janru'], "　・　", $naiyou, "<br />";
 					}
 				?>
 			</div>
@@ -305,7 +334,15 @@
 			<div id="open05" style="display:none;clear:both;">
 				<?php
 					while($sql05 = $tyuumon05->fetch(PDO::FETCH_ASSOC)){
-						echo $sql05['t_date'], "　・　", $sql05['hin_janru'], "　・　", $sql05['t_naiyou'], "<br />";
+						$t_naiyou=$sql05['t_naiyou'];
+						switch($t_naiyou){
+							case 0:
+								$naiyou="見積り";
+								break;
+							case 1:
+								$naiyou="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql05['t_date'])), "　・　", $sql05['hin_janru'], "　・　", $naiyou, "<br />";
 					}
 				?>
 			</div>
@@ -325,7 +362,15 @@
 			<div id="open06" style="display:none;clear:both;">
 				<?php
 					while($sql06 = $tyuumon06->fetch(PDO::FETCH_ASSOC)){
-						echo $sql06['t_date'], "　・　", $sql06['hin_janru'], "　・　", $sql06['t_naiyou'], "<br />";
+						$t_naiyou=$sql06['t_naiyou'];
+						switch($t_naiyou){
+							case 0:
+								$naiyou="見積り";
+								break;
+							case 1:
+								$naiyou="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql06['t_date'])), "　・　", $sql06['hin_janru'], "　・　", $naiyou, "<br />";
 					}
 				?>
 			</div>
@@ -344,7 +389,15 @@
 			<div id="open07" style="display:none;clear:both;">
 				<?php
 					while($sql07 = $tyuumon07->fetch(PDO::FETCH_ASSOC)){
-						echo $sql07['t_date'], "　・　", $sql07['hin_janru'], "　・　", $sql07['t_naiyou'], "<br />";
+						$t_naiyou=$sql07['t_naiyou'];
+						switch($t_naiyou){
+							case 0:
+								$naiyou="見積り";
+								break;
+							case 1:
+								$naiyou="発注";
+						}
+						echo  Date('Y年m月d日', strtotime($sql07['t_date'])), "　・　", $sql07['hin_janru'], "　・　", $naiyou, "<br />";
 					}
 				?>
 			</div>
