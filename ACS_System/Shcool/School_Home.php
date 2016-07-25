@@ -96,8 +96,8 @@
 		</li>
 		<li>注文機能
 			<ul style="list-style:none;">
-				<li><a href="#">新規注文書</a></li>
-				<li><a href="#">注文書選択</a></li>
+				<li><a href="New_purchase_order/Entry.php>新規注文書</a></li>
+				<li><a href="Purchase_order_selection/Selection.php">注文書選択</a></li>
 			</ul>
 		</li>
 		<li>書類
@@ -108,7 +108,7 @@
 		</li>
 		<li>進捗管理
 			<ul style="list-style:none;">
-				<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
+				<li><a href="Progress_management/Purchase_order_selection.php">進捗管理</a></li>
 			</ul>
 		</li>
 	</ul>
@@ -226,7 +226,10 @@
 			<div id="open01" style="display:none;clear:both;">
 				<?php
 					while($sql01 = $tyuumon01->fetch(PDO::FETCH_ASSOC)){
-						echo $sql01['t_date'], "　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
+						$t_naiyou=$sql01['t_naiyou'];
+						switch()
+
+						echo Date('Y年m月d日', strtotime($sql01['t_date']))," 　・　", $sql01['hin_janru'], "　・　", $sql01['t_naiyou'], "<br />";
 					}
 				?>
 			</div>
