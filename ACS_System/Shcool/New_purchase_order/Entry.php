@@ -196,7 +196,7 @@ jQuery(document).ready(function($){
  <td></td>
  <td></td>
  <td colspan ="2">
- <INPUT type="text" name="year" size = "1" maxlength = "4" >
+ <INPUT type="text" name="year" size = "1" maxlength = "4">
  </td>
  <td>年</td>
  <td>
@@ -209,6 +209,17 @@ jQuery(document).ready(function($){
  <td>日</td>
  <td class=xl69></td>
  </tr>
+
+<script language="JavaScript"><!--
+   var dt=new Date();//　日付を取得
+   var dy=dt.getYear();
+   var dm=dt.getMonth()+1;
+   var dd=dt.getDate();
+   if(dy<2000){dy+=1900;}
+   document.form1.year.value=dy;//←テキストボックスに表示
+   document.form1.month.value=dm;//←テキストボックスに表示
+   document.form1.date.value=dd;//←テキストボックスに表示
+//--></script>
 
  <tr height=36 style='mso-height-source:userset;height:27.0pt'>
  <td height=36 style='height:27.0pt'></td>

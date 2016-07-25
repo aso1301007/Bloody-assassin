@@ -12,7 +12,7 @@
 #menu{margin-left:0px;
  		padding: 0px;
  		margin:0px;
-		background:#4169e1;
+		background:#72BBF0;
  }
 
 #menu li {
@@ -26,11 +26,11 @@
   float:left;
   margin-right:auto;
   margin-left:auto;
-  padding-top:8px;
+  padding-top:5px;
   padding-bottom:5px;
   width: 210px;
 /*  height: 20px;*/
-  border: solid 1px #4169e1;
+  border: solid 2px #72BBF0;
   font-weight: bold;
 list-style-position: inside;
 
@@ -38,8 +38,8 @@ list-style-position: inside;
 }
 
 #menu li:hover {
-  color: #FFFFFF;
-  background:#4169e1;
+  color: #222222;
+  background:#72BBF0;
 }
 
 
@@ -49,8 +49,7 @@ list-style-position: inside;
   display: none;
   position: absolute;
   top: 30px;
-  left: 1px;
-  hight:5px;
+  left: -1px;
   padding: 5px;
   width: 200px;
   background: #eee;
@@ -60,7 +59,7 @@ list-style-position: inside;
 
 #menu li ul li {
   margin: 0;
-  padding: 1px;
+  padding: 0;
   width: 200px;
   border: none;
 }
@@ -72,7 +71,6 @@ list-style-position: inside;
 #menu li ul li a:hover {
   background: #E6FFE9;
   color: #0000FF;
-  border:solid 1px #ccc;
 }
 
 /* header要素
@@ -86,19 +84,8 @@ margin-left:auto;
 margin-right:auto;
 }
 
-input[type=button]{
- padding: 5px; /*ボタン内の余白*/
- hight:auto;
- margin-top:15px;
- margin-left:20px;
- background: #4169e1;
- border-radius:5px;
-background:-webkit-gradient(linear, left top, left bottom, from(#FFF), to(#72BBF0)); /*グラデーション*/
- background:-webkit-linear-gradient(#FFF, #72BBF0); /*同上*/
- background:linear-gradient(#FFF, #72BBF0);   /*同上*/
- font-size: 16px; /*文字サイズ*/
-
-/*border : solid 1px #000000;
+#top{
+border : solid 1px #000000;
 margin-top:20px;
 margin-left:15px;
 vertical-align:middle;
@@ -107,12 +94,12 @@ padding:5px;
 border-width : 1px;
 border-padding:5px;
 color:#000000;
-*/
+
 }
 
 #login_name{
 text-align:right;
-padding:5px;
+padding:20px;
 float:right;
 margin-top:25px;
 padding:5px;
@@ -124,18 +111,16 @@ font-size:1em;
 body{
 width:1200px;
 background-color:#F0F8FF;
-margin-left : auto ;
-margin-right : auto ;
+margin-left : auto ; margin-right : auto ;
 
 }
 #main{
 background-color:#FFFFFF;
 width:848px;
-hight:auto;
 margin-left:auto;
 margin-right:auto;
-/*patting:40px;*/
-
+patting:40px;
+height:800px;
       overflow:hidden;
 }
 
@@ -143,16 +128,16 @@ margin-right:auto;
 width:848px;
   margin:60px 0px 5px 0px;
   border: none;
-  border: solid 2px #4169e1;
+  border: solid 2px #72BBF0;
 }
 
 
 
-/*タイトル表示
+/*ページタイトル表示
 ----------------------------------------*/
 #title{
 width:848px;
-hight:30px;
+hight:0px;
 margin:30px 0px 5px 0px;
   background:#FFFFFF;
 text-align: center;
@@ -161,27 +146,19 @@ font-size:1.5em;
 }
 
 
-
-/* 進捗確認ページで使うスタイル
---------------------------------------------*/
+/*書類名の出力
+---------------------------------------*/
 #syorui{
-width:700px;
+width:848px;
 margin-top:70px;
-margin-left:50px;
 text-align: center;
-font-size:1.7em;
-background:#72BBF0;
-color:#FFF;
-padding:15px;
-border:2px dashed rgba(255,255,255,0.5);
-border-radius:6px;
--moz-border-radius:6px;
--webkit-border-radius:6px;
-box-shadow:0 0 0 5px #72BBF0,0 2px 3px 5px rgba(0,0,0,5);
--moz-box-shadow:0 0 0 5px #72BBF0, 0 2px 3px 5px rgba(0,0,0,5);
--webkit-box-shadow:0 0 0 5px #72BBF0, 0 2px 3px 5px rgba(0,0,0,5);
+font-size:1.5em;
 }
 
+
+
+/* 画像
+--------------------------------------------*/
 #img1{
 width:848px;
 height:70px;
@@ -194,32 +171,15 @@ text-align:center;
 width:848px;
 height:70px;
       overflow:hidden;
-margin-top:50px;
+margin-top:30px;
 text-align:center;
 }
 
 
-#nouhin_button{
-width:150px;
-height:50px;
-      overflow:hidden;
-margin-top:10px;
-margin-left:180px;
-}
 
 
-#shounin{
-width:750px;
-margin-top:70px;
-margin-left:20px;
-font-size:1.4em;
-padding:20px;
-background:#FFF;
-box-shadow:0 0 50px #4169e1 inset,10px 5px 0 #cecece;
--moz-box-shadow:0 0 50px #4169e1 inset,10px 5px 0 #cecece;
--webkit-box-shadow:0 0 50px #4169e1 inset,10px 5px 0 #cecece;
-}
-
+/*進捗更新ボタン
+---------------------------------------------------*/
 
 #kakunin{
 width:170px;
@@ -227,7 +187,6 @@ height:30px;
       overflow:hidden;
 margin-top:7px;
 margin-left:280px;
-float:left;
 }
 
 #mitumori_now{
@@ -235,8 +194,7 @@ width:170px;
 height:30px;
       overflow:hidden;
 margin-top:7px;
-margin-left:10px;
-float:left;
+margin-left:0px;
 }
 
 #mitumori_fin{
@@ -244,42 +202,5 @@ width:170px;
 height:30px;
       overflow:hidden;
 margin-top:7px;
-margin-left:10px;
-}
-
-/*-------------------------------------------*/
-
-
-/*ソート
-------------------------------------------------*/
-#period_sort{
-float:right;
-width:400px;
-height:70px;
-border-style: solid;
-border-width: 1px;
-margin:20px 20px 5px 5px;
-padding:10px;
-align:left;
-}
-
-
-#item_sort{
-border-style: solid;
-border-width: 1px;
-margin:5px 20px 10px 20px;
-padding:10px;
-align:left;
-}
-/*検索
-----------------------------------------------*/
-#number_search{
-style="float:left;
-width:350px;
-height:70px;
-border-style: solid;
-border-width: 1px;
-margin:20px 5px 5px 20px;
-padding:10px;
-align:left;>
+margin-left:0px;
 }
