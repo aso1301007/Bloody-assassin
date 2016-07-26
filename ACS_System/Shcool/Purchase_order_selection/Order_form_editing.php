@@ -1,4 +1,4 @@
-<?php session_start()?>
+<?php //session_start()?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
@@ -32,41 +32,10 @@ mso-footer-margin:.3in;}
 </head>
 <body>
 <?php
+include '../School_header.php';
 	require '../../DB.php';			//DB.php呼び出し
 ?>
-<div id="header">
-	<div id="top">
-		<input type="button" name="top" value="TOP" onclick="location.href='/acs_system/Shcool/School_Home.php'" />
-	</div>
-	<div id="login_name"><?php echo $_SESSION['user_name'];?>さん</div>
-</div>
-<div id="select_menu" style="clear:left;">
-	<ul id="menu">
-		<li>ログアウト
-			<ul style="list-style:none;">
-				<li><a href="../Login/Logout.php">ログアウト</a></li>
-			</ul>
-		</li>
-		<li>注文機能
-			<ul style="list-style:none;">
-				<li><a href="#">新規注文書</a></li>
-				<li><a href="#">注文書選択</a></li>
-			</ul>
-		</li>
-		<li>書類
-			<ul style="list-style:none;">
-				<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
-				<li><a href="#">製作物画像登録</a></li>
-			</ul>
-		</li>
-		<li>進捗管理
-			<ul style="list-style:none;">
-				<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
-			</ul>
-		</li>
-	</ul>
-</div>
-<div id="main">
+<div id="title">注文書選択</div>
 	<?php	//DBから発注書の内容を検索
 	$id = $_REQUEST["id"];	//Selection.phpから選択した項目の注文idを受け取る
 	$sql = "SELECT *
@@ -80,9 +49,8 @@ mso-footer-margin:.3in;}
 	$SQL = $result_sql->fetch(PDO::FETCH_ASSOC);
 	echo $SQL['school_id'];
 
-?>
 
-<?php //検索したデータを加工
+ //検索したデータを加工
 	//年、月、日に変換
 	$now = date('Y/m/d');
 	$year = date('Y', strtotime($now));

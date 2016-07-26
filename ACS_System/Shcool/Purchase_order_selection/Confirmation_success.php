@@ -1,4 +1,4 @@
-<?php session_start();?>
+<?php //session_start();?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
@@ -44,8 +44,10 @@ mso-footer-margin:.3in;}
 </head>
 <body>
 <?php
+include '../School_header.php';
 	require '../../DB.php';			//DB.php呼び出し
 ?>
+<div id="title">注文書選択</div>
 <?php
 	class is_null{
 		//プロパティを定義
@@ -78,41 +80,9 @@ mso-footer-margin:.3in;}
 			}
 		}
 	}
-?>
-<div id="header">
-	<div id="top">
-		<input type="button" name="top" value="TOP" onclick="location.href='/acs_system/Shcool/School_Home.php'" />
-	</div>
-	<div id="login_name"><?php echo $_SESSION['user_name'];?>さん</div>
-</div>
-<div id="select_menu" style="clear:left;">
-	<ul id="menu">
-		<li>ログアウト
-			<ul style="list-style:none;">
-				<li><a href="../Login/Logout.php">ログアウト</a></li>
-			</ul>
-		</li>
-		<li>注文機能
-			<ul style="list-style:none;">
-				<li><a href="#">新規注文書</a></li>
-				<li><a href="#">注文書選択</a></li>
-			</ul>
-		</li>
-		<li>書類
-			<ul style="list-style:none;">
-				<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
-				<li><a href="#">製作物画像登録</a></li>
-			</ul>
-		</li>
-		<li>進捗管理
-			<ul style="list-style:none;">
-				<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
-			</ul>
-		</li>
-	</ul>
-</div>
-<div id="main">
-<?php	//DBから発注書の内容を検索
+
+
+	//DBから発注書の内容を検索
 	$id = $_REQUEST["id"];	//Selection.phpから選択した項目の注文idを受け取る
 	$sql = "SELECT *
 			FROM tyuumon t1 inner join tyuumon_master t2 on t1.tm_id = t2.tm_id
@@ -124,9 +94,9 @@ mso-footer-margin:.3in;}
 	$result_sql->execute();
 	if(!$result_sql) var_dump($result_sql->errorInfo());
 	$SQL = $result_sql->fetch(PDO::FETCH_ASSOC);
-?>
 
-<?php //検索したデータを加工
+
+ //検索したデータを加工
 	$Flg = True;	//未記入項目があるのかどうかを判定する変数	//年、月、日に変換
 	$year = date('Y', strtotime($SQL['t_date']));
 	$month = date('m', strtotime($SQL['t_date']));
@@ -832,7 +802,7 @@ while($c < 6){
 <?php
 	$err_message = "";
 
-	// submit されたら遷移  
+	// submit されたら遷移
 	if (isset($_POST['mode']) && $_POST['mode'] == "check") {
 		$_SESSION['destination_id'] = $_POST['tyuumonsha'];
 		$_SESSION['comment'] = $_POST['comment'];
@@ -845,7 +815,7 @@ while($c < 6){
 	if(isset($_GET['id'])){
 		require_once(dirname(__FILE__). "/bin/DB_Manager.php");
 		require_once(dirname(__FILE__) .'/bin/common.php');
-		
+
 		$tm_id = $_SESSION['tm_id'] = $_GET['id'];
 		$user_id = $_SESSION['user_id'];  // ログインしているユーザのID
 
