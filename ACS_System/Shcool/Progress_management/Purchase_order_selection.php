@@ -103,7 +103,7 @@ include '../School_header.php';
 <?php
 
 $non_oblect=0;
-$result = $pdo->prepare("SELECT * FROM ((((tyuumon TY
+$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
 				INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
 				INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
 				INNER JOIN school SC ON TY.school_id=SC.school_id)
@@ -121,7 +121,7 @@ $result->execute();
 	//制作ナンバー検索
 	if(isset($_POST['search_text'])){
 	$search_word = $_POST['search_text'];
-		$search_result=$pdo->prepare("SELECT * FROM ((((tyuumon TY
+		$search_result=$pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
 				INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
 				INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
 				INNER JOIN school SC ON TY.school_id=SC.school_id)
@@ -151,7 +151,7 @@ $result->execute();
 		if($koumoku=='t_naiyou'){
 			$select_Name1="t_naiyou";
 //			echo "内容".$zyouken;
-			$sort_result= $pdo->prepare("SELECT * FROM ((((tyuumon TY
+			$sort_result= $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
 										INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
 										INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
 										INNER JOIN school SC ON TY.school_id=SC.school_id)
@@ -167,7 +167,7 @@ $result->execute();
 		if($koumoku=='hin_janru'){
 			$select_Name1="hin_janru";
 //			echo "品名zyouken:".$zyouken;
-			$sort_result= $pdo->prepare("SELECT * FROM ((((tyuumon TY
+			$sort_result= $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
 										INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
 										INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
 										INNER JOIN school SC ON TY.school_id=SC.school_id)
@@ -183,7 +183,7 @@ $result->execute();
 		if($koumoku=='school_name'){
 			$select_Name1="school_name";
 //			echo "学校zyouken".$zyouken;
-			$sort_result= $pdo->prepare("SELECT * FROM ((((tyuumon TY
+			$sort_result= $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
 										INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
 										INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
 										INNER JOIN school SC ON TY.school_id=SC.school_id)
@@ -208,7 +208,7 @@ $result->execute();
 			$s_year = $_POST['select_year'];
 			$s_month = $_POST['select_month'];
 
-		$date_result= $pdo->prepare("SELECT * FROM ((((tyuumon TY
+		$date_result= $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
 										INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
 										INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
 										INNER JOIN school SC ON TY.school_id=SC.school_id)

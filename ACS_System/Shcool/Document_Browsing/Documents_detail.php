@@ -77,6 +77,7 @@ require '../../DB.php';
 <div id="title">書類閲覧</div>
 <?php
  $tm_id=$_POST['eturan_tm_id'];     //選んだ注文書id
+ //echo "tm_id=".$tm_id;
 
 //-----注文書内容をDBから受け取る-----------------------
 //$tm_id="1";
@@ -88,7 +89,7 @@ $sql = "SELECT * FROM (((((((tyuumon TY
 		INNER JOIN gakubu GK ON TY.t_gakubu=GK.gakubu_id)
 		INNER JOIN hinmei HI ON HI.hin_id=TY.t_hin_name)
 		LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
-		WHERE TY.tm_id =:tm_id";
+		WHERE TY.tm_id = :tm_id";
 $data = $pdo->prepare($sql);
 $data->bindParam(':tm_id', $tm_id, PDO::PARAM_STR);
 $data->execute();
@@ -805,7 +806,12 @@ switch ($s_men){
 
 			<!-- 折り畳まれ部分 -->
 			<div id="open03" style="display:none;clear:both;">
-<?php 				echo"<img src='$img_path' alt='画像' width='450px' text-align='center'/>";
+<?php
+if($img_path==null){   //画像がないときNoImage.png
+				$img_path="img/NoImage.png";
+			}
+
+echo"<img src='$img_path' alt='画像' width='450px' text-align='center'/>";
 ?>
 			</div>
 			<!--// 折り畳まれ部分 -->
