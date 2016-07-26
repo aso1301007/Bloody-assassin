@@ -824,6 +824,99 @@ while($c < 6){
 	$c++;
 }
 ?>
+
+
+
+
+
+<?php
+	$err_message = "";
+
+	// submit されたら遷移  
+	if (isset($_POST['mode']) && $_POST['mode'] == "check") {
+		$_SESSION['destination_id'] = $_POST['tyuumonsha'];
+		$_SESSION['comment'] = $_POST['comment'];
+
+		header("Location: ./shounin_kakunin.php");
+		exit();
+	}
+
+	//  GETでIDを受け取り必要なデータを用意する
+	if(isset($_GET['id'])){
+		require_once(dirname(__FILE__). "/bin/DB_Manager.php");
+		require_once(dirname(__FILE__) .'/bin/common.php');
+		
+		$tm_id = $_SESSION['tm_id'] = $_GET['id'];
+		$user_id = $_SESSION['user_id'];  // ログインしているユーザのID
+
+		$db = new DB_Manager();
+		$arr_tyumon = $db->select_tyuumon_by_id($tm_id);
+
+		$db->set_shounin_arr($tm_id);  // 承認表関係の取得関数を使うための準備
+		$arr_my_shounin = $db->get_my_shounin_by_id($user_id);  // ログイン者の承認がなければfalse
+		$finished_shounin_flg = $db->check_finished_shounin();  // 最終承認がなされているか
+		$created_shounin_flg = $db->check_created_shounin_by_id($user_id);  // 承認フローが作られているか
+
+		// 承認が終わっていて、かつログインしている人が申請者だった場合
+		if($created_shounin_flg && $finished_shounin_flg){
+			// todo:ACSに送信するボタンを挿入する
+		}
+		else{
+			$select_content = "";
+
+			// if($arr_my_shounin){
+				// 申請者の場合のセレクターを用意
+				if($created_shounin_flg){
+					$select_content = <<<HTML
+						<select name="select_action" id="select_action">
+							<option value="">選択してください</option>
+							<option value="shounin_sinsei">承認申請</option>
+						</select>
+HTML;
+				}
+				// 承認者の場合のセレクターを用意
+				else{
+					$select_content = <<<HTML
+						<select name="select_action" id="select_action">
+							<option value="">選択してください</option>
+							<option value="shounin">承認</option>
+							<option value="sasimodosi">差し戻し</option>
+							<option value="last_shounin">最終承認</option>
+						</select>
+HTML;
+				}
+
+				$select_content .= <<<HTML
+					<div id='result'></div><!-- 返してきたデータを表示 -->
+HTML;
+			// }
+		}
+	}
+	// GETでidがなければエラーにする
+	else{
+		$err_message = "不正なURLでアクセスされました";
+	}
+
+
+?>
+
+<?php
+	// エラーがなかった場合
+	if($err_message == ""){
+		print $select_content;
+	}
+	// エラーメッセージが格納されている場合、メッセージを表示
+	else{
+		print "<p>$err_message</p>";
+	}
+?>
+
+
+
+
+
+<!--
+
 <td colspan="6" class="xl93">注文書承認</td>
 <td class="xl74" />
 <?php
@@ -960,6 +1053,8 @@ while($c < 6){
 ?>
 <td class="xl69">　</td>
 </tr>
+
+-->
 
 <tr style='mso-height-source:userset; height:27.0pt'>
 <td height="36px" style='height:27.0pt' />
