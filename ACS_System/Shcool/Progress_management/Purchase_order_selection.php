@@ -233,8 +233,7 @@ if (!$date_pull) {
 
 <div>
 <!-------製作物ナンバー検索--------------------------->
-<div id="number_search" style="float:left; width:350px; height:70px; border-style: solid; border-width: 1px; margin:20px 5px 5px 20px; padding:10px;" align="left">
-	<b>制作物ナンバーを入力してください。</b>
+<div id="number_search"><b>制作物ナンバーを入力してください。</b>
 	<form  method="post" action=""style="float:right">
 		<p>制作物ナンバー：<input type="text"value="<?php if(isset($_POST['search_text'])){echo($_POST['search_text']);}?>" style="height:20px; vertical-align: middle;" name="search_text" size="20" maxlength="8" />
 		<span style="margin-right: 1em;"></span>
@@ -244,8 +243,7 @@ if (!$date_pull) {
 
 
 <!-------日時ソート-------------------------------------->
-<div id="period_sort" style="float:right; width:400px; height:70px; border-style: solid; border-width: 1px; margin:20px 20px 5px 5px; padding:10px;" align="left">
-	<form name="sort_period" method="post"action="">
+<div id="period_sort"><form name="sort_period" method="post"action="">
 		<b>年と月を選択してください。</b>
 		<p>年：
 		<select name = "select_year" >
@@ -279,8 +277,8 @@ if (!$date_pull) {
 
 <!-- -----ソート項目----------------------------- -->
 
-<div id="number_search" style="float:left; width:786px; height:70px; border-style: solid; border-width: 1px; margin:20px 5px 5px 20px; padding:10px;" align="left">
-	<form name="sort" method="post"action="">
+<div id="things_search" >
+<form name="sort" method="post"action="">
 		<b>項目と条件を選択してください。</b>
 		<p>項目：
 		<select name = "selectName1" onchange="functionName()">
@@ -304,7 +302,7 @@ if (!$date_pull) {
 
 <div id="syoruiitiran" style="clear:right;clear:left; margin-top:15em;">
 
-<ul class="ul-list-02" >
+
 	<?php
 		$count=0;
 		$kensuu=0;
@@ -331,13 +329,15 @@ if (!$date_pull) {
 //			text-align:center;
 	//書類情報
 echo <<<EOT
-	<div style="float:left; margin-left:5em;">
+	<div id="kensaku">
 			<input type="image" src="$img_path" alt="画像" width="140px" height="120px" onclick="location.href='Progress_situation.php?select_id=$tm_id'"/></br>
+<div style="float:left;">
 EOT;
 								echo "製作物ナンバー：",$row['tm_seisakubutu'],"<br/>製作日：",$row['t_date'],"<br />注文内容：",$naiyou,"<br />品名：",$row['hin_janru'],"<br/>学校名：",$row['school_name'];
-								echo "<br/><br/></div>";
+								echo "<br/></div>";
 								$count++;
 								$kensuu++;
+echo "</div>";
 		}
 //		echo "object:",$non_oblect;
 if ($kensuu==0){

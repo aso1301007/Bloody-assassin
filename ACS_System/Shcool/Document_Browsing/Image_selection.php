@@ -235,7 +235,7 @@ if (!$date_pull) {
 
 <div>
 <!-------製作物ナンバー検索--------------------------->
-<div id="number_search" style="float:left; width:350px; height:70px; border-style: solid; border-width: 1px; margin:20px 5px 5px 20px; padding:10px;" align="left">
+<div id="number_search">
 	<b>制作物ナンバーを入力してください。</b>
 	<form  method="post" action=""style="float:right">
 		<p>制作物ナンバー：<input type="text"value="<?php if(isset($_POST['search_text'])){echo($_POST['search_text']);}?>" style="height:20px; vertical-align: middle;" name="search_text" size="20" maxlength="8" />
@@ -246,7 +246,7 @@ if (!$date_pull) {
 
 
 <!-------日時ソート-------------------------------------->
-<div id="period_sort" style="float:right; width:400px; height:70px; border-style: solid; border-width: 1px; margin:20px 20px 5px 5px; padding:10px;" align="left">
+<div id="period_sort">
 	<form name="sort_period" method="post"action="">
 		<b>年と月を選択してください。</b>
 		<p>年：
@@ -281,7 +281,7 @@ if (!$date_pull) {
 
 <!-- -----ソート項目----------------------------- -->
 
-<div id="number_search" style="float:left; width:786px; height:70px; border-style: solid; border-width: 1px; margin:20px 5px 5px 20px; padding:10px;" align="left">
+<div id="things_search" >
 	<form name="sort" method="post"action="">
 		<b>項目と条件を選択してください。</b>
 		<p>項目：
@@ -306,7 +306,6 @@ if (!$date_pull) {
 
 <div id="syoruiitiran" style="clear:right;clear:left; margin-top:15em;">
 
-<ul class="ul-list-02" >
 	<?php
 		$count=0;
 		$kensuu=0;
@@ -334,26 +333,27 @@ if (!$date_pull) {
 //			text-align:center;
 	//書類情報
 echo <<<EOT
-	<div style="float:left; margin-left:5em;">
+	<div id="kensaku">
 								<form action="Documents_detail.php" method="post">
  									<input type="image" src="$img_path" alt="画像" width="140px" height="120px"/>
 									<input type="hidden" name="eturan_tm_id" value="$tm_id" />
 								</form>
+<div style="float:left;">
 EOT;
 								echo "製作物ナンバー：",$row['tm_seisakubutu'],"<br/>製作日：",$row['t_date'],"<br />注文内容：",$naiyou,"<br />品名：",$row['hin_janru'],"<br/>学校名：",$row['school_name'];
-								echo "<br/><br/></div>";
+								echo "<br/></div>";
 								$count++;
 								$kensuu++;
+echo "</div>";
 		}
 //		echo "object:",$non_oblect;
 if ($kensuu==0){
   		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
  // 		unset($non_oblect);
- 	 }
+}
 //echo "取得件数は".$kensuu."件です。";
 ?>
 
-</div>
 
 </div>
 <?php

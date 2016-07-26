@@ -16,7 +16,7 @@ $user_name=$_SESSION['user_name'];
 			<div id="login_name"><?php echo $user_name;?> さん</div>
 </div>
 
-<div id="select_menu" style="clear:left;">
+<div id="select_menu">
 
 	<ul id="menu">
 		<li>ログアウト
