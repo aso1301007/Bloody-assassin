@@ -225,12 +225,12 @@ $user_id=$_SESSION['user_id'];
 						$t_naiyou2=$sql02['t_naiyou'];
 						switch($t_naiyou2){
 							case 0:
-								$naiyou="見積り";
+								$naiyou2="見積り";
 								break;
 							case 1:
-								$naiyou="発注";
+								$naiyou2="発注";
 						}
-						echo Date('Y年m月d日', strtotime($sql01['t_date'])), "　・　", $sql02['hin_janru'], "　・　", $naiyou2, "<br />";
+						echo Date('Y年m月d日', strtotime($sql02['t_date'])), "　・　", $sql02['hin_janru'], "　・　", $naiyou2, "<br />";
 					}
 				?>
 			</div>
