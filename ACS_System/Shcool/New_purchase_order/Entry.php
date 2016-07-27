@@ -77,6 +77,7 @@ include("../School_header.php")
 <br>
 <br>
 <h3><center>項目に記入してください。</center></h3>
+<h3><center>年月日、部署、電話番号は必ず入力してください。</center></h3>
 <form action="Entry_confirmation.php" method="POST" name = "form1"  onSubmit="return check()">
 <table border=0 width=713 style='border-collapse:
  collapse;table-layout:fixed;width:529pt' align:center; margin-bottom:50px;'>
