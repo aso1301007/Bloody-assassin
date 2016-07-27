@@ -256,7 +256,7 @@ class DB_Manager extends PDO
         $sasimodosi_flg){
         $sql = "UPDATE shounin SET ";
         $sql .= "s_shounin_flg     = :shounin_flg, ";
-        $sql .= "s_sasimodosi_flg  = :sasimodosi_flg, ";
+        $sql .= "s_sasimodosi_flg  = :sasimodosi_flg ";
         $sql .= "WHERE s_id        = :id";
 
         $stmt = $this->prepare($sql);
@@ -288,13 +288,13 @@ class DB_Manager extends PDO
      */
     public function update_shounin_master_flag($id, $last_shounin_flg, 
         $sakujo_flg){
-        $sql = "UPDATE shounin SET ";
+        $sql = "UPDATE shounin_master SET ";
         $sql .= "sm_last_shounin_flg = :last_shounin_flg, ";
-        $sql .= "sm_sakujo_flg       = :sakujo_flg, ";
+        $sql .= "sm_sakujo_flg       = :sakujo_flg ";
         $sql .= "WHERE sm_id         = :id";
 
-        $sm_sakujo_flg       = $this->convertBoolToString($sakujo_flg);
-        $sm_last_shounin_flg = $this->convertBoolToString($last_shounin_flg);
+        $sakujo_flg       = $this->convertBoolToString($sakujo_flg);
+        $last_shounin_flg = $this->convertBoolToString($last_shounin_flg);
 
         $stmt = $this->prepare($sql);
 
@@ -416,6 +416,15 @@ class DB_Manager extends PDO
             }
         }
         return false;
+    }
+
+    public function check_empty_shounin_master(){
+        if($this->shounin_master_arr == array()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 }
