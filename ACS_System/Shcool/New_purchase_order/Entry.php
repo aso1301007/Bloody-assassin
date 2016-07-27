@@ -33,6 +33,15 @@ function check(){
 	else if(document.form1.date.value == ""){ // 「日」の入力をチェック
 		flag = 1;
 	}
+	else if(document.form1.busho.value == ""){ // 「部署」の入力をチェック
+		flag = 1;
+	}
+	else if(document.form1.user_name.value == ""){ // 「担当者名」の入力をチェック
+		flag = 1;
+	}
+	else if(document.form1.user_tel.value == ""){ // 「電話番号」の入力をチェック
+		flag = 1;
+	}
 	// 設定終了
 	if(flag){
 		window.alert('必須項目に未入力がありました'); // 入力漏れがあれば警告ダイアログを表示
@@ -62,40 +71,6 @@ jQuery(document).ready(function($){
 <?php
 include("../School_header.php")
 ?>
-<!--
-<div id="header">
-			<input type="button" name="top" value="TOP" onclick="location.href='../School_Home.php'">
-			<div id="login_name"><?php echo $user_name;?> さん</div>
-</div>
-<div id="select_menu" style="clear:left;">
-		<ul id="menu">
-			<li>ログアウト
-				<ul style="list-style:none;">
-					<li><a href="../../Login/Logout.php">ログアウト</a></li>
-				</ul>
-			</li>
-			<li>注文書
-				<ul style="list-style:none;">
-					<li><a href="Entry.php">新規注文書</a></li>
-					<li><a href="#">注文書選択</a></li>
-				</ul>
-			</li>
-			<li>書類
-				<ul style="list-style:none;">
-					<li><a href="../Documents_Browsing/Image_selection.php">書類閲覧</a></li>
-					<li><a href="#">製作物画像登録</a></li>
-				</ul>
-			</li>
-			<li>進捗管理
-				<ul style="list-style:none;">
-					<li><a href="../progress_management/Purchase_order_selection.php">進捗管理</a></li>
-				</ul>
-			</li>
-		</ul>
-</div>
-<div id="main">
-<div id = "border"></div>
--->
 
 <p></p>
 <h1><center>注文書作成</center></h1>
@@ -104,7 +79,7 @@ include("../School_header.php")
 <h3><center>項目に記入してください。</center></h3>
 <form action="Entry_confirmation.php" method="POST" name = "form1"  onSubmit="return check()">
 <table border=0 width=713 style='border-collapse:
- collapse;table-layout:fixed;width:529pt align:center; margin-bottom:50px;'>
+ collapse;table-layout:fixed;width:529pt' align:center; margin-bottom:50px;'>
  <col width=31 span=23 style='width:23pt'>
  <tr height=36 style='height:27.0pt'>
  <td height=36 width=31 style='height:27.0pt;width:23pt'></td>
