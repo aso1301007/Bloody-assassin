@@ -6,10 +6,6 @@
 <link rel=stylesheet type=text/css href=../../css.css>
 
 
-
-<title>学校_進捗状況</title>
-
-
 <script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
 <script src="../../js/jquery.focused.min.js"></script>
 
@@ -36,31 +32,22 @@ jQuery(document).ready(function($){
 		}
 	}
 </script>
-
+<title>学校_進捗状況</title>
 </head>
 
+
 <body>
-
 <?php
-
-session_start();
-
+//session_start();
 require '../../DB.php';
+include '../School_header.php';
 
+echo "<div id='title'><a>進捗状況</a></div>";
+//-----前ページで指定された注文書のID受け取り-----
 
-/*//-----前ページで指定された注文書のID受け取り-----
-*/
 $_SESSION['sintyoku_tm_id']=$_GET['select_id'];
 $tm_id=$_SESSION['sintyoku_tm_id'];
 //---------------------------------------
-
-
-//------ユーザ名取得---------
-$user_name=$_SESSION['user_name'];
-if($user_name==null){
-	header('Location: ../../Login/login.html');
-}
-//-----------------------------
 
 
 //-----------日付と注文書名の取得---------------------
@@ -143,53 +130,26 @@ while($row = $data -> fetch(PDO::FETCH_ASSOC)){
 		$touroku = $row['tm_touroku_flg'];
 		$houkoku = $row['tm_houkokusho_flg'];
 }//-------------------------------------------------------
+
+
+switch($t_naiyou){
+case '0':
+	$naiyou = "見積もり";
+	break;
+case '1':
+	$naiyou = "発注";
+	break;
+}
+
 ?>
 
-
-<div id="header">
-			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='../School_Home.php'">
-			<div id="login_name"><?php echo $user_name;?> さん</div>
-</div>
-
-<div id="select_menu" style="clear:left;">
-
-	<ul id="menu">
-		<li>ログアウト
-			<ul style="list-style:none;">
-				<li><a href="../../Login/Logout.php">ログアウト</a></li>
-			</ul>
-		</li>
-		<li>注文機能
-			<ul style="list-style:none;">
-				<li><a href="#">新規注文書</a></li>
-				<li><a href="#">注文書選択</a></li>
-			</ul>
-		</li>
-		<li>書類
-			<ul style="list-style:none;">
-				<li><a href="../Document_Browsing/Image_selection.php">書類閲覧</a></li>
-				<li><a href="#">製作物画像登録</a></li>
-			</ul>
-		</li>
-		<li>進捗管理
-			<ul style="list-style:none;">
-				<li><a href="Purchase_order_selection.php">進捗管理</a></li>
-			</ul>
-		</li>
-	</ul>
-
-</div>
-<div id="main">
-<div id="border"></div>
-
-<div id="title"><a>進捗状況</a></div>
 
 
 <div id="syorui">
 <?php
 
 //注文書名を出力
-echo Date('Y年m月d日', strtotime($t_date))."  ・  " .$t_naiyou."  ・  " .$hin_janru;
+echo Date('Y年m月d日', strtotime($t_date))."  ・  " .$naiyou."  ・  " .$hin_janru;
 
 echo "</div><div id='shounin'>";
 echo "<div style='text-align:center;'>承認の進捗状況</div><br/>";
@@ -236,30 +196,30 @@ echo "</div><div id='img1'>";
 
 //進捗を判定して画像貼り付け
 switch ($hattyu){
-	case 0: echo '<img src="img/hattyuu2.jpg"/>';
+	case 0: echo '<img src="Progress_img/hattyuu2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/hattyuu.jpg"/>';
+	case 1: echo '<img src="Progress_img/hattyuu.jpg"/>';
 		break;
 }
 
 switch ($kakunin){
-	case 0: echo '<img src="img/kakunin2.jpg"/>';
+	case 0: echo '<img src="Progress_img/kakunin2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/kakunin.jpg"/>';
+	case 1: echo '<img src="Progress_img/kakunin.jpg"/>';
 		break;
 }
 
 switch ($mitumori_now){
-	case 0: echo '<img src="img/mitumori_now2.jpg"/>';
+	case 0: echo '<img src="Progress_img/mitumori_now2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/mitumori_now.jpg"/>';
+	case 1: echo '<img src="Progress_img/mitumori_now.jpg"/>';
 		break;
 }
 
 switch ($mitumori_fin){
-	case 0: echo '<img src="img/mitumori_fin2.jpg"/>';
+	case 0: echo '<img src="Progress_img/mitumori_fin2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/mitumori_fin.jpg"/>';
+	case 1: echo '<img src="Progress_img/mitumori_fin.jpg"/>';
 		break;
 }
 
@@ -270,23 +230,23 @@ echo <<<EOT
 <div id="img2">
 EOT;
 switch ($nouhin){
-	case 0: echo '<img src="img/nouhin2.jpg"/>';
+	case 0: echo '<img src="Progress_img/nouhin2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/nouhin.jpg"/>';
+	case 1: echo '<img src="Progress_img/nouhin.jpg"/>';
 		break;
 }
 
 switch ($touroku){
-	case 0: echo '<img src="img/touroku2.jpg"/>';
+	case 0: echo '<img src="Progress_img/touroku2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/touroku.jpg"/>';
+	case 1: echo '<img src="Progress_img/touroku.jpg"/>';
 		break;
 }
 
 switch ($houkoku){
-	case 0: echo '<img src="img/houkoku2.jpg"/>';
+	case 0: echo '<img src="Progress_img/houkoku2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/houkoku.jpg"/>';
+	case 1: echo '<img src="Progress_img/houkoku.jpg"/>';
 		break;
 }
 ?>

@@ -1,4 +1,4 @@
-<?php session_start();?>
+<?php //session_start();?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
@@ -21,69 +21,33 @@
 </head>
 <body>
 <?php
+include '../School_header.php';
 	require '../../DB.php';			//DB.php呼び出し
 ?>
-<div id="header">
-	<div id="top">
-		<input type="button" name="top" value="TOP" onclick="location.href='/acs_system/Shcool/School_Home.php'" />
-	</div>
-	<div id="login_name"><?php echo $_SESSION['user_name'];?>さん</div>
-</div>
-<div id="select_menu" style="clear:left;">
-	<ul id="menu">
-		<li>ログアウト
-			<ul style="list-style:none;">
-				<li><a href="../Login/Logout.php">ログアウト</a></li>
-			</ul>
-		</li>
-		<li>注文機能
-			<ul style="list-style:none;">
-				<li><a href="#">新規注文書</a></li>
-				<li><a href="#">注文書選択</a></li>
-			</ul>
-		</li>
-		<li>書類
-			<ul style="list-style:none;">
-				<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
-				<li><a href="#">製作物画像登録</a></li>
-			</ul>
-		</li>
-		<li>進捗管理
-			<ul style="list-style:none;">
-				<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
-			</ul>
-		</li>
-	</ul>
-</div>
-<div id="main">
-	<div id="border"></div>
-	<div id="title">保存：成功</div>
+<div id="title">保存：成功</div>
 <?php
 	$Flg = True;										//未入力項目を探すときに使う
 	$id = $_POST['id'];									//注文id
 	$date = $_POST['date'];								//日付
-	if(is_null($date) or $date == ""){
+	if(empty($date) or $date === ""){
 		$Flg = False;
 	}
 	$t_naiyou = $_POST['t_naiyou'];						//見積もり・発注
-	$school_name = $_POST['school_name'];				//学校名
+	$school_id = $_POST['school_id'];					//学校名
 	$name = $_POST['name'];								//部署名
 	$user_name = $_POST['user_name'];					//担当者名
-	if(is_null($user_name) or $user_name == ""){
+	if(empty($user_name) or $user_name === ""){
 		$Flg = False;
 	}
 	$user_tel = $_POST['user_tel'];						//電話番号
-	if(is_null($user_tel) or $user_tel == ""){
+	if(empty($user_tel) or $user_tel === ""){
 		$Flg = False;
 	}
-	$hin_janru = $_POST['hin_janru'];					//品名
-	if(is_null($hin_janru) or $hin_janru == ""){
-		$Flg = False;
-	}
+	$hin_id = $_POST['hin_id'];							//品名
 	$t_bikou = $_POST['t_bikou'];						//備考
-	$gakubu_name = $_POST['gakubu_name'];				//利用する学部系
+	$gakubu_id = $_POST['gakubu_id'];					//利用する学部系
 	$t_mokuteki = $_POST['t_mokuteki'];					//利用目的
-	if(is_null($t_mokuteki) or $t_mokuteki == ""){
+	if(empty($t_mokuteki) or $t_mokuteki === ""){
 		$Flg = False;
 	}
 	$t_size = $_POST['t_size'];							//仕様：サイズ
@@ -109,37 +73,37 @@
 	$t_sakunen_orikata = $_POST['t_sakunen_orikata'];	//昨年：折り方
 	$t_sakunen_basho = $_POST['t_sakunen_basho'];		//昨年：発注先
 	$t_sakunen_tantou = $_POST['t_sakunen_tantou'];		//昨年：担当者
-	if($t_naiyou == 'est'){//ラジオボタンが見積もりを選んだのかを判定
-		$t_naiyou = "見積り";
+	if($t_naiyou === 'est'){//ラジオボタンが見積もりを選んだのかを判定
+		$t_naiyou = 0;
 	}
 	else{
-		$t_naiyou = "発注";
+		$t_naiyou = 1;
 	}
-	if($t_men =='kata'){//ラジオボタンが片面を選んだのかを判定
+	if($t_men ==='kata'){//ラジオボタンが片面を選んだのかを判定
 		$t_men = "片面";
 	}
 	else{
 		$t_men = "両面";
 	}
-	if($t_sakunen_jisseki =='yes'){//ラジオボタンが昨年実績があるを選んだのかを判定
+	if($t_sakunen_jisseki ==='yes'){//ラジオボタンが昨年実績があるを選んだのかを判定
 		$t_sakunen_jisseki = True;
 	}
 	else{
 		$t_sakunen_jisseki = False;
 	}
-	if($t_zei_hantei == 'komi'){//ラジオボタンが税込を選んだのかを判定
+	if($t_zei_hantei === 'komi'){//ラジオボタンが税込を選んだのかを判定
 		$t_zei_hantei = True;
 	}
 	else{
 		$t_zei_hantei = False;
 	}
-	if($t_sakunen_men == 'kata'){//ラジオボタンが片面を選んだのかを判定
+	if($t_sakunen_men === 'kata'){//ラジオボタンが片面を選んだのかを判定
 			$t_sakunen_men = "片面";
 	}
 	else{
 		$t_sakunen_men = "両面";
 	}
-	if($Flg){//未入力項目がなければ、update文を実行
+//	if($Flg){//未入力項目がなければ、update文を実行
 		$sql = "UPDATE tyuumon
 				SET t_date = :date, t_naiyou = :naiyou, school_id = :school, t_busho = :busho,
 					t_gakubu = :gakubu, t_tantousha = :tantou, t_tel = :tel, t_hin_name = :hin,
@@ -153,8 +117,8 @@
 					t_sakunen_basho = :s_basho, t_sakunen_tantou = :s_tantou
 				WHERE tm_id = :id";
 		$update = $pdo->prepare($sql);
-		$params = array(':date' => $date, ':naiyou' => $t_naiyou, ':school' => $school_name, ':busho' => $name,
-						':gakubu' =>$gakubu_name, ':tantou' => $user_name, ':tel' => $user_tel, ':hin' => $hin_janru,
+		$params = array(':date' => $date, ':naiyou' => $t_naiyou, ':school' => $school_id, ':busho' => $name,
+						':gakubu' =>$gakubu_id, ':tantou' => $user_name, ':tel' => $user_tel, ':hin' => $hin_id,
 						':bikou' => $t_bikou, ':mokuteki' => $t_mokuteki, ':size' => $t_size, ':page' => $t_page,
 						':color' => $t_color, ':men' => $t_men, ':kami' => $t_kami, ':orikata' => $t_orikata,
 						':busu' => $t_busu, ':kiboubi' => $t_kiboubi, ':basho' => $t_basho, ':money' => $t_money,
@@ -166,10 +130,10 @@
 		$success_flg = $update->execute($params);
 
 		if(!$success_flg) var_dump($update->errorInfo());
-	}
-	else{
-		header("Location: ".$_SERVER['HTTP_REFERER']. "&message_error=1");
-	}
+//	}
+//	else{
+//		header("Location: ".$_SERVER['HTTP_REFERER']. "&message_error=1");
+//	}
 ?>
 <div align="center">
 <input type="button" name="can" value="戻る" onclick="location.href='Selection.php'" />

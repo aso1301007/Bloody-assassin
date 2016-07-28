@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Insert title here</title>
 <link rel=Stylesheet href=stylesheet.css type="text/css">
-<link rel=stylesheet type=text/css href=css.css>
+<link rel=stylesheet type=text/css href=../../css.css>
 <style>
 <!--table
 {mso-displayed-decimal-separator:"\.";
@@ -17,8 +17,8 @@ mso-footer-margin:.3in;}
 </style>
 
 
-<script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>
-<script src="js/jquery.focused.min.js"></script>
+<script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
+<script src="../../js/jquery.focused.min.js"></script>
 
 <script type="text/javascript">
 function check(){
@@ -31,6 +31,15 @@ function check(){
 		flag = 1;
 	}
 	else if(document.form1.date.value == ""){ // 「日」の入力をチェック
+		flag = 1;
+	}
+	else if(document.form1.busho.value == ""){ // 「部署」の入力をチェック
+		flag = 1;
+	}
+	else if(document.form1.user_name.value == ""){ // 「担当者名」の入力をチェック
+		flag = 1;
+	}
+	else if(document.form1.user_tel.value == ""){ // 「電話番号」の入力をチェック
 		flag = 1;
 	}
 	// 設定終了
@@ -59,50 +68,38 @@ jQuery(document).ready(function($){
 </script>
 </head>
 <body>
+<?php
+include("../School_header.php");
+require '../../DB.php';			//DB.php呼び出し
+?>
+<?php
+//学校名
+$school_id = 1;
+$Yes_school = "SELECT * FROM school WHERE school_id = ". $school_id. "";
+$yes_school =  $pdo->prepare($Yes_school);
+$yes_school->execute();
+$No_school = "SELECT * FROM school WHERE school_id <> ".$school_id."";	//選択されていない値を検索
+$no_school = $pdo->prepare($No_school);
+$no_school->execute();
 
-<div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../Select_Report/School_Home.psp'">
-			<div id="login_name">担当者さん</div>
-</div>
-<div id="select_menu" style="clear:left;">
-		<ul id="menu">
-			<li>ログアウト
-				<ul style="list-style:none;">
-					<li><a href="../../Login/Logout.php">ログアウト</a></li>
-				</ul>
-			</li>
-			<li>注文書
-				<ul style="list-style:none;">
-					<li><a href="#">新規注文書</a></li>
-					<li><a href="#">注文書選択</a></li>
-				</ul>
-			</li>
-			<li>書類
-				<ul style="list-style:none;">
-					<li><a href="Image_selection.php">書類閲覧</a></li>
-					<li><a href="#">製作物画像登録</a></li>
-				</ul>
-			</li>
-			<li>進捗管理
-				<ul style="list-style:none;">
-					<li><a href="../progress/Purchase_order_selection.php">進捗管理</a></li>
-				</ul>
-			</li>
-		</ul>
-</div>
-
-
-
-<div id="main">
-<div id = "border"></div>
+//利用する学部系
+$undergraduate_id = 1;
+$Yes_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id = ". $undergraduate_id. "";
+$yes_undergraduate =  $pdo->prepare($Yes_undergraduate);
+$yes_undergraduate->execute();
+$No_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id <> ".$undergraduate_id."";	//選択されていない値を検索
+$no_undergraduate = $pdo->prepare($No_undergraduate);
+$no_undergraduate->execute();
+?>
 <p></p>
 <h1><center>注文書作成</center></h1>
 <br>
 <br>
 <h3><center>項目に記入してください。</center></h3>
+<h3><center>年月日、部署、電話番号は必ず入力してください。</center></h3>
 <form action="Entry_confirmation.php" method="POST" name = "form1"  onSubmit="return check()">
 <table border=0 width=713 style='border-collapse:
- collapse;table-layout:fixed;width:529pt' align = center>
+ collapse;table-layout:fixed;width:529pt' align:center; margin-bottom:50px;'>
  <col width=31 span=23 style='width:23pt'>
  <tr height=36 style='height:27.0pt'>
  <td height=36 width=31 style='height:27.0pt;width:23pt'></td>
@@ -196,7 +193,7 @@ jQuery(document).ready(function($){
  <td></td>
  <td></td>
  <td colspan ="2">
- <INPUT type="text" name="year" size = "1" maxlength = "4" >
+ <INPUT type="text" name="year" size = "1" maxlength = "4">
  </td>
  <td>年</td>
  <td>
@@ -209,6 +206,17 @@ jQuery(document).ready(function($){
  <td>日</td>
  <td class=xl69></td>
  </tr>
+
+<script language="JavaScript"><!--
+   var dt=new Date();//　日付を取得
+   var dy=dt.getYear();
+   var dm=dt.getMonth()+1;
+   var dd=dt.getDate();
+   if(dy<2000){dy+=1900;}
+   document.form1.year.value=dy;//←テキストボックスに表示
+   document.form1.month.value=dm;//←テキストボックスに表示
+   document.form1.date.value=dd;//←テキストボックスに表示
+//--></script>
 
  <tr height=36 style='mso-height-source:userset;height:27.0pt'>
  <td height=36 style='height:27.0pt'></td>
@@ -239,20 +247,15 @@ jQuery(document).ready(function($){
  <td class=xl68>　</td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>学校名</td>
  <td colspan=8 class=xl113 style='border-right:.5pt solid black;border-left:none'>
-  <SELECT name="school_name" class = "two">
- <OPTION value="1" selected>麻生情報ビジネス専門学校福岡校</OPTION>
- <OPTION value="2">麻生外語観光＆製菓専門学校</OPTION>
- <OPTION value="3">麻生医療福祉専門学校福岡校</OPTION>
- <OPTION value="4">麻生建築＆デザイン専門学校</OPTION>
- <OPTION value="5">麻生公務員専門学校福岡校</OPTION>
- <OPTION value="6">麻生リハビリテーション大学校</OPTION>
- <OPTION value="7">麻生工科自動車大学校</OPTION>
- <OPTION value="8">麻生ビューティーカレッジ</OPTION>
- <OPTION value="9">麻生情報ビジネス専門学校北九州校</OPTION>
- <OPTION value="10">麻生公務員専門学校北九州校</OPTION>
- <OPTION value="11">麻生医療福祉＆観光カレッジ</OPTION>
- <OPTION value="12">麻生看護大学校</OPTION>
- </SELECT>
+<select name="school_id" class="one">
+<?php
+$YES_SCHOOL = $yes_school->fetch(PDO::FETCH_ASSOC);
+echo "<option value=". $YES_SCHOOL['school_id']. " selected >". $YES_SCHOOL['school_name']. "</option>";
+	while($NO_SCHOOL = $no_school->fetch(PDO::FETCH_ASSOC)){
+		echo "<option value=". $NO_SCHOOL['school_id']. ">". $NO_SCHOOL['school_name']. "</option>";
+	}
+?>
+</select>
  </td>
  <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>部署名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
@@ -300,7 +303,15 @@ jQuery(document).ready(function($){
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>利用する学部系</td>
   <td colspan=6 class=xl89 style='border-left:none'>
-  <input type="text" name="gakubu_name" maxlength="20" class = "one">
+  <select name="gakubu_id" class="one">
+<?php
+$YES_UNDERGRADUATE = $yes_undergraduate->fetch(PDO::FETCH_ASSOC);
+echo "<option value=". $YES_UNDERGRADUATE['gakubu_id']. " selected >". $YES_UNDERGRADUATE['gakubu_name']. "</option>";
+	while($NO_UNDERGRADUATE = $no_undergraduate->fetch(PDO::FETCH_ASSOC)){
+		echo "<option value=". $NO_UNDERGRADUATE['gakubu_id']. ">". $NO_UNDERGRADUATE['gakubu_name']. "</option>";
+	}
+?>
+</select>
   </td>
   <td colspan=3 class=xl111 style='border-right:.5pt solid black'>利用目的</td>
   <td colspan=7 class=xl89 style='border-right:.5pt solid black;border-left:none'>

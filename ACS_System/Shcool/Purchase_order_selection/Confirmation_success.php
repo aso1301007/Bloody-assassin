@@ -1,4 +1,4 @@
-<?php session_start();?>
+<?php //session_start();?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
@@ -22,7 +22,7 @@
 <script>
     //未記入項目があったかを判定
     function OnButtonClick(Flg, id){//送信ボタンを押したらURLにget送信
-		if(Flg == 'True'){
+		if(Flg){
         	location.href = "Successful_transmission.php?id=" + id;
         	return false;
 		}
@@ -44,97 +44,79 @@ mso-footer-margin:.3in;}
 </head>
 <body>
 <?php
+include '../School_header.php';
 	require '../../DB.php';			//DB.php呼び出し
 ?>
+<div id="title">注文書選択</div>
 <?php
 	class is_null{
 		//プロパティを定義
 		public $variable;
+		public $Flg;
 
 		function null_jud(){//項目が未記入を判定
-			if(is_null($this->variable)){//null判定
+			$var = $this->variable;
+			if(empty($var)){//null判定
 				$return = "未記入";
+				return $return;
 			}
 			else{
-				$return = $this->variable;
+				return $var;
 			}
-			return $return;
+
 		}
 		function Flg(){//未記入項目があるとフラグを変える
-			if($this->variable = '未記入'){//null判定
-				$Flg = "False";
+			$var = $this->variable;
+			$Flg = $this->Flg;
+			if(empty($var)){//null判定
+				$return = False;
+				return $return;
+			}
+			if($Flg){
+				return $Flg;
 			}
 			else{
-				$Flg = "True";
+				return $Flg;
 			}
-			return $Flg;
 		}
 	}
-?>
-<div id="header">
-	<div id="top">
-		<input type="button" name="top" value="TOP" onclick="location.href='/acs_system/Shcool/School_Home.php'" />
-	</div>
-	<div id="login_name"><?php echo $_SESSION['user_name'];?>さん</div>
-</div>
-<div id="select_menu" style="clear:left;">
-	<ul id="menu">
-		<li>ログアウト
-			<ul style="list-style:none;">
-				<li><a href="../Login/Logout.php">ログアウト</a></li>
-			</ul>
-		</li>
-		<li>注文機能
-			<ul style="list-style:none;">
-				<li><a href="#">新規注文書</a></li>
-				<li><a href="#">注文書選択</a></li>
-			</ul>
-		</li>
-		<li>書類
-			<ul style="list-style:none;">
-				<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
-				<li><a href="#">製作物画像登録</a></li>
-			</ul>
-		</li>
-		<li>進捗管理
-			<ul style="list-style:none;">
-				<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
-			</ul>
-		</li>
-	</ul>
-</div>
-<div id="main">
-<?php	//DBから発注書の内容を検索
+
+
+	//DBから発注書の内容を検索
 	$id = $_REQUEST["id"];	//Selection.phpから選択した項目の注文idを受け取る
 	$sql = "SELECT *
-			FROM (tyuumon t1 inner join tyuumon_master t2 on t1.tm_id = t2.tm_id)
+			FROM tyuumon t1 inner join tyuumon_master t2 on t1.tm_id = t2.tm_id
 				inner join school s1 on t1.school_id = s1.school_id
-			WHERE t1.tm_id = ".$id;
+				inner join hinmei h1 on t1.t_hin_name = h1.hin_id
+				inner join gakubu g1 on t1.t_gakubu = g1.gakubu_id
+			WHERE t1.tm_id = ". $id;
 	$result_sql = $pdo->prepare($sql);
 	$result_sql->execute();
+	if(!$result_sql) var_dump($result_sql->errorInfo());
 	$SQL = $result_sql->fetch(PDO::FETCH_ASSOC);
-?>
 
-<?php //検索したデータを加工
-	$Flg = "True";	//未記入項目があるのかどうかを判定する変数
 
-	//年、月、日に変換
+ //検索したデータを加工
+	$Flg = True;	//未記入項目があるのかどうかを判定する変数	//年、月、日に変換
 	$year = date('Y', strtotime($SQL['t_date']));
 	$month = date('m', strtotime($SQL['t_date']));
 	$day = date('d', strtotime($SQL['t_date']));
 	//年のnull判定
 	$jud_year = new is_null();
 	$jud_year->variable = $year;
+	$jud_year->Flg = $Flg;
 	$year = $jud_year->null_jud();
 	$Flg = $jud_year->Flg();
 	//月のnull判定
 	$jud_month = new is_null();
 	$jud_month->variable = $month;
+	$jud_month->Flg = $Flg;
 	$month = $jud_month->null_jud();
 	$Flg = $jud_month->Flg();
 	//日のnull判定
 	$jud_day = new is_null();
 	$jud_day->variable = $day;
+	$jud_day->Flg = $Flg;
 	$day = $jud_day->null_jud();
 	$Flg = $jud_day->Flg();
 
@@ -142,19 +124,21 @@ mso-footer-margin:.3in;}
 	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" disabled />見積もり</td>";
 	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" disabled />発注</td>";
 	switch($SQL['t_naiyou']){
-		case '見積もり':
+		case 0:
 			$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked disabled />見積もり</td>";
 			break;
 
-		case '発注':
+		case 1:
 		$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked disabled />発注</td>";
 		break;
 	}
 	//学校名
+	$school_id = $SQL['school_id'];
 	$school_name = $SQL['school_name'];
 	//学校名のnull判定
 	$jud_school_name = new is_null();
 	$jud_school_name->variable = $school_name;
+	$jud_school_name->Flg = $Flg;
 	$school_name = $jud_school_name->null_jud();
 	$Flg = $jud_school_name->Flg();
 
@@ -163,6 +147,7 @@ mso-footer-margin:.3in;}
 	//部署名のnull判定
 	$jud_department_name = new is_null();
 	$jud_department_name->variable = $department_name;
+	$jud_department_name->Flg = $Flg;
 	$department_name = $jud_department_name->null_jud();
 	$Flg = $jud_department_name->Flg();
 
@@ -171,6 +156,7 @@ mso-footer-margin:.3in;}
 	//担当者名のnull判定
 	$jud_responsible_party = new is_null();
 	$jud_responsible_party->variable = $responsible_party;
+	$jud_responsible_party->Flg = $Flg;
 	$responsible_party = $jud_responsible_party->null_jud();
 	$Flg = $jud_responsible_party->Flg();
 
@@ -179,14 +165,17 @@ mso-footer-margin:.3in;}
 	//電話番号のnull判定
 	$jud_phone_number = new is_null();
 	$jud_phone_number->variable = $phone_number;
+	$jud_phone_number->Flg = $Flg;
 	$phone_number = $jud_phone_number->null_jud();
 	$Flg = $jud_phone_number->Flg();
 
 	//品名
-	$product_name = $SQL['t_hin_name'];
+	$product_id = $SQL['hin_id'];
+	$product_name = $SQL['hin_janru'];
 	//品名のnull判定
 	$jud_product_name = new is_null();
 	$jud_product_name->variable = $product_name;
+	$jud_product_name->Flg = $Flg;
 	$product_name = $jud_product_name->null_jud();
 	$Flg = $jud_product_name->Flg();
 
@@ -195,15 +184,23 @@ mso-footer-margin:.3in;}
 
 
 	//利用する学部系
-	$undergraduate = $SQL['t_gakubu'];
+	$undergraduate_id = $SQL['gakubu_id'];
+	$undergraduate = $SQL['gakubu_name'];
 	//学部系のnull判定
 	$jud_undergraduate = new is_null();
 	$jud_undergraduate->variable = $undergraduate;
+	$jud_undergraduate->Flg = $Flg;
 	$undergraduate = $jud_undergraduate->null_jud();
 	$Flg = $jud_undergraduate->Flg();
 
 	//利用目的
 	$purpose = $SQL['t_mokuteki'];
+	//利用目的のnull判定
+	$jud_purpose = new is_null();
+	$jud_purpose->variable = $purpose;
+	$jud_purpose->Flg = $Flg;
+	$purpose = $jud_purpose->null_jud();
+	$Flg = $jud_purpose->Flg();
 
 	//仕様
 	//サイズ
@@ -211,13 +208,15 @@ mso-footer-margin:.3in;}
 	//サイズのnull判定
 	$jud_specification_size = new is_null();
 	$jud_specification_size->variable = $specification_size;
+	$jud_specification_size->Flg = $Flg;
 	$specification_size = $jud_specification_size->null_jud();
 	$Flg = $jud_specification_size->Flg();
 	//ページ数
 	$specification_page =  $SQL['t_page'];
-	//サイズのnull判定
+	//ページのnull判定
 	$jud_specification_page = new is_null();
 	$jud_specification_page->variable = $specification_page;
+	$jud_specification_page->Flg = $Flg;
 	$specification_page = $jud_specification_page->null_jud();
 	$Flg = $jud_specification_page->Flg();
 	//色数
@@ -225,6 +224,7 @@ mso-footer-margin:.3in;}
 	//色数のnull判定
 	$jud_specification_color = new is_null();
 	$jud_specification_color->variable = $specification_color;
+	$jud_specification_color->Flg = $Flg;
 	$specification_color = $jud_specification_color->null_jud();
 	$Flg = $jud_specification_color->Flg();
 	//紙
@@ -232,6 +232,7 @@ mso-footer-margin:.3in;}
 	//紙のnull判定
 	$jud_specification_kami = new is_null();
 	$jud_specification_kami->variable = $specification_kami;
+	$jud_specification_kami->Flg = $Flg;
 	$specification_kami = $jud_specification_kami->null_jud();
 	$Flg = $jud_specification_kami->Flg();
 	//折り方
@@ -239,6 +240,7 @@ mso-footer-margin:.3in;}
 	//折り方のnull判定
 	$jud_specification_orikata = new is_null();
 	$jud_specification_orikata->variable = $specification_orikata;
+	$jud_specification_orikata->Flg = $Flg;
 	$specification_orikata = $jud_specification_orikata->null_jud();
 	$Flg = $jud_specification_orikata->Flg();
 	//仕様(ラジオボタン)
@@ -259,6 +261,7 @@ mso-footer-margin:.3in;}
 	//部数のnull判定
 	$jud_copies_number = new is_null();
 	$jud_copies_number->variable = $copies_number;
+	$jud_copies_number->Flg = $Flg;
 	$copies_number = $jud_copies_number->null_jud();
 	$Flg = $jud_copies_number->Flg();
 
@@ -267,6 +270,7 @@ mso-footer-margin:.3in;}
 	//納品希望日のnull判定
 	$jud_pefeeferred_date = new is_null();
 	$jud_pefeeferred_date->variable = $pefeeferred_date;
+	$jud_pefeeferred_date->Flg = $Flg;
 	$pefeeferred_date = $jud_pefeeferred_date->null_jud();
 	$Flg = $jud_pefeeferred_date->Flg();
 
@@ -276,6 +280,7 @@ mso-footer-margin:.3in;}
 	//希望納品場所のnull判定
 	$jud_dsired_locat = new is_null();
 	$jud_dsired_locat->variable = $dsired_locat;
+	$jud_dsired_locat->Flg = $Flg;
 	$dsired_locat = $jud_dsired_locat->null_jud();
 	$Flg = $jud_dsired_locat->Flg();
 
@@ -284,6 +289,7 @@ mso-footer-margin:.3in;}
 	//希望金額のnull判定
 	$jud_hope_amount_of_money = new is_null();
 	$jud_hope_amount_of_money->variable = $hope_amount_of_money;
+	$jud_hope_amount_of_money->Flg = $Flg;
 	$hope_amount_of_money = $jud_hope_amount_of_money->null_jud();
 	$Flg = $jud_hope_amount_of_money->Flg();
 
@@ -292,6 +298,7 @@ mso-footer-margin:.3in;}
 	//仕様の要望のnull判定
 	$jud_demand_of_specification = new is_null();
 	$jud_demand_of_specification->variable = $demand_of_specification;
+	$jud_demand_of_specification->Flg = $Flg;
 	$demand_of_specification = $jud_demand_of_specification->null_jud();
 	$Flg = $jud_demand_of_specification->Flg();
 
@@ -306,6 +313,7 @@ mso-footer-margin:.3in;}
 		//昨年費用のnull判定
 		$jud_last_year_actual_expenses = new is_null();
 		$jud_last_year_actual_expenses->variable = $last_year_actual_expenses;
+		$jud_last_year_actual_expenses->Flg = $Flg;
 		$last_year_actual_expenses = $jud_last_year_actual_expenses->null_jud();
 		$Flg = $jud_last_year_actual_expenses->Flg();
 		//税込
@@ -323,6 +331,7 @@ mso-footer-margin:.3in;}
 		//昨年部数のnull判定
 		$jud_last_year_copies_number = new is_null();
 		$jud_last_year_copies_number->variable = $last_year_copies_number;
+		$jud_last_year_copies_number->Flg = $Flg;
 		$last_year_copies_number = $jud_last_year_copies_number->null_jud();
 		$Flg = $jud_last_year_copies_number->Flg();
 		//昨年仕様(サイズ)
@@ -330,6 +339,7 @@ mso-footer-margin:.3in;}
 		//昨年サイズのnull判定
 		$jud_last_year_specification_size = new is_null();
 		$jud_last_year_specification_size->variable = $last_year_specification_size;
+		$jud_last_year_specification_size->Flg = $Flg;
 		$last_year_specification_size = $jud_last_year_specification_size->null_jud();
 		$Flg = $jud_last_year_specification_size->Flg();
 		//昨年仕様(ページ数)
@@ -337,6 +347,7 @@ mso-footer-margin:.3in;}
 		//昨年ページのnull判定
 		$jud_last_year_specification_page = new is_null();
 		$jud_last_year_specification_page->variable = $last_year_specification_page;
+		$jud_last_year_specification_page->Flg = $Flg;
 		$last_year_specification_page = $jud_last_year_specification_page->null_jud();
 		$Flg = $jud_last_year_specification_page->Flg();
 		//昨年仕様(色数)
@@ -344,6 +355,7 @@ mso-footer-margin:.3in;}
 		//昨年色数のnull判定
 		$jud_last_year_specification_color = new is_null();
 		$jud_last_year_specification_color->variable = $last_year_specification_color;
+		$jud_last_year_specification_color->Flg = $Flg;
 		$last_year_specification_color = $jud_last_year_specification_color->null_jud();
 		$Flg = $jud_last_year_specification_color->Flg();
 		//昨年仕様(紙)
@@ -351,6 +363,7 @@ mso-footer-margin:.3in;}
 		//昨年紙のnull判定
 		$jud_last_year_specification_kami = new is_null();
 		$jud_last_year_specification_kami->variable = $last_year_specification_kami;
+		$jud_last_year_specification_kami->Flg = $Flg;
 		$last_year_specification_kami = $jud_last_year_specification_kami->null_jud();
 		$Flg = $jud_last_year_specification_kami->Flg();
 		//昨年仕様(折り方)
@@ -358,6 +371,7 @@ mso-footer-margin:.3in;}
 		//昨年紙のnull判定
 		$jud_last_year_specification_orikata = new is_null();
 		$jud_last_year_specification_orikata->variable = $last_year_specification_orikata;
+		$jud_last_year_specification_orikata->Flg = $Flg;
 		$last_year_specification_orikata = $jud_last_year_specification_orikata->null_jud();
 		$Flg = $jud_last_year_specification_orikata->Flg();
 		//仕様(ラジオボタン)
@@ -377,6 +391,7 @@ mso-footer-margin:.3in;}
 		//昨年発注先のnull判定
 		$jud_last_year_ordering_destination = new is_null();
 		$jud_last_year_ordering_destination->variable = $last_year_ordering_destination;
+		$jud_last_year_ordering_destination->Flg = $Flg;
 		$last_year_ordering_destination = $jud_last_year_ordering_destination->null_jud();
 		$Flg = $jud_last_year_ordering_destination->Flg();
 		//昨年担当者
@@ -384,6 +399,7 @@ mso-footer-margin:.3in;}
 		//昨年担当者のnull判定
 		$jud_the_person_in_charge = new is_null();
 		$jud_the_person_in_charge->variable = $the_person_in_charge;
+		$jud_the_person_in_charge->Flg = $Flg;
 		$the_person_in_charge = $jud_the_person_in_charge->null_jud();
 		$Flg = $jud_the_person_in_charge->Flg();
 	}
@@ -412,6 +428,9 @@ mso-footer-margin:.3in;}
 
 ?>
 <form>
+<input type="hidden" name="id" value="<?php echo $school_id;?>" />
+<input type="hidden" name="gakubu_id" value="<?php echo $undergraduate_id;?>" />
+<input type="hidden" name="hin_id" value="<?php echo $product_id;?>" />
 <table border="0px" width="713px" style='border-collapse: collapse;table-layout:fixed;width:529pt' align = "center">
 <col width="31px" span="23px" style='width: 23pt;' />
 <tr style='height: 27.0pt;'>
@@ -775,6 +794,99 @@ while($c < 6){
 	$c++;
 }
 ?>
+
+
+
+
+
+<?php
+	$err_message = "";
+
+	// submit されたら遷移
+	if (isset($_POST['mode']) && $_POST['mode'] == "check") {
+		$_SESSION['destination_id'] = $_POST['tyuumonsha'];
+		$_SESSION['comment'] = $_POST['comment'];
+
+		header("Location: ./shounin_kakunin.php");
+		exit();
+	}
+
+	//  GETでIDを受け取り必要なデータを用意する
+	if(isset($_GET['id'])){
+		require_once(dirname(__FILE__). "/bin/DB_Manager.php");
+		require_once(dirname(__FILE__) .'/bin/common.php');
+
+		$tm_id = $_SESSION['tm_id'] = $_GET['id'];
+		$user_id = $_SESSION['user_id'];  // ログインしているユーザのID
+
+		$db = new DB_Manager();
+		$arr_tyumon = $db->select_tyuumon_by_id($tm_id);
+
+		$db->set_shounin_arr($tm_id);  // 承認表関係の取得関数を使うための準備
+		$arr_my_shounin = $db->get_my_shounin_by_id($user_id);  // ログイン者の承認がなければfalse
+		$finished_shounin_flg = $db->check_finished_shounin();  // 最終承認がなされているか
+		$created_shounin_flg = $db->check_created_shounin_by_id($user_id);  // 承認フローが作られているか
+
+		// 承認が終わっていて、かつログインしている人が申請者だった場合
+		if($created_shounin_flg && $finished_shounin_flg){
+			// todo:ACSに送信するボタンを挿入する
+		}
+		else{
+			$select_content = "";
+
+			// if($arr_my_shounin){
+				// 申請者の場合のセレクターを用意
+				if($created_shounin_flg){
+					$select_content = <<<HTML
+						<select name="select_action" id="select_action">
+							<option value="">選択してください</option>
+							<option value="shounin_sinsei">承認申請</option>
+						</select>
+HTML;
+				}
+				// 承認者の場合のセレクターを用意
+				else{
+					$select_content = <<<HTML
+						<select name="select_action" id="select_action">
+							<option value="">選択してください</option>
+							<option value="shounin">承認</option>
+							<option value="sasimodosi">差し戻し</option>
+							<option value="last_shounin">最終承認</option>
+						</select>
+HTML;
+				}
+
+				$select_content .= <<<HTML
+					<div id='result'></div><!-- 返してきたデータを表示 -->
+HTML;
+			// }
+		}
+	}
+	// GETでidがなければエラーにする
+	else{
+		$err_message = "不正なURLでアクセスされました";
+	}
+
+
+?>
+
+<?php
+	// エラーがなかった場合
+	if($err_message == ""){
+		print $select_content;
+	}
+	// エラーメッセージが格納されている場合、メッセージを表示
+	else{
+		print "<p>$err_message</p>";
+	}
+?>
+
+
+
+
+
+<!--
+
 <td colspan="6" class="xl93">注文書承認</td>
 <td class="xl74" />
 <?php
@@ -800,7 +912,7 @@ while($c < 5){
 ?>
 <td colspan="5" class="xl86" style='border-right:.5pt solid black'>最終責任者</td>
 <td class="xl77" style='border-top:none;border-left:none'>
-<input type="checkbox" name="saisyu" value="1" /></td>
+<input type="checkbox" name="saisyu" value="1" disabled="disabled" /></td>
 <td class="xl76" />
 <td />
 <?php
@@ -826,7 +938,7 @@ while($c < 6){
 ?>
 <td colspan="5" class="xl86" style='border-right:.5pt solid black'>役職者</td>
 <td class="xl77" style='border-top:none;border-left:none'>
-<input type="checkbox" name="yakusyoku" value="2" /></td>
+<input type="checkbox" name="yakusyoku" value="2" disabled="disabled" /></td>
 <td class="xl76" />
 <td />
 <?php
@@ -852,7 +964,7 @@ while($c < 6){
 ?>
 <td colspan="5" class="xl86" style='border-right:.5pt solid black'>担当者</td>
 <td class="xl77" style='border-top:none;border-left:none'>
-<input type="checkbox" name="tanto1" value="3" /></td>
+<input type="checkbox" name="tanto1" value="3" disabled="disabled" /></td>
 <td />
 <td />
 <?php
@@ -878,7 +990,7 @@ while($c < 6){
 ?>
 <td colspan="5" class="xl86" style='border-right:.5pt solid black'>担当者</td>
 <td class="xl77" style='border-top:none;border-left:none'>
-<input type="checkbox" name="tanto2" value="4" /></td>
+<input type="checkbox" name="tanto2" value="4" disabled="disabled" /></td>
 <td class="xl80"></td>
 <?php
 $c = 0;
@@ -911,6 +1023,8 @@ while($c < 6){
 ?>
 <td class="xl69">　</td>
 </tr>
+
+-->
 
 <tr style='mso-height-source:userset; height:27.0pt'>
 <td height="36px" style='height:27.0pt' />

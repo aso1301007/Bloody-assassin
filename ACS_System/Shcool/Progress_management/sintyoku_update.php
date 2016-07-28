@@ -23,8 +23,16 @@
 </head>
 <body>
 <?php
+
+	include '../School_header.php';
+	?>
+<div id="title">進捗管理</div>
+<?php
+
+
+
 	session_cache_limiter('none');
-	session_start();
+//	session_start();
 	$user_name=$_SESSION['user_name'];
 	require '../../DB.php';
 
@@ -61,40 +69,6 @@
 
 	}
 ?>
-<div id="header">
-			<input type="button" name="top" value="TOP" margin-left: 20px;margin-top: 15px; onclick="location.href='../School_Home.php'">
-			<div id="login_name"><?php echo $user_name;?> さん</div>
-</div>
-	<div id="select_menu" style="clear:left;">
-		<ul id="menu">
-			<li>ログアウト
-				<ul style="list-style:none;">
-					<li><a href="../Login/Logout.php">ログアウト</a></li>
-				</ul>
-			</li>
-			<li>注文書
-				<ul style="list-style:none;">
-					<li><a href="#">新規注文書</a></li>
-					<li><a href="#">注文書選択</a></li>
-				</ul>
-			</li>
-			<li>書類
-				<ul style="list-style:none;">
-					<li><a href="../Document_Browsing/Img_select.php">書類閲覧</a></li>
-					<li><a href="#">製作物画像登録</a></li>
-				</ul>
-			</li>
-			<li>進捗管理
-				<ul style="list-style:none;">
-					<li><a href="Purchase_order_selection.php">進捗管理</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
-
-<div id="main">
-<div id="border"></div>
-<div id="title">進捗管理</div>
 <div style="text-align:center; margin-top:50px;">
 <font size="4"><a>更新しました</a></font><br /></div>
 <div style="text-align: center; margin-top:10px; padding-bottom:50px;">

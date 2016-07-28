@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Insert title here</title>
 <link rel=Stylesheet href=stylesheet.css type="text/css">
-<link rel=stylesheet type=text/css href=css.css>
+<link rel=stylesheet type=text/css href=../../css.css>
 <style>
 <!--table
 {mso-displayed-decimal-separator:"\.";
@@ -17,8 +17,8 @@ mso-footer-margin:.3in;}
 </style>
 
 
-<script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>
-<script src="js/jquery.focused.min.js"></script>
+<script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
+<script src="../../js/jquery.focused.min.js"></script>
 
 <script type="text/javascript">
 jQuery(document).ready(function($){
@@ -36,50 +36,17 @@ jQuery(document).ready(function($){
 </script>
 </head>
 <body>
-
-<div id="header">
-			<input type = "button" name = "top" value = "TOP" onclick = "location.href='../Select_Report/School_Home.psp'">
-			<div id="login_name">担当者さん</div>
-</div>
-
-<div id="select_menu" style="clear:left;">
-		<ul id="menu">
-			<li>ログアウト
-				<ul style="list-style:none;">
-					<li><a href="../../Login/Logout.php">ログアウト</a></li>
-				</ul>
-			</li>
-			<li>注文書
-				<ul style="list-style:none;">
-					<li><a href="#">新規注文書</a></li>
-					<li><a href="#">注文書選択</a></li>
-				</ul>
-			</li>
-			<li>書類
-				<ul style="list-style:none;">
-					<li><a href="Image_selection.php">書類閲覧</a></li>
-					<li><a href="#">製作物画像登録</a></li>
-				</ul>
-			</li>
-			<li>進捗管理
-				<ul style="list-style:none;">
-					<li><a href="../progress/Purchase_order_selection.php">進捗管理</a></li>
-				</ul>
-			</li>
-		</ul>
-</div>
-
-
-<div id="main">
-<div id = "border"></div>
+<?php
+include("../School_header.php")
+?>
+<div id="title">注文書作成</div>
 <p></p>
+<form action="Save_success.php" method="POST" name = "form1">
 <h1><center>以下の内容で保存してよろしいですか？</center></h1>
 <table align = center>
 <tr>
 <td>
-<form action="Save_success.php" method="POST" name = "form1">
-<input type="submit" value="保存" class ="nine">
-</form>
+<input type="submit" value="保存" class ="nine" >
 </td>
 <td>
 <form action="newfile1.php" method="POST" name = "form2">
@@ -128,117 +95,203 @@ $t_sakunen_orikata = $_POST["t_sakunen_orikata"];
 $t_sakunen_basho = $_POST["t_sakunen_basho"];
 $t_sakunen_tantou = $_POST["t_sakunen_tantou"];
 
-$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" disabled = \"disabled\">見積もり</td>";
-$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" disabled = \"disabled\">発注</td>";
+$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"0\" disabled = \"disabled\">見積もり</td>";
+$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"1\" disabled = \"disabled\">発注</td>";
 switch ($t_naiyou){
 case 'mi':
-	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"est\" checked disabled = \"disabled\">見積もり</td>";
+	$estimate = "<input type=\"radio\" name=\"t_naiyou\" value=\"0\" checked>見積もり</td>";
 	break;
 case 'ha':
-	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"ord\" checked disabled = \"disabled\">発注</td>";
+	$order = "<input type=\"radio\" name=\"t_naiyou\" value=\"1\" checked>発注</td>";
 	break;
 }
 
 switch ($school_name){
 	case '1':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生情報ビジネス専門学校福岡校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生情報ビジネス専門学校福岡校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"1\">";
 		break;
 	case '2':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生外語観光＆製菓専門学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生外語観光＆製菓専門学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"2\">";
 		break;
 	case'3':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生医療福祉専門学校福岡校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生医療福祉専門学校福岡校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"3\">";
 		break;
 	case'4':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生建築＆デザイン専門学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生建築＆デザイン専門学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"4\">";
 		break;
 	case'5':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生公務員専門学校福岡校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生公務員専門学校福岡校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"5\">";
 		break;
 	case'6':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生リハビリテーション大学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生リハビリテーション大学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"6\">";
 		break;
 	case'7':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生工科自動車大学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生工科自動車大学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"7\">";
 		break;
 	case'8':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生ビューティーカレッジ\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生ビューティーカレッジ\" readonly>";
+		"<input type=\"hidden\" name=\"school_name\" value=\"8\">";
 		break;
 	case'9':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生情報ビジネス専門学校北九州校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生情報ビジネス専門学校北九州校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"9\">";
 		break;
 	case'10':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生公務員専門学校北九州校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生公務員専門学校北九州校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"10\">";
 		break;
 	case'11':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生医療福祉＆観光カレッジ\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生医療福祉＆観光カレッジ\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"11\">";
 		break;
 	case'12':
-		$school = "<input type=\"text\" name=\"school_name\" class = \"one\" value=\"麻生看護大学校\" readonly>";
+		$school = "<input type=\"text\" name=\"school\" class = \"one\" value=\"麻生看護大学校\" readonly>";
+		$school2="<input type=\"hidden\" name=\"school_name\" value=\"12\">";
 		break;
 }
 
 switch ($hin_janru){
 case '1':
-	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"パンフレット\" readonly>";
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru_mei\" class = \"one\" value=\"パンフレット\" readonly>";
+	$hin="<input type=\"hidden\" name=\"hin_janru\" value=\"1\">";
 	break;
 case '2':
-	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"ポスター\" readonly>";
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru_mei\" class = \"one\" value=\"ポスター\" readonly>";
+	$hin="<input type=\"hidden\" name=\"hin_janru\" value=\"2\">";
 	break;
 case'3':
-	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"看板\" readonly>";
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru_mei\" class = \"one\" value=\"看板\" readonly>";
+	$hin="<input type=\"hidden\" name=\"hin_janru\" value=\"3\">";
 	break;
 case'4':
-	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru\" class = \"one\" value=\"その他\" readonly>";
+	$hin_janru_mei = "<input type=\"text\" name=\"hin_janru_mei\" class = \"one\" value=\"その他\" readonly>";
+	$hin="<input type=\"hidden\" name=\"hin_janru\" value=\"4\">";
 	break;
 }
 
-$kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" disabled = \"disabled\">片面</td>";
-$ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" disabled = \"disabled\">両面</td>";
-switch ($t_men){
+switch ($gakubu_name){
 	case '1':
-		$kata = "<input type=\"radio\" name=\"t_men\" value=\"kata\" checked disabled = \"disabled\">片面</td>";
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"組み込みシステム科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"1\">";
 		break;
 	case '2':
-		$ryo = "<input type=\"radio\" name=\"t_men\" value=\"ryo\" checked disabled = \"disabled\">両面</td>";
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"情報工学科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"2\">";
+		break;
+	case'3':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"ネットワーク・セキュリティ科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"3\">";
+		break;
+	case'4':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"情報システム専攻科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"4\">";
+		break;
+	case'5':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"情報システム科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"5\">";
+		break;
+	case'6':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"エアライン科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"6\">";
+		break;
+	case'7':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"エアポート科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"7\">";
+		break;
+	case'8':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"製菓パティシエ科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"8\">";
+		break;
+	case'9':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"医療秘書科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"9\">";
+		break;
+	case'10':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"医療情報科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"10\">";
+		break;
+	case'11':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"診療情報管理士科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"11\">";
+		break;
+	case'12':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"建築工学科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"12\">";
+		break;
+	case'13':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"建築学科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"13\">";
+		break;
+	case'14':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"建築士専攻科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"14\">";
+		break;
+	case'15':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"公務員専攻科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"15\">";
+		break;
+	case'16':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"公務員総合科\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"16\">";
+		break;
+	case'17':
+		$gakubu_name = "<input type=\"text\" name=\"gakubu_name\" class = \"one\" value=\"高3コース\" readonly>";
+		$gakubu_id="<input type=\"hidden\" name=\"gakubu_id\" value=\"17\">";
 		break;
 }
 
-$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" disabled = \"disabled\">あり</td>";
-$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" disabled = \"disabled\">なし</td>";
-switch ($t_sakunen_jisseki){
+$kata = "<input type=\"radio\" name=\"t_men\" value=\"片面\" disabled = \"disabled\">片面</td>";
+$ryo = "<input type=\"radio\" name=\"t_men\" value=\"両面\" disabled = \"disabled\">両面</td>";
+switch ($t_men){
 	case '1':
-		$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"yes\" checked disabled = \"disabled\">あり</td>";
+		$kata = "<input type=\"radio\" name=\"t_men\" value=\"片面\" checked>片面</td>";
 		break;
 	case '2':
-		$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"no\" checked disabled = \"disabled\">なし</td>";
+		$ryo = "<input type=\"radio\" name=\"t_men\" value=\"両面\" checked>両面</td>";
+		break;
+}
+
+$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"1\" disabled = \"disabled\">あり</td>";
+$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"0\" disabled = \"disabled\">なし</td>";
+switch ($t_sakunen_jisseki){
+	case '1':
+		$yes = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"1\" checked>あり</td>";
+		break;
+	case '2':
+		$no = "<input type=\"radio\" name=\"t_sakunen_jisseki\" value=\"0\" checked>なし</td>";
 		break;
 }
 
 $komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" disabled = \"disabled\">(税込み)</td>";
-$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" disabled = \"disabled\">(税抜き)</td>";
+$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"0\" disabled = \"disabled\">(税抜き)</td>";
 switch ($t_zei_hantei){
 	case '1':
-		$komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" checked disabled = \"disabled\">(税込み)</td>";
+		$komi = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"1\" checked>(税込み)</td>";
 		break;
 	case '2':
-		$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"2\" checked disabled = \"disabled\">(税抜き)</td>";
+		$nuki = "<input type=\"radio\" name=\"t_zei_hantei\" value=\"0\" checked>(税抜き)</td>";
 		break;
 }
 
-$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" disabled = \"disabled\">片面</td>";
-$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" disabled = \"disabled\">両面</td>";
+$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"片面\" disabled = \"disabled\">片面</td>";
+$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"両面\" disabled = \"disabled\">両面</td>";
 switch ($t_sakunen_men){
 	case '1':
-		$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"1\" checked disabled = \"disabled\">片面</td>";
+		$l_kata = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"片面\" checked>片面</td>";
 		break;
 	case '2':
-		$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"2\" checked disabled = \"disabled\">両面</td>";
+		$l_ryo = "<input type=\"radio\" name=\"t_sakunen_men\" value=\"両面\" checked>両面</td>";
 		break;
 }
 ?>
 
-<form action="newfile3.php" method="POST">
 <table border=0 width=713 style='border-collapse:
  collapse;table-layout:fixed;width:529pt' align = center>
  <col width=31 span=23 style='width:23pt'>
@@ -377,11 +430,12 @@ switch ($t_sakunen_men){
  <td class=xl68>　</td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>学校名</td>
  <td colspan=8 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <?php echo $school; ?>
+ <?php echo $school ?>
+ <?php echo $school2 ?>
  </td>
  <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>部署名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <input type="text" name="name" maxlength="15" class = "one" readonly value =  <?php echo $busho; ?>>
+ <input type="text" name="busho" maxlength="15" class = "one" readonly value =  <?php echo $busho; ?>>
  </td>
  <td class=xl69>　</td>
  </tr>
@@ -406,6 +460,7 @@ switch ($t_sakunen_men){
  <td colspan=4 class=xl114 style='border-right:.5pt solid black'>品名</td>
  <td colspan=6>
  <?php echo $hin_janru_mei ?>
+ <?php echo $hin ?>
  </td>
  <td colspan=3 class=xl114 style='border-right:.5pt solid black'>備考</td>
  <td colspan=7 class=xl114 style='border-right:.5pt solid black;border-bottom:border-left:none'>
@@ -421,7 +476,8 @@ switch ($t_sakunen_men){
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>利用する学部系</td>
   <td colspan=6 class=xl89 style='border-left:none'>
-  <input type="text" name="gakubu_name" maxlength="20" class = "one" readonly value =  <?php echo $gakubu_name; ?>>
+  <?php echo $gakubu_name; ?>
+  <?php echo $gakubu_id?>
   </td>
   <td colspan=3 class=xl111 style='border-right:.5pt solid black'>利用目的</td>
   <td colspan=7 class=xl89 style='border-right:.5pt solid black;border-left:none'>
