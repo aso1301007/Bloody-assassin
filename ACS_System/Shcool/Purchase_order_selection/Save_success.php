@@ -174,42 +174,6 @@
 <div align="center">
 <input type="button" name="can" value="戻る" onclick="location.href='Selection.php'" />
 </div>
-<?php
-echo $id. "<br />";
-echo $date. "<br />";
-echo $t_naiyou. "<br />";
-echo $school_name. "<br />";
-echo $name. "<br />";
-echo $user_name. "<br />";
-echo $user_tel. "<br />";
-echo $hin_janru. "<br />";
-echo $t_bikou. "<br />";
-echo $gakubu_name. "<br />";
-echo $t_mokuteki. "<br />";
-echo $t_size. "<br />";
-echo $t_page. "<br />";
-echo $t_color. "<br />";
-echo $t_men. "<br />";
-echo $t_kami. "<br />";
-echo $t_orikata. "<br />";
-echo $t_busu. "<br />";
-echo $t_kiboubi. "<br />";
-echo $t_basho. "<br />";
-echo $t_money. "<br />";
-echo $t_youbou. "<br />";
-echo $t_sakunen_jisseki. "<br />";
-echo $t_sakunen_money. "<br />";
-echo $t_zei_hantei. "<br />";
-echo $t_sakunen_busu. "<br />";
-echo $t_sakunen_size. "<br />";
-echo $t_sakunen_page. "<br />";
-echo $t_sakunen_color. "<br />";
-echo $t_sakunen_men. "<br />";
-echo $t_sakunen_kami. "<br />";
-echo $t_sakunen_orikata. "<br />";
-echo $t_sakunen_basho. "<br />";
-echo $t_sakunen_tantou. "<br />";
-?>
 </div>
 </body>
 </html>
