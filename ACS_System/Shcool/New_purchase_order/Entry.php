@@ -73,19 +73,8 @@ include("../School_header.php");
 require '../../DB.php';			//DB.php呼び出し
 ?>
 <?php
-//DBから学校表と学部表を取得
-$id = $_REQUEST["id"];	//Selection.phpから選択した項目の注文idを受け取る
-$sql = "SELECT *
-			FROM 	school s1 inner join gakubu g1 on s1.school_id = g1.school_id
-			WHERE t1.tm_id = ". $id;
-$result_sql = $pdo->prepare($sql);
-$result_sql->execute();
-if(!$result_sql) var_dump($result_sql->errorInfo());
-$SQL = $result_sql->fetch(PDO::FETCH_ASSOC);
-
 //学校名
-$school_id = $SQL['school_id'];
-if(empty($school_id)){$school_id = 1;}
+$school_id = 1;
 $Yes_school = "SELECT * FROM school WHERE school_id = ". $school_id. "";
 $yes_school =  $pdo->prepare($Yes_school);
 $yes_school->execute();
@@ -94,8 +83,7 @@ $no_school = $pdo->prepare($No_school);
 $no_school->execute();
 
 //利用する学部系
-$undergraduate_id = $SQL['gakubu_id'];
-if(empty($undergraduate_id)){$undergraduate_id = 1;}
+$undergraduate_id = 1;
 $Yes_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id = ". $undergraduate_id. "";
 $yes_undergraduate =  $pdo->prepare($Yes_undergraduate);
 $yes_undergraduate->execute();
