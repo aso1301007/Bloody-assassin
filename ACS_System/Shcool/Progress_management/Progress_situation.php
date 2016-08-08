@@ -196,30 +196,30 @@ echo "</div><div id='img1'>";
 
 //進捗を判定して画像貼り付け
 switch ($hattyu){
-	case 0: echo '<img src="img/hattyuu2.jpg"/>';
+	case 0: echo '<img src="Progress_img/hattyuu2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/hattyuu.jpg"/>';
+	case 1: echo '<img src="Progress_img/hattyuu.jpg"/>';
 		break;
 }
 
 switch ($kakunin){
-	case 0: echo '<img src="img/kakunin2.jpg"/>';
+	case 0: echo '<img src="Progress_img/kakunin2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/kakunin.jpg"/>';
+	case 1: echo '<img src="Progress_img/kakunin.jpg"/>';
 		break;
 }
 
 switch ($mitumori_now){
-	case 0: echo '<img src="img/mitumori_now2.jpg"/>';
+	case 0: echo '<img src="Progress_img/mitumori_now2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/mitumori_now.jpg"/>';
+	case 1: echo '<img src="Progress_img/mitumori_now.jpg"/>';
 		break;
 }
 
 switch ($mitumori_fin){
-	case 0: echo '<img src="img/mitumori_fin2.jpg"/>';
+	case 0: echo '<img src="Progress_img/mitumori_fin2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/mitumori_fin.jpg"/>';
+	case 1: echo '<img src="Progress_img/mitumori_fin.jpg"/>';
 		break;
 }
 
@@ -230,23 +230,23 @@ echo <<<EOT
 <div id="img2">
 EOT;
 switch ($nouhin){
-	case 0: echo '<img src="img/nouhin2.jpg"/>';
+	case 0: echo '<img src="Progress_img/nouhin2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/nouhin.jpg"/>';
+	case 1: echo '<img src="Progress_img/nouhin.jpg"/>';
 		break;
 }
 
 switch ($touroku){
-	case 0: echo '<img src="img/touroku2.jpg"/>';
+	case 0: echo '<img src="Progress_img/touroku2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/touroku.jpg"/>';
+	case 1: echo '<img src="Progress_img/touroku.jpg"/>';
 		break;
 }
 
 switch ($houkoku){
-	case 0: echo '<img src="img/houkoku2.jpg"/>';
+	case 0: echo '<img src="Progress_img/houkoku2.jpg"/>';
 		break;
-	case 1: echo '<img src="img/houkoku.jpg"/>';
+	case 1: echo '<img src="Progress_img/houkoku.jpg"/>';
 		break;
 }
 ?>

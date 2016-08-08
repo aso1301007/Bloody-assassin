@@ -69,9 +69,28 @@ jQuery(document).ready(function($){
 </head>
 <body>
 <?php
-include("../School_header.php")
+include("../School_header.php");
+require '../../DB.php';			//DB.php呼び出し
 ?>
+<?php
+//学校名
+$school_id = 1;
+$Yes_school = "SELECT * FROM school WHERE school_id = ". $school_id. "";
+$yes_school =  $pdo->prepare($Yes_school);
+$yes_school->execute();
+$No_school = "SELECT * FROM school WHERE school_id <> ".$school_id."";	//選択されていない値を検索
+$no_school = $pdo->prepare($No_school);
+$no_school->execute();
 
+//利用する学部系
+$undergraduate_id = 1;
+$Yes_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id = ". $undergraduate_id. "";
+$yes_undergraduate =  $pdo->prepare($Yes_undergraduate);
+$yes_undergraduate->execute();
+$No_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id <> ".$undergraduate_id."";	//選択されていない値を検索
+$no_undergraduate = $pdo->prepare($No_undergraduate);
+$no_undergraduate->execute();
+?>
 <p></p>
 <h1><center>注文書作成</center></h1>
 <br>
@@ -228,20 +247,15 @@ include("../School_header.php")
  <td class=xl68>　</td>
  <td colspan=4 class=xl89 style='border-right:.5pt solid black'>学校名</td>
  <td colspan=8 class=xl113 style='border-right:.5pt solid black;border-left:none'>
- <SELECT name="school_name" class = "two">
- <OPTION value="1" selected>麻生情報ビジネス専門学校福岡校</OPTION>
- <OPTION value="2">麻生外語観光＆製菓専門学校</OPTION>
- <OPTION value="3">麻生医療福祉専門学校福岡校</OPTION>
- <OPTION value="4">麻生建築＆デザイン専門学校</OPTION>
- <OPTION value="5">麻生公務員専門学校福岡校</OPTION>
- <OPTION value="6">麻生リハビリテーション大学校</OPTION>
- <OPTION value="7">麻生工科自動車大学校</OPTION>
- <OPTION value="8">麻生ビューティーカレッジ</OPTION>
- <OPTION value="9">麻生情報ビジネス専門学校北九州校</OPTION>
- <OPTION value="10">麻生公務員専門学校北九州校</OPTION>
- <OPTION value="11">麻生医療福祉＆観光カレッジ</OPTION>
- <OPTION value="12">麻生看護大学校</OPTION>
- </SELECT>
+<select name="school_id" class="one">
+<?php
+$YES_SCHOOL = $yes_school->fetch(PDO::FETCH_ASSOC);
+echo "<option value=". $YES_SCHOOL['school_id']. " selected >". $YES_SCHOOL['school_name']. "</option>";
+	while($NO_SCHOOL = $no_school->fetch(PDO::FETCH_ASSOC)){
+		echo "<option value=". $NO_SCHOOL['school_id']. ">". $NO_SCHOOL['school_name']. "</option>";
+	}
+?>
+</select>
  </td>
  <td colspan=2 class=xl89 style='border-right:.5pt solid black;border-left:none'>部署名</td>
  <td colspan=6 class=xl113 style='border-right:.5pt solid black;border-left:none'>
@@ -288,27 +302,16 @@ include("../School_header.php")
   <td height=36 style='height:27.0pt'></td>
   <td class=xl68>　</td>
   <td colspan=4 class=xl89 style='border-right:.5pt solid black'>利用する学部系</td>
-
   <td colspan=6 class=xl89 style='border-left:none'>
-  <SELECT name="gakubu_name" class = "one">
-  <OPTION value="1" selected>組み込みシステム科</OPTION>
-  <OPTION value="2">情報工学科</OPTION>
-  <OPTION value="3">ネットワーク・セキュリティ科</OPTION>
-  <OPTION value="4">情報システム専攻科</OPTION>
-  <OPTION value="5">情報システム科</OPTION>
-  <OPTION value="6">エアライン科</OPTION>
-  <OPTION value="7">エアポート科</OPTION>
-  <OPTION value="8">製菓パティシエ科</OPTION>
-  <OPTION value="9">医療秘書科</OPTION>
-  <OPTION value="10">医療情報科</OPTION>
-  <OPTION value="11">診療情報管理士科</OPTION>
-  <OPTION value="12">建築工学科</OPTION>
-  <OPTION value="13">建築学科</OPTION>
-  <OPTION value="14">建築士専攻科</OPTION>
-  <OPTION value="15">公務員専攻科</OPTION>
-  <OPTION value="16">公務員総合科</OPTION>
-  <OPTION value="17">高3コース</OPTION>
-  </SELECT>
+  <select name="gakubu_id" class="one">
+<?php
+$YES_UNDERGRADUATE = $yes_undergraduate->fetch(PDO::FETCH_ASSOC);
+echo "<option value=". $YES_UNDERGRADUATE['gakubu_id']. " selected >". $YES_UNDERGRADUATE['gakubu_name']. "</option>";
+	while($NO_UNDERGRADUATE = $no_undergraduate->fetch(PDO::FETCH_ASSOC)){
+		echo "<option value=". $NO_UNDERGRADUATE['gakubu_id']. ">". $NO_UNDERGRADUATE['gakubu_name']. "</option>";
+	}
+?>
+</select>
   </td>
   <td colspan=3 class=xl111 style='border-right:.5pt solid black'>利用目的</td>
   <td colspan=7 class=xl89 style='border-right:.5pt solid black;border-left:none'>

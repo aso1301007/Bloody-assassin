@@ -6,7 +6,7 @@ $user_name=$_SESSION['user_name'];
 
 //ログインしていないorセッションが切れた場合------------
 	if($user_name==null){
-		header("Location: ../Login/login.html");
+		header("Location:'http://localhost/ACS_System/Login/login.html'");
 	}
 
 

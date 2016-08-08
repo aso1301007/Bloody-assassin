@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="../../css.css"></link>
 <title>注文書選択</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
 <script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
 <script src="../../js/jquery.focused.min.js"></script>
 <script type="text/javascript">
@@ -17,6 +18,30 @@
 			//window.alert('キャンセルされました');
 		});
 	});
+</script>
+<script>
+$(function() {
+  var page = 0;
+  function draw() {
+    $('#page').html(page + 1);
+    $('tr').hide();
+    $('tr:first,tr:gt(' + page * 10 + '):lt(10)').show();
+  }
+  $('#prev').click(function() {
+    if (page > 0) {
+      page--;
+      draw();
+    }
+  });
+  $("#next").click(function() {
+	  max = $("#max_id").val();
+    if (page < (max - 1) / 10 - 1) {
+      page++;
+      draw();
+    }
+  });
+  draw();
+});
 </script>
 <style type="text/css">/* テーブル内のスタイルを定義 */
 .list{
@@ -54,7 +79,7 @@ div.over02{
 <body>
 <?php
 include '../School_header.php';
-	require '../../DB.php';			//DB.php呼び出し
+require '../../DB.php';			//DB.php呼び出し
 ?>
 	<div id="title">注文書選択</div>
 
@@ -81,6 +106,7 @@ include '../School_header.php';
 	<div style="width:250px; height:25px; border-style: solid; border-width: 1px; margin-top: 20px; margin-right: 860px; margin-left:60px; padding:10px;" align="center">
 		<font size="5">保存中の注文書一覧</font>
 	</div>
+	<input type="hidden" id="max_id" name="max" value="<?php echo $count;?>" />
 	<table id="purchase_list" class="list" style="width:700px; height:20px; border-style: solid; border-width: 1px; margin-button: 40px; margin-right: 60px; margin-left: 60px; padding:10px;" align="left">
 		<tr style="border-style: solid; border-width: 1px;" align="center">
 			<th style="width:200px;">作成日</th>
@@ -93,17 +119,30 @@ include '../School_header.php';
 				echo "<td><div class=\"over01\"><a href=\"Confirmation_success.php?id=" .$SQL['tm_id'] ."\">" .$SQL['hin_janru'] ."</div></td>";
 				echo "<td><div class=\"over02\">" .$SQL['t_bikou'] ."</div></td></tr>";
 			}
-			if($count < 10){//案件が10件以下の場合、10件までリスト挿入
-				while($count < 10){
-					echo "<tr><td><div class=\"over01\" /></td><td><div class=\"over01\" />なし</td><td><div class=\"over02\"></td></tr>";
-					$count++;
-				}
+			$null = $count % 10;
+			while($null < 10){
+				echo "<tr><td><div class=\"over01\" /></td><td><div class=\"over01\" />なし</td><td><div class=\"over02\"></td></tr>";
+				$null++;
 			}
 			// db切断
 			$pdo = null;
 
 			?>
 	</table>
+	<br clear="left" />
+		<div align="left" style="margin-left:40px;" >
+		<input id="prev"type="button" value="戻る" />
+		<input id="next" type="button" value="次へ" />
+		<span id="page"></span>
+		<?php
+			$total = 1;
+			 if(($count / 10) > 1){
+				$total = ceil($count / 10);
+			 }
+		?>
+		<span id="page" />
+		<font>/<?php echo $total;?>ページ</font>
+	</div>
 </div>
 </body>
 </html>
