@@ -12,7 +12,7 @@ $user_name=$_SESSION['user_name'];
 
 ?>
 <div id="header">
-			<input type="button" name="top" value="TOP" onclick="window.href='http://localhost/ACS_System/Shcool/School_Home.php'">
+			<input type="button" name="top" value="TOP" onclick="location.href='http://localhost/ACS_System/Shcool/School_Home.php'"/>
 			<div id="login_name"><?php echo $user_name;?> さん</div>
 </div>
 
