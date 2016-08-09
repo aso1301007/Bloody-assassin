@@ -61,10 +61,10 @@ function functionName()
 
 	if (select1.options[select1.selectedIndex].value == "t_naiyou")
 	{
-	select2.options[0] = new Option("見積もり","mi");
-	<?php if($_POST['selectName2']=="mi"){?>select2.options[0].selected = true;<?php }?>
-	select2.options[1] = new Option("発注","ha");
-	<?php if($_POST['selectName2']=="ha"){?>select2.options[1].selected = true;<?php }?>
+	select2.options[0] = new Option("見積もり","0");
+	<?php if($_POST['selectName2']=="0"){?>select2.options[0].selected = true;<?php }?>
+	select2.options[1] = new Option("発注","1");
+	<?php if($_POST['selectName2']=="1"){?>select2.options[1].selected = true;<?php }?>
 	}
 
 
@@ -99,16 +99,16 @@ function functionName()
 	<?php
 include '../School_header.php';
 ?>
-<div id="title">書類一覧</div>
+<div id="title">進捗管理</div>
 <?php
 
 $non_oblect=0;
-$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name FROM ((((tyuumon TY
+$result = $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
 				INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
 				INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
 				INNER JOIN school SC ON TY.school_id=SC.school_id)
 				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
-				ORDER BY TY.t_date ASC LIMIT 10");
+				ORDER BY TY.t_date DESC LIMIT 10");
 
 $result->execute();
 
@@ -121,22 +121,23 @@ $result->execute();
 	//制作ナンバー検索
 	if(isset($_POST['search_text'])){
 	$search_word = $_POST['search_text'];
-		$search_result=$pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
-				from tyuumon,tyuumon_master,hinmei,gazou
-				where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id
-				and tyuumon_master.tm_seisakubutu LIKE '%:keyword%'");
-		$keyword = $search_word;
-		//$search_result->bindParam(":keyword", $keyword, PDO::PARAM_STR);
-		$search_result->bindValue(":keyword", $keyword);
+		$search_result=$pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
+				INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
+				INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
+				INNER JOIN school SC ON TY.school_id=SC.school_id)
+				LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
+				WHERE TM.tm_seisakubutu LIKE ?
+				ORDER BY TY.t_date DESC LIMIT 10");
+/* 				from tyuumon,tyuumon_master,hinmei,gazou,school
+				where tyuumon.tm_id=tyuumon_master.tm_id
+				and tyuumon.t_hin_name=hinmei.hin_id
+				and gazou.tm_id=tyuumon.tm_id
+				and school.school_id=tyuumon.school_id
+				and tyuumon_master.tm_seisakubutu LIKE ?");
+*/
+ $keyword = $search_word;
 		$result=$search_result;
-		$result->execute();
-		// 【案件がない場合】
-		$resultSet = $search_result->fetchAll();
-		$resultNum = count($resultSet);
-
-		if (0 == $resultNum) {
-			$non_oblect=1;
-		}
+		$result->execute(array("%".$_POST['search_text']."%"));
 
 	}
 
@@ -149,58 +150,57 @@ $result->execute();
 		//見積もりor発注
 		if($koumoku=='t_naiyou'){
 			$select_Name1="t_naiyou";
-			$sort_result= $pdo->prepare("select * from tyuumon,gazou,hinmei,tyuumon_master
-										where tyuumon.t_naiyou=:zyouken and tyuumon.tm_id=gazou.tm_id and hinmei.hin_id=tyuumon.t_hin_name
-										and tyuumon_master.tm_id=tyuumon.tm_id
-										order by'".":zyouken"."'");
+//			echo "内容".$zyouken;
+			$sort_result= $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
+										INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
+										INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
+										INNER JOIN school SC ON TY.school_id=SC.school_id)
+										LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
+										WHERE TY.t_naiyou = :zyouken
+										ORDER BY TY.t_date DESC LIMIT 10");
 			$sort_result->bindValue(":zyouken",$zyouken);
 			$result=$sort_result;
 			$result->execute();
-				// 【案件がない場合】
-		$resultSet = $sort_result->fetchAll();
-		$resultNum = count($resultSet);
-
-		if (0 == $resultNum) {
-			$non_oblect=1;
-		}
 		}
 
 		//品名ジャンル
 		if($koumoku=='hin_janru'){
 			$select_Name1="hin_janru";
-			$sort_result= $pdo->prepare("select * from tyuumon,hinmei,gazou,tyuumon_master
-										where tyuumon.t_hin_name=hinmei.hin_id and tyuumon.tm_id=gazou.tm_id and tyuumon.tm_id=tyuumon_master.tm_id and hinmei.hin_id=:zyouken
-										order by '".":zyouken"."'");
+//			echo "品名zyouken:".$zyouken;
+			$sort_result= $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
+										INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
+										INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
+										INNER JOIN school SC ON TY.school_id=SC.school_id)
+										LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
+										WHERE HI.hin_id=:zyouken
+										ORDER BY TY.t_date DESC LIMIT 10");
 			$sort_result->bindValue(":zyouken",$zyouken);
 			$result=$sort_result;
 			$result->execute();
-				// 【案件がない場合】
-		$resultSet = $sort_result->fetchAll();
-		$resultNum = count($resultSet);
-
-		if (0 == $resultNum) {
-			$non_oblect=1;
-		}
 		}
 
 		//学校名
 		if($koumoku=='school_name'){
 			$select_Name1="school_name";
-			$sort_result= $pdo->prepare("select * from tyuumon,tyuumon_master,tyuumonsha,school,hinmei,gazou
-										where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon_master.user_id=tyuumonsha.user_id and
-										tyuumonsha.school_id=school.school_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id and
-										 school.school_id=:zyouken order by '".":zyouken"."'");
+//			echo "学校zyouken".$zyouken;
+			$sort_result= $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
+										INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
+										INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
+										INNER JOIN school SC ON TY.school_id=SC.school_id)
+										LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
+										WHERE SC.school_id = :zyouken
+										ORDER BY TY.t_date DESC LIMIT 10");
 			$sort_result->bindValue(":zyouken", $zyouken);
 			$result=$sort_result;
 			$result->execute();
 			}
 			// 【案件がない場合】
-		$resultSet = $sort_result->fetchAll();
+/* 		$resultSet = $sort_result->fetchAll();
 		$resultNum = count($resultSet);
 
 		if (0 == $resultNum) {
 			$non_oblect=1;
-		}
+		} */
 	}
 
 //日付検索
@@ -208,36 +208,32 @@ $result->execute();
 			$s_year = $_POST['select_year'];
 			$s_month = $_POST['select_month'];
 
-		$date_result= $pdo->prepare("select tyuumon.tm_id,tyuumon.t_date,hinmei.hin_janru,tyuumon_master.tm_seisakubutu,gazou.gazou_path
-									from tyuumon,tyuumon_master,hinmei,gazou
-									where tyuumon.tm_id=tyuumon_master.tm_id and tyuumon.t_hin_name=hinmei.hin_id and gazou.tm_id=tyuumon.tm_id
-									and tyuumon.t_date	LIKE ':keyword%'");
+		$date_result= $pdo->prepare("SELECT TY.tm_id, TY.t_date, HI.hin_janru,G.gazou_path,TM.tm_seisakubutu,SC.school_name,TY.t_naiyou FROM ((((tyuumon TY
+										INNER JOIN hinmei HI ON TY.t_hin_name = HI.hin_id)
+										INNER JOIN tyuumon_master TM ON TM.tm_id=TY.tm_id)
+										INNER JOIN school SC ON TY.school_id=SC.school_id)
+										LEFT OUTER JOIN gazou G ON TY.tm_id = G.tm_id)
+										WHERE TY.t_date	LIKE ?
+										ORDER BY TY.t_date DESC LIMIT 10");
 		$keyword = $s_year."-".$s_month;//yearとmonthを結合して検索
-		$date_result->bindValue(":keyword", $keyword);
+//		$date_result->bindValue(":keyword", $keyword);
 		$result=$date_result;
-		$result->execute();
-					// 【案件がない場合】
-		$resultSet = $date_result->fetchAll();
-		$resultNum = count($resultSet);
-
-		if (0 == $resultNum) {
-			$non_oblect=1;
-		}
+		$result->execute(array($keyword."%"));
 		}
 
 //日付プルダウンに挿入する西暦の取得
 $date_pull= $pdo->prepare("SELECT DISTINCT SUBSTR(t_date,1,4)AS t_date FROM tyuumon");
 $date_pull->execute();
 if (!$date_pull) {
-	exit('データを登録できませんでした。');
+	exit('データを登録できませんでした。日付検索');
 }
 ?>
 
 
+
 <div>
 <!-------製作物ナンバー検索--------------------------->
-<div id="number_search" style="float:left; width:350px; height:70px; border-style: solid; border-width: 1px; margin:20px 5px 5px 20px; padding:10px;" align="left">
-	<b>制作物ナンバーを入力してください。</b>
+<div id="number_search"><b>制作物ナンバーを入力してください。</b>
 	<form  method="post" action=""style="float:right">
 		<p>制作物ナンバー：<input type="text"value="<?php if(isset($_POST['search_text'])){echo($_POST['search_text']);}?>" style="height:20px; vertical-align: middle;" name="search_text" size="20" maxlength="8" />
 		<span style="margin-right: 1em;"></span>
@@ -247,8 +243,7 @@ if (!$date_pull) {
 
 
 <!-------日時ソート-------------------------------------->
-<div id="period_sort" style="float:right; width:400px; height:70px; border-style: solid; border-width: 1px; margin:20px 20px 5px 5px; padding:10px;" align="left">
-	<form name="sort_period" method="post"action="">
+<div id="period_sort"><form name="sort_period" method="post"action="">
 		<b>年と月を選択してください。</b>
 		<p>年：
 		<select name = "select_year" >
@@ -280,10 +275,10 @@ if (!$date_pull) {
 </div>
 
 
-<!-------ソート項目------------------------------->
+<!-- -----ソート項目----------------------------- -->
 
-<div id="number_search" style="float:left; width:786px; height:70px; border-style: solid; border-width: 1px; margin:20px 5px 5px 20px; padding:10px;" align="left">
-	<form name="sort" method="post"action="">
+<div id="things_search" >
+<form name="sort" method="post"action="">
 		<b>項目と条件を選択してください。</b>
 		<p>項目：
 		<select name = "selectName1" onchange="functionName()">
@@ -305,14 +300,24 @@ if (!$date_pull) {
 
 
 
-
 <div id="syoruiitiran" style="clear:right;clear:left; margin-top:15em;">
 
-<ul class="ul-list-02" >
+
 	<?php
 		$count=0;
+		$kensuu=0;
 		while ($row = $result -> fetch(PDO::FETCH_ASSOC))  {
+			$t_naiyou=$row['t_naiyou'];
 			$img_path=$row['gazou_path'];
+
+		switch ($t_naiyou){  //発注or見積り
+			case '0':
+				$naiyou = "見積もり";
+				break;
+			case '1':
+				$naiyou = "発注";
+				break;
+		}
 
 			if($img_path==null){   //画像がないときNoImage.png
 				$img_path="img/NoImage.png";
@@ -323,21 +328,24 @@ if (!$date_pull) {
 			}
 //			text-align:center;
 	//書類情報
-		echo <<<EOT
-	<div style="float:left; margin-left:6em; text-align:center;">
+echo <<<EOT
+	<div id="kensaku">
 			<input type="image" src="$img_path" alt="画像" width="140px" height="120px" onclick="location.href='Progress_situation.php?select_id=$tm_id'"/></br>
+<div style="float:left;">
 EOT;
-								echo "製作物ナンバー：",$row['tm_seisakubutu'],"<br/>製作日：",$row['t_date'],"<br />品名：",$row['hin_janru'],"<br/>学校名：",$row['school_name'];
-								echo "<br/><br/></div>";
+								echo "製作物ナンバー：",$row['tm_seisakubutu'],"<br/>製作日：",$row['t_date'],"<br />注文内容：",$naiyou,"<br />品名：",$row['hin_janru'],"<br/>学校名：",$row['school_name'];
+								echo "<br/></div>";
 								$count++;
+								$kensuu++;
+echo "</div>";
 		}
 //		echo "object:",$non_oblect;
- if ($non_oblect==1){
+if ($kensuu==0){
   		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
-  		unset($non_oblect);
+ // 		unset($non_oblect);
  	 }
-
-		?>
+//echo "取得件数は".$kensuu."件です。";
+?>
 
 </div>
 
@@ -348,6 +356,4 @@ EOT;
     	?>
 
 </body>
-
-
 </html>

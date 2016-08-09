@@ -32,7 +32,7 @@
 	require_once(dirname(__FILE__) .'/bin/common.php');
 
 	$db = new DB_Manager();
-if($_SESSION['select_action'] == "last_shounin"){
+if(isset($_SESSION['select_action']) && $_SESSION['select_action'] == "last_shounin"){
 	$html_content = <<<HTML
 		<h3>最終承認してもよろしいですか？</h3>
 HTML;

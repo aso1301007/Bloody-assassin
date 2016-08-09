@@ -22,6 +22,7 @@
 </head>
 <body>
 <?php require(dirname(__FILE__) . '/../School_header.php') ?>
+<?php require(dirname(__FILE__). "/bin/common.php"); ?>
 <?php
 
 $html_content = "";
@@ -29,7 +30,7 @@ $html_content = "";
 
 /* 確認画面からの遷移かどうかをチェック */
 
-if($_POST['mode'] == "registComplete"){
+if($_POST['mode'] == "registComplete" && isset($_SESSION['select_action'])){
 
     /*
        入力値により処理を切り分け
@@ -38,7 +39,6 @@ if($_POST['mode'] == "registComplete"){
 
     if($_POST['regist']){
         require_once(dirname(__FILE__). "/bin/DB_Manager.php");
-        require_once(dirname(__FILE__). "/bin/common.php");
 
         $select_action = $_SESSION['select_action'];
         $db = new DB_Manager();
@@ -52,7 +52,6 @@ if($_POST['mode'] == "registComplete"){
             try{
                 $db->insert_new_shounin($tm_id, $login_user_id, $destination_id, $comment);
 
-                reset_var_in_shounin_session();
                 $html_content = <<<HTML
                     <p>認証依頼を送信しました</p>
                     <p><a href="Confirmation_success.php?id=$tm_id">注文書のページに戻る</a></p>
@@ -60,7 +59,6 @@ HTML;
             }
             catch(PDOException $e){
                 $html_content = "<p>エラーが発生しました<br />エラー文：". $e->getMessage(). "</p>";
-                break;
             }
         }
         else{
@@ -91,13 +89,13 @@ HTML;
                     break;
                case "last_shounin":
                     $shounin_master_arr = $db->get_shounin_master();
-                    $db->update_shounin_master_flag($shounin_master_arr['sm_id'], true, false);
-                    break;
+                    $db->update_shounin_master_flag($shounin_master_arr[0]['sm_id'], true, false);
 
                     $html_content = <<<HTML
                         <p>最終認証を完了しました</p>
                         <p><a href="Confirmation_success.php?id=$tm_id">注文書のページに戻る</a></p>
 HTML;
+                    break;
                }
 
             }
@@ -106,7 +104,7 @@ HTML;
             }
         }
 
-        
+        reset_var_in_shounin_session();
 
 
     } elseif ($_POST['return']) {

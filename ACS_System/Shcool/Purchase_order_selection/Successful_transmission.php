@@ -1,4 +1,4 @@
-<?php session_start()?>
+<?php //session_start()?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
@@ -20,42 +20,13 @@
 </script>
 </head>
 <body>
-<div id="header">
-	<input type="button" name="top" value="TOP" onclick="location.href='School_Home.php'"/>
-	<div id="login_name"><?php $_SESSION['user_name'];?>さん</div>
-</div>
-<div id="select_menu" style="clear:left;">
-	<ul id="menu">
-		<li>ログアウト
-			<ul style="list-style:none;">
-				<li><a href="../Login/Logout.php">ログアウト</a></li>
-			</ul>
-		</li>
-		<li>注文書
-			<ul style="list-style:none;">
-				<li><a href="#">新規注文書</a></li>
-				<li><a href="#">注文書選択</a></li>
-			</ul>
-		</li>
-		<li>書類
-			<ul style="list-style:none;">
-				<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
-				<li><a href="#">製作物画像登録</a></li>
-			</ul>
-		</li>
-		<li>進捗管理
-			<ul style="list-style:none;">
-				<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
-			</ul>
-		</li>
-	</ul>
-</div>
-<div id="main">
-	<div id="border"></div>
-	<div id="title">送信結果</div>
+
+
 <?php
+include '../School_header.php';
 	require '../../DB.php';			//DB.php呼び出し
 ?>
+<div id="title">送信結果</div>
 <?php
 $id = $_REQUEST['id'];//注文ID
 $sql = "SELECT t1.t_tantousha, t2.tm_seisakubutu

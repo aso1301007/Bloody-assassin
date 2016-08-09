@@ -75,7 +75,7 @@ $t_sakunen_tantou = $_POST["t_sakunen_tantou"];
 <?php
 require_once "../../DB.php";
 ?>
-
+<div id="title">注文書作成</div>
 <?php
 
 $sql = "SELECT MAX(tm_seisakubutu) as ts FROM tyuumon_master";

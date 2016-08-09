@@ -30,9 +30,9 @@ class DB_Manager extends PDO
      * @param  boolean $bool 
      * @return string        'true'もしくは'false'
      */
-    private function convertBoolToString($bool){
-        return $bool ? "true" : "false";
-    }
+    // private function convertBoolToString($bool){
+        // return $bool ? "true" : "false";
+    // }
 
     /**
      * 渡したテーブル名のテーブルの値をすべて返す
@@ -137,7 +137,6 @@ class DB_Manager extends PDO
     public function select_shounin_master_by_tm_id($tm_id){
         $sql = "SELECT * FROM shounin_master";
         $sql .= " WHERE tm_id = ?";
-        $sql .= " AND sm_last_shounin_flg = false";
         $sql .= " AND sm_sakujo_flg = false";
         $sql .= " ORDER BY sm_id DESC";
 
@@ -219,9 +218,9 @@ class DB_Manager extends PDO
         $sql .= "VALUES('', :sm_id, :sender_id, :destination_id, ";
         $sql .= ":comment, :shounin_flg, :sasimodosi_flg)";
 
-        // boolean型の変数は'1'/''として評価されるのでstringに変換しておく
-        $sasimodosi_flg = $this->convertBoolToString($sasimodosi_flg);
-        $shounin_flg    = $this->convertBoolToString($shounin_flg);
+        // boolean型の変数はtrue='1'／false=''として評価されるのでstringに変換しておく
+        // $sasimodosi_flg = $this->convertBoolToString($sasimodosi_flg);
+        // $shounin_flg    = $this->convertBoolToString($shounin_flg);
 
         $stmt = $this->prepare($sql);
 
@@ -231,8 +230,8 @@ class DB_Manager extends PDO
             $stmt->bindValue(':sender_id',      $sender_id,      PDO::PARAM_INT);
             $stmt->bindValue(':destination_id', $destination_id, PDO::PARAM_INT);
             $stmt->bindValue(':comment',        $comment,        PDO::PARAM_STR);
-            $stmt->bindValue(':shounin_flg',    $shounin_flg,    PDO::PARAM_BOOL);
-            $stmt->bindValue(':sasimodosi_flg', $sasimodosi_flg, PDO::PARAM_BOOL);
+            $stmt->bindValue(':shounin_flg',    $shounin_flg,    PDO::PARAM_INT);
+            $stmt->bindValue(':sasimodosi_flg', $sasimodosi_flg, PDO::PARAM_INT);
 
             $stmt->execute();
 
@@ -255,17 +254,17 @@ class DB_Manager extends PDO
     public function update_shounin_flag($id, $shounin_flg, 
         $sasimodosi_flg){
         $sql = "UPDATE shounin SET ";
-        $sql .= "s_shounin_flg     = :shounin_flg, ";
-        $sql .= "s_sasimodosi_flg  = :sasimodosi_flg ";
-        $sql .= "WHERE s_id        = :id";
+        $sql .= "s_shounin_flg = :shounin_flg, ";
+        $sql .= "s_sasimodosi_flg = :sasimodosi_flg ";
+        $sql .= "WHERE s_id = :id";
 
         $stmt = $this->prepare($sql);
 
         $this->beginTransaction();
         try{
 
-            $stmt->bindValue(':shounin_flg',    $shounin_flg,    PDO::PARAM_BOOL);
-            $stmt->bindValue(':sasimodosi_flg', $sasimodosi_flg, PDO::PARAM_BOOL);
+            $stmt->bindValue(':shounin_flg',    $shounin_flg,    PDO::PARAM_INT);
+            $stmt->bindValue(':sasimodosi_flg', $sasimodosi_flg, PDO::PARAM_INT);
             $stmt->bindValue(':id',             $id,             PDO::PARAM_INT);
 
             $stmt->execute();
@@ -290,19 +289,19 @@ class DB_Manager extends PDO
         $sakujo_flg){
         $sql = "UPDATE shounin_master SET ";
         $sql .= "sm_last_shounin_flg = :last_shounin_flg, ";
-        $sql .= "sm_sakujo_flg       = :sakujo_flg ";
-        $sql .= "WHERE sm_id         = :id";
+        $sql .= "sm_sakujo_flg = :sakujo_flg ";
+        $sql .= "WHERE sm_id = :id";
 
-        $sakujo_flg       = $this->convertBoolToString($sakujo_flg);
-        $last_shounin_flg = $this->convertBoolToString($last_shounin_flg);
+        // $sakujo_flg       = $this->convertBoolToString($sakujo_flg);
+        // $last_shounin_flg = $this->convertBoolToString($last_shounin_flg);
 
         $stmt = $this->prepare($sql);
 
         $this->beginTransaction();
         try{
 
-            $stmt->bindValue(':last_shounin_flg', $last_shounin_flg, PDO::PARAM_BOOL);
-            $stmt->bindValue(':sakujo_flg',       $sakujo_flg,       PDO::PARAM_BOOL);
+            $stmt->bindValue(':last_shounin_flg', $last_shounin_flg, PDO::PARAM_INT);
+            $stmt->bindValue(':sakujo_flg',       $sakujo_flg,       PDO::PARAM_INT);
             $stmt->bindValue(':id',               $id,               PDO::PARAM_INT);
 
             $stmt->execute();
@@ -369,7 +368,7 @@ class DB_Manager extends PDO
     public function get_shounin_master(){
         $arr = $this->shounin_master_arr;
         if($arr != array()){
-            return $this->shounin_master_arr;
+            return $arr;
         }
     }
 
@@ -406,6 +405,16 @@ class DB_Manager extends PDO
         }
 
         return false;
+    }
+
+    public function check_created_tyuumon_by_id($tm_id, $user_id){
+        $arr = $this->select_tyuumon_by_id($tm_id);
+        if($arr['user_id'] == $user_id){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public function check_sasimodosi_shounin_by_id($user_id){

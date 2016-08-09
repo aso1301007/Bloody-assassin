@@ -31,7 +31,8 @@
     }
 </script>
 <style>
-<!--table
+<!--
+table
 {mso-displayed-decimal-separator:"\.";
 mso-displayed-thousand-separator:"\,";}
 @page
@@ -43,8 +44,10 @@ mso-footer-margin:.3in;}
 </head>
 <body>
 <?php
+include '../School_header.php';
 	require '../../DB.php';			//DB.php呼び出し
 ?>
+<div id="title">注文書選択</div>
 <?php
 	class is_null{
 		//プロパティを定義
@@ -110,7 +113,6 @@ mso-footer-margin:.3in;}
 		</li>
 	</ul>
 </div> -->
-<?php require(dirname(__FILE__) . '/../School_header.php') ?>
 
 <!--  佐藤追加分  -->
 <?php
@@ -118,9 +120,10 @@ mso-footer-margin:.3in;}
 
 	// submit されたら遷移  
 	if (isset($_POST['mode']) && $_POST['mode'] == "check") {
-		$_SESSION['destination_id'] = $_POST['tyuumonsha'];
-		$_SESSION['comment'] = $_POST['comment'];
-
+		if(isset($_POST['tyuumonsha']) && isset($_POST['comment'])){
+			$_SESSION['destination_id'] = $_POST['tyuumonsha'];
+			$_SESSION['comment'] = $_POST['comment'];
+		}
 		header("Location: ./shounin_kakunin.php");
 		exit();
 	}
@@ -132,9 +135,11 @@ mso-footer-margin:.3in;}
 		
 		$tm_id = $_SESSION['tm_id'] = $_GET['id'];
 		$user_id = $_SESSION['user_id'];  // ログインしているユーザのID
+		$send_available_flg = false;
 
 		$db = new DB_Manager();
 		$arr_tyumon = $db->select_tyuumon_by_id($tm_id);
+		$tyuumon_creater_flg = $db->check_created_tyuumon_by_id($tm_id, $user_id);
 
 		$db->set_shounin_arr($tm_id);  // 承認表関係の取得関数を使うための準備
 		$arr_my_shounin = $db->get_my_shounin_by_id($user_id);  // ログイン者の承認がなければfalse
@@ -144,6 +149,7 @@ mso-footer-margin:.3in;}
 		// 承認が終わっていて、かつログインしている人が申請者だった場合
 		if($created_shounin_flg && $finished_shounin_flg){
 			// todo:ACSに送信するボタンを挿入する
+			$send_available_flg = true;
 		}
 		else{
 			$select_content = "";
@@ -187,7 +193,7 @@ HTML;
 				}
 				else{
 					$select_content = <<<HTML
-						<p>この注文書は承認中です</p>
+						<p>この注文書は承認待中です</p>
 HTML;
 				}
 			}
@@ -208,6 +214,9 @@ HTML;
 <!-- 追加分ここまで -->
 <div id="main">
 <?php	//DBから発注書の内容を検索
+
+
+	//DBから発注書の内容を検索
 	$id = $_REQUEST["id"];	//Selection.phpから選択した項目の注文idを受け取る
 	$sql = "SELECT *
 			FROM tyuumon t1 inner join tyuumon_master t2 on t1.tm_id = t2.tm_id
@@ -916,13 +925,7 @@ while($c < 20){
 
 
 
-
-
-
-
 <!--
-
-
 <?php
 $c = 0;
 while($c < 6){
@@ -1130,16 +1133,21 @@ while($c < 23){
 </tr>
 </table>
 
+
+
+
 <!-- 佐藤追加分ここから -->
-<?php	if(!$finished_shounin_flg){ ?>
 <div style="margin : 50px;">
 <hr />
 <div style="margin : 20px;">
 <h3>注文書申請</h3>
-<p>操作選択</p>
 <?php
 	// エラーがなかった場合
-	if($err_message == ""){
+	if($finished_shounin_flg){
+		print "<p>承認作業は終了しています</p>";
+	}
+	else if($err_message == ""){
+		print "<p>操作選択</p>";
 		print $select_content;
 	}
 	// エラーメッセージが格納されている場合、メッセージを表示
@@ -1150,18 +1158,22 @@ while($c < 23){
 </div>
 <hr />
 </div>
-<?php	} ?>
+
 <!-- 追加分ここまで -->
+
+
+
 
 
 
 <div align="center">
 
-<?php	if($finished_shounin_flg){ ?>
+<?php	if($send_available_flg){ ?>
 <input type="button" name="sub" value="送信" onclick="OnButtonClick('<?php echo $Flg;?>', '<?php echo $id;?>');" />
 <?php	} ?>
-
+<?php	if($tyuumon_creater_flg){ ?>
 <input type="button" name="edi" value="編集" onclick="location.href='Order_form_editing.php?id=<?php echo $id;?>'" />
+<?php	} ?>
 <input type="button" name="can" value="戻る" onclick="location.href='Selection.php'" />
 </div>
 </div>

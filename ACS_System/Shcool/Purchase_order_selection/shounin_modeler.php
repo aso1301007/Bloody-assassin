@@ -93,7 +93,7 @@ HTML;
 
 	  		$html_content = <<<HTML
 
-			  <form action="tyuumon.php" method="post" accept-charset="utf-8">
+			  <form action="Confirmation_success.php" method="post" accept-charset="utf-8">
 			  <input type="hidden" name="mode" value="check" />	
 
 				<p>コメント</p>
@@ -111,7 +111,7 @@ HTML;
 	  	case "last_shounin":
 	  		$html_content = <<<HTML
 
-			  <form action="tyuumon.php" method="post" accept-charset="utf-8">
+			  <form action="Confirmation_success.php" method="post" accept-charset="utf-8">
 			  <input type="hidden" name="mode" value="check" />
 			    <p>最終承認</p>
 				<input type="submit" value="確認" />

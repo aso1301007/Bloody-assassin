@@ -39,6 +39,7 @@ jQuery(document).ready(function($){
 <?php
 include("../School_header.php")
 ?>
+<div id="title">注文書作成</div>
 <p></p>
 <form action="Save_success.php" method="POST" name = "form1">
 <h1><center>以下の内容で保存してよろしいですか？</center></h1>
