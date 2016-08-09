@@ -320,7 +320,7 @@ if (!$date_pull) {
 		}
 
 			if($img_path==null){   //画像がないときNoImage.png
-				$img_path="img/NoImage.png";
+				$img_path="img/NoImage.jpg";
 			}
 			$tm_id =$row['tm_id'];
 			if($count%2==0){

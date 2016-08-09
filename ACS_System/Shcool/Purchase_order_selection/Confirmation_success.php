@@ -228,9 +228,9 @@ HTML;
 	$result_sql->execute();
 	if(!$result_sql) var_dump($result_sql->errorInfo());
 	$SQL = $result_sql->fetch(PDO::FETCH_ASSOC);
-?>
 
-<?php //検索したデータを加工
+
+ //検索したデータを加工
 	$Flg = True;	//未記入項目があるのかどうかを判定する変数	//年、月、日に変換
 	$year = date('Y', strtotime($SQL['t_date']));
 	$month = date('m', strtotime($SQL['t_date']));
@@ -920,7 +920,6 @@ while($c < 20){
 <tr style='mso-height-source:userset;height:27.0pt'>
 <td height="36px" style='height:27.0pt' />
 <td class="xl68">　</td>
-
 
 
 
