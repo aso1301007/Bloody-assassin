@@ -177,7 +177,7 @@ while($app_info1 = $app_info -> fetch(PDO::FETCH_ASSOC)){
 		$saki_name=$name_info1['saki_name'];
 	}
 
-//条件によって表示切替
+//---------条件によって表示切替-----------------------------
 echo "<div style='margin-left:1em;'>";
 	if($shounin_flg==0){
 		if($sasimodosi==0){ echo $hizuke,"　　",$saki_name,"さんの承認待ちです。";
@@ -192,6 +192,7 @@ if($sakujo_flg==1){
 }
 echo "<br/></div>";
 }
+//----------------------------------------------------------------
 echo "</div><div id='img1'>";
 
 //進捗を判定して画像貼り付け
