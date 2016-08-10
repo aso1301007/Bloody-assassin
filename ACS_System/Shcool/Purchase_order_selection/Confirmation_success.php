@@ -1,4 +1,3 @@
-<?php //session_start();?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
@@ -32,7 +31,8 @@
     }
 </script>
 <style>
-<!--table
+<!--
+table
 {mso-displayed-decimal-separator:"\.";
 mso-displayed-thousand-separator:"\,";}
 @page
@@ -80,6 +80,140 @@ include '../School_header.php';
 			}
 		}
 	}
+?>
+<!-- <div id="header">
+	<div id="top">
+		<input type="button" name="top" value="TOP" onclick="location.href='/acs_system/Shcool/School_Home.php'" />
+	</div>
+	<div id="login_name"><?php echo $_SESSION['user_name'];?>さん</div>
+</div>
+<div id="select_menu" style="clear:left;">
+	<ul id="menu">
+		<li>ログアウト
+			<ul style="list-style:none;">
+				<li><a href="../Login/Logout.php">ログアウト</a></li>
+			</ul>
+		</li>
+		<li>注文機能
+			<ul style="list-style:none;">
+				<li><a href="#">新規注文書</a></li>
+				<li><a href="#">注文書選択</a></li>
+			</ul>
+		</li>
+		<li>書類
+			<ul style="list-style:none;">
+				<li><a href="Document_Browsing/Image_selection.php">書類閲覧</a></li>
+				<li><a href="#">製作物画像登録</a></li>
+			</ul>
+		</li>
+		<li>進捗管理
+			<ul style="list-style:none;">
+				<li><a href="progress/Purchase_order_selection.php">進捗管理</a></li>
+			</ul>
+		</li>
+	</ul>
+</div> -->
+
+<!--  佐藤追加分  -->
+<?php
+	$err_message = "";
+
+	// submit されたら遷移  
+	if (isset($_POST['mode']) && $_POST['mode'] == "check") {
+		if(isset($_POST['tyuumonsha']) && isset($_POST['comment'])){
+			$_SESSION['destination_id'] = $_POST['tyuumonsha'];
+			$_SESSION['comment'] = $_POST['comment'];
+		}
+		header("Location: ./shounin_kakunin.php");
+		exit();
+	}
+
+	//  GETでIDを受け取り必要なデータを用意する
+	if(isset($_GET['id'])){
+		require_once(dirname(__FILE__). "/bin/DB_Manager.php");
+		require_once(dirname(__FILE__) .'/bin/common.php');
+		
+		$tm_id = $_SESSION['tm_id'] = $_GET['id'];
+		$user_id = $_SESSION['user_id'];  // ログインしているユーザのID
+		$send_available_flg = false;
+
+		$db = new DB_Manager();
+		$arr_tyumon = $db->select_tyuumon_by_id($tm_id);
+		$tyuumon_creater_flg = $db->check_created_tyuumon_by_id($tm_id, $user_id);
+
+		$db->set_shounin_arr($tm_id);  // 承認表関係の取得関数を使うための準備
+		$arr_my_shounin = $db->get_my_shounin_by_id($user_id);  // ログイン者の承認がなければfalse
+		$finished_shounin_flg = $db->check_finished_shounin();  // 最終承認がなされているか
+		$created_shounin_flg = $db->check_created_shounin_by_id($user_id);  // 承認フローがログイン者によって作られているか
+
+		// 承認が終わっていて、かつログインしている人が申請者だった場合
+		if($created_shounin_flg && $finished_shounin_flg){
+			// todo:ACSに送信するボタンを挿入する
+			$send_available_flg = true;
+		}
+		else{
+			$select_content = "";
+
+			// 承認フローがある場合
+			if($arr_my_shounin){
+			// if(true){
+				// 申請者の場合のセレクターを用意
+				if($created_shounin_flg){
+				// if(false){
+					$select_content = <<<HTML
+						<select name="select_action" id="select_action">
+							<option value="">選択してください</option>
+							<option value="shounin_sinsei">承認申請</option>
+						</select>
+HTML;
+				}
+				// 承認者の場合のセレクターを用意
+				else{
+					$select_content = <<<HTML
+						<select name="select_action" id="select_action">
+							<option value="">選択してください</option>
+							<option value="shounin">承認</option>
+							<option value="sasimodosi">差し戻し</option>
+							<option value="last_shounin">最終承認</option>
+						</select>
+HTML;
+				}
+
+			}
+			// 承認フローがまだない場合
+			else{
+				// todo: 注文書を作った人かどうかの判定も必要？
+				if($db->check_empty_shounin_master()){
+					$select_content = <<<HTML
+						<select name="select_action" id="select_action">
+							<option value="">選択してください</option>
+							<option value="shounin_sinsei">承認申請</option>
+						</select>
+HTML;
+				}
+				else{
+					$select_content = <<<HTML
+						<p>この注文書は承認待中です</p>
+HTML;
+				}
+			}
+				//返してきたデータを表示
+				$select_content .= <<<HTML
+					<div id='result'></div>	
+HTML;
+		}
+	}
+	// GETでidがなければエラーにする
+	else{
+		$err_message = "不正なURLでアクセスされました";
+	}
+
+
+?>
+
+<!-- 追加分ここまで -->
+<div id="main">
+<?php	//DBから発注書の内容を検索
 
 
 	//DBから発注書の内容を検索
@@ -427,7 +561,6 @@ include '../School_header.php';
 //	$order_approval = "";
 
 ?>
-<form>
 <input type="hidden" name="id" value="<?php echo $school_id;?>" />
 <input type="hidden" name="gakubu_id" value="<?php echo $undergraduate_id;?>" />
 <input type="hidden" name="hin_id" value="<?php echo $product_id;?>" />
@@ -787,6 +920,11 @@ while($c < 20){
 <tr style='mso-height-source:userset;height:27.0pt'>
 <td height="36px" style='height:27.0pt' />
 <td class="xl68">　</td>
+
+
+
+
+<!--
 <?php
 $c = 0;
 while($c < 6){
@@ -794,99 +932,6 @@ while($c < 6){
 	$c++;
 }
 ?>
-
-
-
-
-
-<?php
-	$err_message = "";
-
-	// submit されたら遷移
-	if (isset($_POST['mode']) && $_POST['mode'] == "check") {
-		$_SESSION['destination_id'] = $_POST['tyuumonsha'];
-		$_SESSION['comment'] = $_POST['comment'];
-
-		header("Location: ./shounin_kakunin.php");
-		exit();
-	}
-
-	//  GETでIDを受け取り必要なデータを用意する
-	if(isset($_GET['id'])){
-		require_once(dirname(__FILE__). "/bin/DB_Manager.php");
-		require_once(dirname(__FILE__) .'/bin/common.php');
-
-		$tm_id = $_SESSION['tm_id'] = $_GET['id'];
-		$user_id = $_SESSION['user_id'];  // ログインしているユーザのID
-
-		$db = new DB_Manager();
-		$arr_tyumon = $db->select_tyuumon_by_id($tm_id);
-
-		$db->set_shounin_arr($tm_id);  // 承認表関係の取得関数を使うための準備
-		$arr_my_shounin = $db->get_my_shounin_by_id($user_id);  // ログイン者の承認がなければfalse
-		$finished_shounin_flg = $db->check_finished_shounin();  // 最終承認がなされているか
-		$created_shounin_flg = $db->check_created_shounin_by_id($user_id);  // 承認フローが作られているか
-
-		// 承認が終わっていて、かつログインしている人が申請者だった場合
-		if($created_shounin_flg && $finished_shounin_flg){
-			// todo:ACSに送信するボタンを挿入する
-		}
-		else{
-			$select_content = "";
-
-			// if($arr_my_shounin){
-				// 申請者の場合のセレクターを用意
-				if($created_shounin_flg){
-					$select_content = <<<HTML
-						<select name="select_action" id="select_action">
-							<option value="">選択してください</option>
-							<option value="shounin_sinsei">承認申請</option>
-						</select>
-HTML;
-				}
-				// 承認者の場合のセレクターを用意
-				else{
-					$select_content = <<<HTML
-						<select name="select_action" id="select_action">
-							<option value="">選択してください</option>
-							<option value="shounin">承認</option>
-							<option value="sasimodosi">差し戻し</option>
-							<option value="last_shounin">最終承認</option>
-						</select>
-HTML;
-				}
-
-				$select_content .= <<<HTML
-					<div id='result'></div><!-- 返してきたデータを表示 -->
-HTML;
-			// }
-		}
-	}
-	// GETでidがなければエラーにする
-	else{
-		$err_message = "不正なURLでアクセスされました";
-	}
-
-
-?>
-
-<?php
-	// エラーがなかった場合
-	if($err_message == ""){
-		print $select_content;
-	}
-	// エラーメッセージが格納されている場合、メッセージを表示
-	else{
-		print "<p>$err_message</p>";
-	}
-?>
-
-
-
-
-
-<!--
-
 <td colspan="6" class="xl93">注文書承認</td>
 <td class="xl74" />
 <?php
@@ -1022,9 +1067,12 @@ while($c < 6){
 }
 ?>
 <td class="xl69">　</td>
-</tr>
 
 -->
+	
+</tr>
+
+
 
 <tr style='mso-height-source:userset; height:27.0pt'>
 <td height="36px" style='height:27.0pt' />
@@ -1083,16 +1131,102 @@ while($c < 23){
 ?>
 </tr>
 </table>
+
+
+
+
+<!-- 佐藤追加分ここから -->
+<div style="margin : 50px;">
+<hr />
+<div style="margin : 20px;">
+<h3>注文書申請</h3>
+<?php
+	// エラーがなかった場合
+	if($finished_shounin_flg){
+		print "<p>承認作業は終了しています</p>";
+	}
+	else if($err_message == ""){
+		print "<p>操作選択</p>";
+		print $select_content;
+	}
+	// エラーメッセージが格納されている場合、メッセージを表示
+	else{
+		print "<p>$err_message</p>";
+	}
+?>
+</div>
+<hr />
+</div>
+
+<!-- 追加分ここまで -->
+
+
+
+
+
+
 <div align="center">
+
+<?php	if($send_available_flg){ ?>
 <input type="button" name="sub" value="送信" onclick="OnButtonClick('<?php echo $Flg;?>', '<?php echo $id;?>');" />
+<?php	} ?>
+<?php	if($tyuumon_creater_flg){ ?>
 <input type="button" name="edi" value="編集" onclick="location.href='Order_form_editing.php?id=<?php echo $id;?>'" />
+<?php	} ?>
 <input type="button" name="can" value="戻る" onclick="location.href='Selection.php'" />
 </div>
-</form>
 </div>
 <?php
 // 切断
 $pdo = null;
 ?>
+
+<!-- 佐藤追加分ここから -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+
+  //送信ボタンをクリック
+  $('#select_action').change(function(){
+
+    //POSTメソッドで送るデータを定義する
+    //var data = {パラメータ : 値};
+    var data = {request : $("#select_action option:selected").val()};
+
+    //Ajax通信メソッド
+    //type : HTTP通信の種類(POSTとかGETとか)
+    //url  : リクエスト送信先のURL
+    //data : サーバに送信する値
+    $.ajax({
+      type: "POST",
+      url: "shounin_modeler.php",
+      data: data,
+      dataTyoe: "json",
+      //Ajax通信が成功した場合に呼び出されるメソッド
+      success: function(data, dataType){
+        //デバッグ用 アラートとコンソール
+        //alert(data);
+        //console.log(data);
+
+        //出力する部分
+        $('#result').html(data);
+      },
+      //Ajax通信が失敗した場合に呼び出されるメソッド
+      error: function(XMLHttpRequest, textStatus, errorThrown){
+        alert('Error : ' + errorThrown);
+        $("#XMLHttpRequest").html("XMLHttpRequest : " + XMLHttpRequest.status);
+        $("#textStatus").html("textStatus : " + textStatus);
+        $("#errorThrown").html("errorThrown : " + errorThrown);
+      }
+    });
+    return false;
+  });
+});
+
+</script>
+
+<!-- 追加分ここまで -->
+
 </body>
 </html>

@@ -20,7 +20,17 @@
 	 * 承認機能に関するセッション変数を破棄する
 	 */
 	function reset_var_in_shounin_session(){
-		unset($_SESSION['destination_id'], $_SESSION['comment'],
-			$_SESSION['tm_id'], $_SESSION['select_action']);
+		if(isset($_SESSION['destination_id'])){
+			unset($_SESSION['destination_id']);
+		}
+		if(isset($_SESSION['comment'])){
+			unset( $_SESSION['comment']);
+		}
+		if(isset($_SESSION['tm_id'])){
+			unset($_SESSION['tm_id']);
+		}
+		if(isset($_SESSION['select_action'])){
+			unset($_SESSION['select_action']);
+		}
 	}
 ?>

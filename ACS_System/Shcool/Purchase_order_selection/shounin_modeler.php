@@ -48,8 +48,8 @@
 	  	case "shounin":
 	  	case "shounin_sinsei":
 	  		$html_content_destination = <<<HTML
-				<h3>注文者一覧</h3>
-				<ul>
+				<p>送信先注文者選択</p>
+				<ul style="list-style-type: none;">
 HTML;
 
 	  		// 送信先を選ぶためのリストを用意
@@ -93,10 +93,10 @@ HTML;
 
 	  		$html_content = <<<HTML
 
-			  <form action="tyuumon.php" method="post" accept-charset="utf-8">
+			  <form action="Confirmation_success.php" method="post" accept-charset="utf-8">
 			  <input type="hidden" name="mode" value="check" />	
 
-				<h3>コメント</h3>
+				<p>コメント</p>
 				$html_content_comment
 
 				<p><textarea name="comment">$comment</textarea></p>
@@ -111,9 +111,9 @@ HTML;
 	  	case "last_shounin":
 	  		$html_content = <<<HTML
 
-			  <form action="tyuumon.php" method="post" accept-charset="utf-8">
+			  <form action="Confirmation_success.php" method="post" accept-charset="utf-8">
 			  <input type="hidden" name="mode" value="check" />
-			    <h3>最終承認</h3>
+			    <p>最終承認</p>
 				<input type="submit" value="確認" />
 			  </form>
 HTML;

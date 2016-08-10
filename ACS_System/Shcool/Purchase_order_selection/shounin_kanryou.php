@@ -1,13 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja"> 
+<head>
+<link rel="stylesheet" type="text/css" href="../../css.css"></link>
+<link rel="Stylesheet" href="stylesheet.css" type="text/css" />
+<script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
+<script src="../../js/jquery.focused.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function($){
+        $("#menu li").hover(function() {
+            $(this).children('ul').show();
+            //window.alert('キャンセルされました');
+        }, function() {
+            $(this).children('ul').hide();
+            //window.alert('キャンセルされました');
+        });
+    });
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+<title>承認申請完了</title>
+</head>
+<body>
+<?php require(dirname(__FILE__) . '/../School_header.php') ?>
+<?php require(dirname(__FILE__). "/bin/common.php"); ?>
 <?php
-
-session_start();
 
 $html_content = "";
 
 
 /* 確認画面からの遷移かどうかをチェック */
 
-if($_POST['mode'] == "registComplete"){
+if($_POST['mode'] == "registComplete" && isset($_SESSION['select_action'])){
 
     /*
        入力値により処理を切り分け
@@ -16,7 +39,6 @@ if($_POST['mode'] == "registComplete"){
 
     if($_POST['regist']){
         require_once(dirname(__FILE__). "/bin/DB_Manager.php");
-        require_once(dirname(__FILE__). "/bin/common.php");
 
         $select_action = $_SESSION['select_action'];
         $db = new DB_Manager();
@@ -30,19 +52,17 @@ if($_POST['mode'] == "registComplete"){
             try{
                 $db->insert_new_shounin($tm_id, $login_user_id, $destination_id, $comment);
 
-                reset_var_in_shounin_session();
                 $html_content = <<<HTML
                     <p>認証依頼を送信しました</p>
-                    <p><a href="tyuumon.php?id=$tm_id">注文書のページに戻る</a></p>
+                    <p><a href="Confirmation_success.php?id=$tm_id">注文書のページに戻る</a></p>
 HTML;
             }
             catch(PDOException $e){
                 $html_content = "<p>エラーが発生しました<br />エラー文：". $e->getMessage(). "</p>";
-                break;
             }
         }
         else{
-            $db->set_shounin_arr();
+            $db->set_shounin_arr($tm_id);
 
             try{
                 switch($select_action){
@@ -53,7 +73,7 @@ HTML;
 
                     $html_content = <<<HTML
                         <p>認証完了、および送信成功しました</p>
-                        <p><a href="tyuumon.php?id=$tm_id">注文書のページに戻る</a></p>
+                        <p><a href="Confirmation_success.php?id=$tm_id">注文書のページに戻る</a></p>
 HTML;
                     break;
                 case "sasimodosi":
@@ -64,28 +84,27 @@ HTML;
 
                     $html_content = <<<HTML
                         <p>差し戻しを完了しました</p>
-                        <p><a href="tyuumon.php?id=$tm_id">注文書のページに戻る</a></p>
+                        <p><a href="Confirmation_success.php?id=$tm_id">注文書のページに戻る</a></p>
 HTML;
                     break;
                case "last_shounin":
-                    $shounin_master_arr = $db->get_shounin_masuter();
-                    $db->update_shounin_master_flag($shounin_master_arr['sm_id'], true, false);
-                    break;
+                    $shounin_master_arr = $db->get_shounin_master();
+                    $db->update_shounin_master_flag($shounin_master_arr[0]['sm_id'], true, false);
 
                     $html_content = <<<HTML
                         <p>最終認証を完了しました</p>
-                        <p><a href="tyuumon.php?id=$tm_id">注文書のページに戻る</a></p>
+                        <p><a href="Confirmation_success.php?id=$tm_id">注文書のページに戻る</a></p>
 HTML;
+                    break;
                }
 
             }
             catch(PDOException $e){
                 $html_content = "<p>エラーが発生しました<br />エラー文：". $e->getMessage(). "</p>";
-                break;
             }
         }
 
-        
+        reset_var_in_shounin_session();
 
 
     } elseif ($_POST['return']) {
@@ -93,7 +112,7 @@ HTML;
     /* submitボタンが「もとへ戻る」だった場合、登録フォームへ移動 */
 
         $id = $_SESSION['tm_id'];
-        header("Location: ./tyuumon.php?id=". $id);
+        header("Location: ./Confirmation_success.php?id=". $id);
         exit();
     } 
 
@@ -110,16 +129,10 @@ HTML;
 ?>
 
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja"> 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-    <title></title>
-</head>
-<body>
+<div style="margin: 50px">
 
      <?= $html_content ?>
 
+</div>
 </body>
 </html>
