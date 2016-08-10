@@ -31,16 +31,17 @@ include '../acs_header.php';
 <div id="title">注文者情報の管理</div>
 
 
-<table style="align:center;">
+<table style="margin-bottom:50px; align:center;"><tr>
+
 	<tr>
 		<td>
-			<input type="button" name="add" value="追加" onclick="location.href='t_user_touroku.php'"/>
+			<input type="button" name="add" value="追加" onclick="location.href='t_user_touroku.php'" style="position: relative; left: 11em; top: 8px; width:100px;"/>
 		</td>
 		<td>
-			<input type="button" name="update" value="変更" onclick="location.href='t_user_henkou.php'"/>
+			<input type="button" name="update" value="変更" onclick="location.href='t_user_henkou.php'" style="position: relative; left: 16em; top: 8px; width:100px;"/>
 		</td>
 		<td>
-			<input type="button" name="delete" value="削除" onclick="location.href='t_user_delete.php'"/>
+			<input type="button" name="delete" value="削除" onclick="location.href='t_user_delete.php'" style="position: relative; left: 21em; top: 8px; width:100px;"/>
 		</td>
 	</tr></table>
 
