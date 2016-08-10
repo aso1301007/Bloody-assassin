@@ -37,7 +37,7 @@ $user_name=$_SESSION['user_name'];
 			</li>
 			<li>DB管理
 				<ul style="list-style:none;">
-					<li><a href="http://localhost/ACS_System/acs/acs_db/user_top.php" target="_self">注文者マスタ追加</a></li>
+					<li><a href="http://localhost/ACS_System/acs/acs_db/function_selection.php" target="_self">注文者マスタ追加</a></li>
 					<li><a href="#">制作会社マスタ追加</a></li>
 				</ul>
 			</li>
