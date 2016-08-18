@@ -67,7 +67,7 @@ try {
 ?>
 
 <h4 style="margin-top:50px; text-align:center;">情報の変更が完了しました</h4>
-<table align="center" border="1" style="margin-bottom:5em;">
+<table align="center" border="1" style="margin-bottom:5px;">
 	<tr>
 		<td align="right">名前</td>
 		<td><?php echo $name;?></td>
@@ -89,6 +89,6 @@ try {
 		<td><?php echo $busho;?></td>
 	</tr>
 </table>
-<input type="button" value="学校選択画面へ" onclick="location.href='t_user_henkou.php'" style="position: absolute; left: 32em; top: 26em"/>
+<input type="button" value="学校選択画面へ" onclick="location.href='t_user_henkou.php'" style="margin-left:350px; top: 0px;margin-bottom:3em;" />
 </body>
 </html>
