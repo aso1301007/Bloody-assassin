@@ -100,9 +100,9 @@ while($row = $stmt ->fetch(PDO::FETCH_ASSOC)){
 <input type="submit" value="情報を変更"/></div>
  </form>
 <div style="margin-bottom:20px; margin-top:10px;">
- <form action="t_user_henkou_sentaku.php" method="post">
+ <form action="t_user_henkou_sentaku.php" method="get">
 	 <input type="submit" value="戻る" ></input>
- <input type="hidden" name="school"value="1"></input>
+ <input type="hidden" name="school"value="<?php echo $school_id;?>"></input>
  </form>
  </div>
 </body>
