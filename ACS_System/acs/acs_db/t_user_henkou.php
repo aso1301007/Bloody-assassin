@@ -56,6 +56,9 @@ $sql ="SELECT * FROM school";
     	</td>
     </tr>
   </table>
-    <div style="text-align:center; margin-bottom:10px;" />
+  </form>
+    <div style="text-align:center; margin-bottom:10px;">
+    	<input type="button" value="戻る" onclick="location.href='function_selection.php'"/>
+    </div>
 </body>
 </html>
