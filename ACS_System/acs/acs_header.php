@@ -12,7 +12,7 @@ $user_name=$_SESSION['user_name'];
 
 ?>
 <div id="header">
-			<input type="button" name="top" value="TOP" onclick="location.href='http://localhost/ACS_System/acs/acs_Home.php'"style="position: absolute; left: 13em; top: 10px"/>
+			<input type="button" name="top" value="TOP" onclick="location.href='http://localhost/ACS_System/acs/acs_Home.php'"style="position: absolute; left: 13em; top: 10px; font-size:16px;"/>
 
 			<div id="login_name"><?php echo $user_name;?> さん</div>
 </div>

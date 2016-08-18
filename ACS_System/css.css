@@ -108,7 +108,7 @@ input[type=button]{
 background:-webkit-gradient(linear, left top, left bottom, from(#FFF), to(#72BBF0)); /*グラデーション*/
  background:-webkit-linear-gradient(#FFF, #72BBF0); /*同上*/
  background:linear-gradient(#FFF, #72BBF0);   /*同上*/
- font-size: 16px; /*文字サイズ*/
+/* font-size: 16px; /*文字サイズ*/
 
 }
 input[type=submit]{
