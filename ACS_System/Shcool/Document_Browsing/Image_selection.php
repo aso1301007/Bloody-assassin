@@ -26,6 +26,30 @@ jQuery(document).ready(function($){
 });
 
 //window.alert('キャンセルされました');
+
+
+$(function() {
+  var page = 0;
+  function draw() {
+    $('#page').html(page + 1);
+    $('tr').hide();
+    $('tr:first,tr:gt(' + page * 10 + '):lt(10)').show();
+  }
+  $('#prev').click(function() {
+    if (page > 0) {
+      page--;
+      draw();
+    }
+  });
+  $("#next").click(function() {
+	  max = $("#max_id").val();
+    if (page < (max - 1) / 10 - 1) {
+      page++;
+      draw();
+    }
+  });
+  draw();
+});
 </script>
 
 
@@ -353,7 +377,19 @@ if ($kensuu==0){
 }
 //echo "取得件数は".$kensuu."件です。";
 ?>
-
+	<br clear="left" />
+		<div align="left" style="margin-left:40px;" >
+		<input id="prev"type="button" value="戻る" />
+		<input id="next" type="button" value="次へ" />
+		<span id="page"></span>
+		<?php
+			$total = 1;
+			 if(($count / 10) > 1){
+				$total = ceil($count / 10);
+			 }
+		?>
+		<span id="page" />
+		<font>/<?php echo $total;?>ページ</font>
 
 </div>
 <?php

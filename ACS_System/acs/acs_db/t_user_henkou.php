@@ -1,34 +1,61 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>注文者の情報変更をします</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../../css.css"/>
+<title>ACS_注文者情報変更</title>
+
+
+<script type="text/javascript" src="../../js/jquery-3.0.0.min.js"></script>
+<script src="../../js/jquery.focused.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+
+
+	$("#menu li").hover(function() {
+	$(this).children('ul').show();
+}, function() {
+	$(this).children('ul').hide();
+});
+
+
+});
+
+//window.alert('キャンセルされました');
+</script>
 </head>
 <body>
-  <p>所属学校を選択してください</p>
-  <form action="t_user_henkou_sentaku.php" method="post" enctype="multipart/form-data">
-  <dl>
-    <dt>学校</dt>
-    <dd>
-    <from>
+
+<?php
+require "../../DB.php";
+include '../acs_header.php';
+$sql ="SELECT * FROM school";
+
+?>
+<div id="title">注文者情報の変更</div>
+  <h4 style="margin-top:50px; text-align:center;">変更したい注文者の所属学校を選択してください</h4>
+  <form action="t_user_henkou_sentaku.php" method="get" enctype="multipart/form-data">
+  <table align="center">
+    <tr>
+    	<td><from>
     	<select name="school">
-    	<option value=1>麻生情報ビジネス専門学校福岡校</option>
-    	<option value=2>麻生外語観光＆製菓専門学校</option>
-    	<option value=3>麻生医療福祉専門学校福岡校</option>
-    	<option value=4>麻生建築＆デザイン専門学校</option>
-    	<option value=5>麻生公務員専門学校福岡校</option>
-    	<option value=6>麻生リハビリテーション大学校</option>
-    	<option value=7>麻生工科自動車大学校</option>
-    	<option value=8>麻生ビューティーカレッジ</option>
-    	<option value=9>麻生情報ビジネス専門学校北九州校</option>
-    	<option value=10>麻生公務員専門学校北九州校</option>
-    	<option value=11>麻生医療福祉＆観光カレッジ</option>
-    	<option value=12>麻生看護大学校</option>
+    	<?php
+		$school = "SELECT * FROM school";
+		$yes_school =  $pdo->prepare($school);
+		$yes_school->execute();
+		while($res = $yes_school->fetch(PDO::FETCH_ASSOC)){
+			echo "<option value=". $res['school_id']. ">". $res['school_name']. "</option>";
+	}
+?>
     	</select>
-      </from>
-    </dd>
-  </dl>
-  <div><input type="submit" value="検索内容表示"></div>
-  </form>
+      	</from>
+    	</td>
+    	<td>
+    		<input type="submit" value="検索" />
+    	</td>
+    </tr>
+  </table>
+    <div style="text-align:center; margin-bottom:10px;" />
 </body>
 </html>
