@@ -119,9 +119,9 @@ input[type=submit]{
  margin-left:20px;*/
  background: #f69;
  border-radius:5px;
- background:-webkit-gradient(linear, left top, left bottom, from(#fcc), to(#f69)); /*グラデーション*/
- background:-webkit-linear-gradient(#fcc, #f69); /*同上*/
- background:linear-gradient(#fcc, #f69);   /*同上*/
+ background:-webkit-gradient(linear, left top, left bottom, from(#FFF), to(#FFAD90)); /*グラデーション*/
+ background:-webkit-linear-gradient(#FFF, #FFAD90); /*同上*/
+ background:linear-gradient(#FFF, #FFAD90);   /*同上*/
  /*font-size: 16px; /*文字サイズ*/
 }
 
