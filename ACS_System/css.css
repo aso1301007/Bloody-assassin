@@ -7,7 +7,7 @@
   margin-left:auto;
   margin-right:auto;
   background:#72BBF0;
-/*  border-bottom: 5px solid #4169e1;*/
+  border-bottom: 5px solid #4169e1;
   border-radius: 6px;
   }
 
@@ -100,26 +100,31 @@ margin-right:auto;
 input[type=button]{
  padding: 5px; /*ボタン内の余白*/
  hight:auto;
+ width:auto;
  margin-top:15px;
 /* margin-left:20px;*/
  background: #4169e1;
  border-radius:5px;
- background:-webkit-gradient(linear, left top, left bottom, from(#FFF), to(#72BBF0)); /*グラデーション*/
+background:-webkit-gradient(linear, left top, left bottom, from(#FFF), to(#72BBF0)); /*グラデーション*/
  background:-webkit-linear-gradient(#FFF, #72BBF0); /*同上*/
  background:linear-gradient(#FFF, #72BBF0);   /*同上*/
  font-size: 16px; /*文字サイズ*/
 
-/*border : solid 1px #000000;
-margin-top:20px;
-margin-left:15px;
-vertical-align:middle;
-float: left;
-padding:5px;
-border-width : 1px;
-border-padding:5px;
-color:#000000;
-*/
 }
+input[type=submit]{
+ padding: 5px; /*ボタン内の余白*/
+ hight:auto;
+ width:auto;
+/* margin-top:15px;
+ margin-left:20px;*/
+ background: #f69;
+ border-radius:5px;
+ background:-webkit-gradient(linear, left top, left bottom, from(#fcc), to(#f69)); /*グラデーション*/
+ background:-webkit-linear-gradient(#fcc, #f69); /*同上*/
+ background:linear-gradient(#fcc, #f69);   /*同上*/
+ /*font-size: 16px; /*文字サイズ*/
+}
+
 
 #login_name{
 text-align:right;
