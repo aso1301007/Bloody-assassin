@@ -44,49 +44,53 @@ $data->execute(array($school_id));
   <form action="t_user_touroku_kanryou.php" method="post">
   <table align="center" border="1" style="margin-bottom:10px;">
   	<tr>
-  		<td align="right">氏名</td>
+  		<td align="center">氏名</td>
   		<td>  <?php  if(isset($_POST["name"]))
 								  $_SESSION["name"]=$_POST["name"];
 								  echo $_SESSION["name"];?></td>
   	</tr>
 	<tr>
-		<td align="right">学校</td>
+		<td align="center">学校</td>
 		<td>  <?php if(isset($_POST["school"]))
 					  while($row = $data ->fetch(PDO::FETCH_ASSOC)){
 					  	echo $row['school_name'];}  ?>
 		</td>
 	</tr>
 	<tr>
-		<td align="right">部署</td>
+		<td align="center">部署</td>
 		<td>  <?php  if(isset($_POST["busho"]))
 						  $_SESSION["busho"]=$_POST["busho"];
 							echo $_SESSION["busho"];  ?>
 		</td>
 	</tr>
 	<tr>
-		<td align="right">メールアドレス</td>
+		<td align="center">メールアドレス</td>
 		<td><?php  if(isset($_POST["mail"]))
 					  $_SESSION["mail"]=$_POST["mail"];
 					  echo $_SESSION["mail"];?>
 		</td>
 	</tr>
 	<tr>
-		<td align="right">パスワード</td>
+		<td align="center">パスワード</td>
 		<td>  <?php  if(isset($_POST["pass"]))
 						  $_SESSION["pass"]=$_POST["pass"];  ?>
 					    【表示されません】
 		</td>
 	</tr>
 	<tr>
-		<td align="right">電話番号</td>
+		<td align="center">電話番号</td>
 		<td>  <?php  if(isset($_POST["tel"]))
 					  $_SESSION["tel"]=$_POST["tel"];
 					  echo $_SESSION["tel"];?>
 		</td>
 	</tr>
   </table>
-<div style="text-align:center; margin-bottom:10px;"><a href="t_user_touroku.php?action=rewrite">&laquo;&nbsp;書き直す</a>
-<input type="submit" value="登録する"></div>
+  <div style="margin:10px 0px 10px 0px; float:left; position: relative; left: 28em; top: 0px;"/>
+<input type="submit" value="注文者を追加"/></div>
 </form>
+<div style="margin-bottom:10px;">
+	<input type="button" value="入力をやり直す" onclick="location.href='t_user_henkou.php'" style="width:8em; position:relative; left:18em; top:-4px;"/>
+</div>
+
 </body>
 </html>

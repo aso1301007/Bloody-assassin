@@ -24,15 +24,14 @@ jQuery(document).ready(function($){
 
 //window.alert('キャンセルされました');
 </script>
-
+</head>
+<body>
 
 <?php
 require "../../DB.php";
 include '../acs_header.php';
 ?>
 <div id="title">注文者追加</div>
-</head>
-<body>
 <?php
 $sql ="SELECT * FROM school";
 
@@ -75,9 +74,12 @@ $sql ="SELECT * FROM school";
     <td><input type="text" name="tel" size="33" maxlength="11"></td>
 </tr>
 </table>
-  <div style="text-align:center; margin-bottom:10px;">
+  <div style="margin:10px 0px 10px 0px; float:left; position: relative; left: 470px; top: 5px;"/>
   	<input type="submit" value="入力内容を確認"/>
   </div>
   </form>
+  	<div style="margin-bottom:10px;">
+    	<input type="button" value="戻る" onclick="location.href='function_selection.php'" style="width:5em; position:relative; left:22em; top:2px;"/>
+    </div>
 </body>
 </html>

@@ -83,8 +83,8 @@ try {
 
 
 <div style="text-align: center; margin-top:50px; margin-bottom:10px;">
-  <p>ユーザー登録が完了しました</p>
-  <input type="button" value="注文者の追加画面へ" onclick="location.href='http://localhost/ACS_System/acs/acs_db/t_user_touroku.php'"/>
+  <h4>ユーザー登録が完了しました</h4>
+  <input type="button" value="注文者の追加画面へ" onclick="location.href='t_user_touroku.php'"/>
 </div>
 </body>
 </html>
