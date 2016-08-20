@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>ログイン</title>
+
+<!-- スタイルシート -->
+<style type="text/css">
+body{
+width:1200px;
+hight:auto;
+margin-left : auto ;
+margin-right : auto ;
+background:-webkit-gradient(linear, left top, left bottom, from(#72BBF0), to(#F0F8FF)); /*グラデーション*/
+background:-webkit-linear-gradient(#72BBF0, #F0F8FF); /*同上*/
+background:linear-gradient(#72BBF0, #F0F8FF);   /*同上*/
+
+}
+
+/*==== センター帯 ====*/
+#center{
+width: 600px; /*横幅を指定*/
+margin: 8em auto; /*左右中央揃え*/
+padding: 0px; /*内部余白なし*/
+background: #fff;
+border-radius:15px;
+}
+
+/*==== 本文のブロック ====*/
+#main{
+width: auto;
+margin: 8px;
+padding: 4px;
+}
+</style>
+
+<script src="jquery-2.1.1.min.js">
+$(function() {
+    $('#passcheck').change(function(){
+        if ( $(this).prop('checked') ) {
+            $('#password').attr('type','text');
+        } else {
+            $('#password').attr('type','password');
+        }
+    });
+});
+</script>
+</head>
+
+
+<body link="#000000" vlink="#000000" alink="#000000" >
+<font  color="#808080">
+<div id="center">
+<div id="main">
+<div style="margin:4em 9em 2em 9em;">
+	<img border="0" src="name1.png" width="300px" alt="ロゴ">
+</div>
+<center><h2><font color="#808080">サインイン</font></h2></center>
+<font size="3em">
+<form action="Login.php" method="post">
+<center>
+<table top="5em">
+	<tr><td align="right">メールアドレス</td><td><input type="text" name="MAIL" style="width:20em; height:25px; border-radius:5px;" /></td></tr>
+	<tr><td align="right">パスワード</td><td><input type="password" id="password" name="PASS" style="width:20em; height:25px; border-radius:5px;" /></td></tr>
+	<tr><td></td><td align="right"><input type="checkbox" id="passcheck" />パスワードを表示</td></tr>
+
+</table>
+<input type="submit" value="サインイン" style="font-size:1em; width:10em; padding:5px; border-radius:7px; background:#72BBF0; margin:2em auto 4em auto;"/>
+</center>
+</form>
+</font>
+</font>
+</body>
+</html>
