@@ -19,6 +19,83 @@
 		});
 	});
 </script>
+<?php
+include '../School_header.php';
+require '../../DB.php';			//DB.php呼び出し
+?>
+<script type="text/javascript">
+<?php
+//学部データをDBから検索
+$gakubu_date = 'SELECT * ';
+$gakubu_date .= 'FROM gakubu;';
+$Rgakubu_date = $pdo->prepare($gakubu_date);
+$Rgakubu_date->execute();
+
+//学部DB内の学校IDを検索
+$g_schoolid = 'SELECT school_id ';
+$g_schoolid .= 'FROM gakubu ';
+$g_schoolid .= 'GROUP BY school_id;';
+$Rg_schoolid= $pdo->prepare($g_schoolid);
+$Rg_schoolid->execute();
+
+//学校ID毎の最初の学部IDを検索
+$g_id = 'SELECT * ';
+$g_id .= 'FROM gakubu ';
+$g_id .= 'GROUP BY school_id;';
+$Rg_id= $pdo->prepare($g_id);
+$Rg_id->execute();
+
+//学部データを配列に格納する undergraduate_name[学校ID][0から順に] = 学部名
+$SCHOOL_ID = $Rg_schoolid->fetch(PDO::FETCH_ASSOC);
+$school = $SCHOOL_ID['school_id'];//学部DBの学校ID先端
+$g_school = 0;//学部データの学校IDを格納する変数
+$c = 0;//配列の添字
+while($faculty_name = $Rgakubu_date->fetch(PDO::FETCH_ASSOC)){//学部データを吐き出している
+	$g_school = $faculty_name['school_id'];
+	if($school == $g_school){//学部データを吐き出している
+		$undergraduate_name[$SCHOOL_ID['school_id']][$c] = $faculty_name['gakubu_name'];
+		$c++;
+	}
+	else{//学校IDが違うので新しい配列に値を格納している
+		$c = 0;
+		$SCHOOL_ID = $Rg_schoolid->fetch(PDO::FETCH_ASSOC);
+		$school = $SCHOOL_ID['school_id'];
+		$undergraduate_name[$SCHOOL_ID['school_id']][$c] = $faculty_name['gakubu_name'];
+		$c++;
+	}
+}
+
+//学校ID毎の最初の学部IDを配列に格納 undergraduate_id[学校ID] = 学校IDの最初にある学部ID
+while($faculty_id = $Rg_id->fetch(PDO::FETCH_ASSOC)){
+	$undergraduate_id[$faculty_id['school_id']] = $faculty_id['gakubu_id'];
+}
+
+//javascriptに配列を渡すためにjsonに変換する
+$j_undergraduate_name = json_encode($undergraduate_name);
+$j_undergraduate_id = json_encode($undergraduate_id);
+?>
+
+//phpから配列を受け取る
+var undergraduate_name = JSON.parse('<?php echo  $j_undergraduate_name; ?>');
+var undergraduate_id = JSON.parse('<?php echo  $j_undergraduate_id; ?>');
+
+function change_school(){//学校selectが変更されたら処理を行い、学部selectに値を挿入する
+	var select1 = document.forms.order.school_id; //学校selectを宣言
+	var select2 = document.forms.order.gakubu_id; //学部selectを宣言
+	var pObjLen=select1.options.length;
+	select2.options.length = 0; // 選択肢の数がそれぞれに異なる場合、これが重要
+	sel1_value = select1.options[select1.selectedIndex].value;//学校selectで選ばれた値
+	sel2_len = undergraduate_name[sel1_value].length;//学部selectに挿入するデータの数
+	var G_id = undergraduate_id[sel1_value];
+	for(i=0; sel2_len>i; i++){//学科selectに学校selectに連動した学科を挿入
+		select2.options[G_id] = new Option(undergraduate_name[sel1_value][i], G_id);
+		G_id++;
+	}
+	for(r=0; undergraduate_id[sel1_value]>r; r++){//学科selectに挿入された空値を削除
+		select2.options[0] = null;
+	}
+}
+</script>
 <style>
 <!--table
 {mso-displayed-decimal-separator:"\.";
@@ -31,10 +108,6 @@ mso-footer-margin:.3in;}
 </style>
 </head>
 <body>
-<?php
-include '../School_header.php';
-	require '../../DB.php';			//DB.php呼び出し
-?>
 <div id="title">注文書選択</div>
 	<?php	//DBから発注書の内容を検索
 	$id = $_REQUEST["id"];	//Selection.phpから選択した項目の注文idを受け取る
@@ -47,8 +120,6 @@ include '../School_header.php';
 	$result_sql = $pdo->prepare($sql);
 	$result_sql->execute();
 	$SQL = $result_sql->fetch(PDO::FETCH_ASSOC);
-	echo $SQL['school_id'];
-
 
  //検索したデータを加工
 	//年、月、日に変換
@@ -87,7 +158,17 @@ include '../School_header.php';
 	if(!$phone_number){
 		$phone_number = "";
 	}
-
+	//利用する学部系
+	$school_id = $SQL['school_id'];
+	$undergraduate_id = $SQL['gakubu_id'];
+	if(empty($school_id)){$school_id = 1;}
+	if(empty($undergraduate_id)){$undergraduate_id = 1;}
+	$Yes_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id = ". $undergraduate_id. "";
+	$yes_undergraduate =  $pdo->prepare($Yes_undergraduate);
+	$yes_undergraduate->execute();
+	$No_undergraduate = "SELECT * FROM gakubu WHERE school_id = ".$school_id." AND gakubu_id <> ". $undergraduate_id. "";	//選択されていない値を検索
+	$no_undergraduate = $pdo->prepare($No_undergraduate);
+	$no_undergraduate->execute();
 	//品名
 	$product_id = $SQL['hin_id'];
 	if(empty($product_id)){$product_id = 1;}
@@ -99,15 +180,6 @@ include '../School_header.php';
 	$no_hin->execute();
 	//備考
 	$remarks = $SQL['t_bikou'];
-	//利用する学部系
-	$undergraduate_id = $SQL['gakubu_id'];
-	if(empty($undergraduate_id)){$undergraduate_id = 1;}
-	$Yes_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id = ". $undergraduate_id. "";
-	$yes_undergraduate =  $pdo->prepare($Yes_undergraduate);
-	$yes_undergraduate->execute();
-	$No_undergraduate = "SELECT * FROM gakubu WHERE gakubu_id <> ".$undergraduate_id."";	//選択されていない値を検索
-	$no_undergraduate = $pdo->prepare($No_undergraduate);
-	$no_undergraduate->execute();
 	//利用目的
 	$purpose = $SQL['t_mokuteki'];
 	//仕様
@@ -317,7 +389,7 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>学校名</td>
 <td colspan="8" class="xl113" style='border-right:.5pt solid black;border-left:none'>
-<select name="school_id" class="one">
+<select name="school_id" class="one" onchange="change_school()">
 <?php
 $YES_SCHOOL = $yes_school->fetch(PDO::FETCH_ASSOC);
 echo "<option value=". $YES_SCHOOL['school_id']. " selected >". $YES_SCHOOL['school_name']. "</option>";
@@ -373,10 +445,10 @@ echo "<option value=". $YES_HIN['hin_id']. " selected >". $YES_HIN['hin_janru'].
 <td colspan="6" class="xl89" style='border-left:none'>
 <select name="gakubu_id" class="one">
 <?php
-$YES_UNDERGRADUATE = $yes_undergraduate->fetch(PDO::FETCH_ASSOC);
-echo "<option value=". $YES_UNDERGRADUATE['gakubu_id']. " selected >". $YES_UNDERGRADUATE['gakubu_name']. "</option>";
-	while($NO_UNDERGRADUATE = $no_undergraduate->fetch(PDO::FETCH_ASSOC)){
-		echo "<option value=". $NO_UNDERGRADUATE['gakubu_id']. ">". $NO_UNDERGRADUATE['gakubu_name']. "</option>";
+$YES_GAKUBU = $yes_undergraduate->fetch(PDO::FETCH_ASSOC);
+echo "<option value=". $YES_GAKUBU['gakubu_id']. " selected >". $YES_GAKUBU['gakubu_name']. "</option>";
+	while($NO_GAKUBU = $no_undergraduate->fetch(PDO::FETCH_ASSOC)){
+		echo "<option value=". $NO_GAKUBU['gakubu_id']. ">". $NO_GAKUBU['gakubu_name']. "</option>";
 	}
 ?>
 </select>
