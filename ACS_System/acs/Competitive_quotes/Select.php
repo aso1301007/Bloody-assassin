@@ -94,7 +94,7 @@ while($SCHOOL = $result_school->fetch(PDO::FETCH_ASSOC)){
 	$item['school'][$SCHOOL['id']] = $SCHOOL['name'];
 }
 
-//日付(年)を取得
+//日付:年を取得
 $year = 'SELECT SUBSTRING(t_date,1,4) AS YEAR';//例：2015-01-01を2015に変換
 $year .= ' FROM tyuumon';
 $year .= ' GROUP BY YEAR;';
@@ -116,34 +116,98 @@ while($YEAR = $result_year->fetch(PDO::FETCH_ASSOC)){//注文DBにある注文�
 	}
 }
 
+//製作物ナンバー検索用の配列	$production[製作物ナンバー][注文id(tm_id)注文日付(t_date)、品名(hin_janru)、備考(t_bikou)] = DB内の値
+$search_number = 'SELECT t1.tm_id AS ID, t1.t_date AS DATE, t1.t_bikou AS REMARKS,';
+$search_number .= ' t2.tm_seisakubutu AS NUMBER,';
+$search_number .= ' h1.hin_janru AS NAME';
+$search_number .= ' FROM tyuumon t1';
+$search_number .= ' INNER JOIN tyuumon_master t2 ON t1.tm_id = t2.tm_id';
+$search_number .= ' INNER JOIN hinmei h1 ON t1.t_hin_name = h1.hin_id';
+$result_number = $pdo->prepare($search_number);
+$result_number->execute();
+while($number = $result_number->fetch(PDO::FETCH_ASSOC)){
+	$production[$number['NUMBER']]['id'] = $number['ID'];//注文id
+	$production[$number['NUMBER']]['date'] = date('Y年　m月　d日', strtotime($number['DATE']));//注文日付
+	$production[$number['NUMBER']]['remarks'] = $number['REMARKS'];//備考
+	$production[$number['NUMBER']]['name'] = $number['NAME'];//品名
+}
+
+
+//日付検索用の配列
+
+
+//注文内容検索用の配列
+
+
 //javascriptに配列を渡すためにjsonに変換する
-$j_item = json_encode($item);	//項目
+$j_item = json_encode($item);				//項目
 $j_month_date = json_encode($month_date);	//日付：月
+$j_production = json_encode($production);	//製作物ナンバー検索
 ?>
 
 //phpから配列を受け取る
-var item = JSON.parse('<?php echo  $j_item; ?>');	//項目
+var item = JSON.parse('<?php echo  $j_item; ?>');				//項目
 var month_date = JSON.parse('<?php echo  $j_month_date; ?>');	//日付：月
+var production = JSON.parse('<?php echo  $j_production; ?>');	//製作物ナンバー検索
 
 function number_serch(){//製作物ナンバー検索
+	var search = document.forms.search_number.production.value;	//input textの値を取得
+	var Tbe = document.getElementById("list");//<table>を取得
+	while(Tbe.rows[ 1 ] ){//列をヘッダ以外全て削除
+		Tbe.deleteRow( 1 );
+	}
+	if(production[search]){//配列に値が存在するかどうか判定
+		//列を追加
+		var row = Tbe.insertRow(-1);
+		//セルを追加
+		//日付
+		var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
+		col1.innerHTML = "<div class=\"over01\">" + production[search]['date'] + "</div></td>";
+		//品名
+		var col2 = row.insertCell(-1);
+		col2.innerHTML = "<div class=\"over01\"><a href=\"Production_companies.php?id=" + production[search]['id'] + "\">" + production[search]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+		//備考
+		var col3 = row.insertCell(-1);
+		col3.innerHTML = "<div class=\"over02\">" + production[search]['remarks'] + "</div>";
+	}
+	else{
+		var row = Tbe.insertRow(-1);
+		var col1 = row.insertCell(-1);
+		col1.innerHTML = "<div class=\"over01\"></div></td>";
+		var col2 = row.insertCell(-1);
+		col2.innerHTML = "<div class=\"over01\">存在しません。</div>";
+		var col3 = row.insertCell(-1);
+		col3.innerHTML = "<div class=\"over02\"></div>";
+	}
+	for(i=2; i<=10; i++){//<table>の形式を崩さないために挿入
+		var row = Tbe.insertRow(-1);
+		var col1 = row.insertCell(-1);
+		col1.innerHTML = "<div class=\"over01\"></div></td>";
+		var col2 = row.insertCell(-1);
+		col2.innerHTML = "<div class=\"over01\"></div>";
+		var col3 = row.insertCell(-1);
+		col3.innerHTML = "<div class=\"over02\"></div>";
+	}
 
+	//function起動
+	putId();
+	draw();
 }
+
 function things_search(){//項目検索
-	var select2 = document.forms.sort.conditions;
-	alert(select2.options[select2.selectedIndex].value);
+
 }
 function change_item(){//項目検索：項目onchange
 	var select1 = document.forms.sort.item; //項目selectを宣言
 	var select2 = document.forms.sort.conditions; //条件selectを宣言
 	var pObjLen=select1.options.length;
-	select2.options.length = 0; // 選択肢の数がそれぞれに異なる場合、これが重要
+	select2.options.length = 0; //選択肢の数がそれぞれに異なる場合、これが重要
 	sel1_value = select1.options[select1.selectedIndex].value;//項目selectで選ばれた値
 	sel2_len = item[sel1_value].length;//条件selectに挿入するデータの数
 	var i = 0;
 	for(key in item[sel1_value]){
 		select2.options[i] = new Option(item[sel1_value][key], key);
 		i++;
-//		alert(key);
 	}
 }
 function period_sort(){//日時検索
@@ -155,7 +219,7 @@ function change_year(){//日付検索：年onchange
 	var select1 = document.forms.sort_period.year; //学校selectを宣言
 	var select2 = document.forms.sort_period.month; //学部selectを宣言
 	var pObjLen=select1.options.length;
-	select2.options.length = 0; // 選択肢の数がそれぞれに異なる場合、これが重要
+	select2.options.length = 0; //選択肢の数がそれぞれに異なる場合、これが重要
 	sel1_value = select1.options[select1.selectedIndex].value;//年selectで選ばれた値
 	sel2_len = month_date[sel1_value].length;//月selectに挿入するデータの数
 	for(i=0; sel2_len>i; i++){//月selectに年selectに連動した月を挿入
@@ -167,6 +231,7 @@ function change_year(){//日付検索：年onchange
 //<table>10件表示
 var page = 0;	//ページ数初期値
 function putId(){// テーブルの行にID名を付ける
+	page = 0;//現在ページ数を初期化
 	var Tbe = document.getElementById("list");//<table>を取得
 	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
 	for(i=0; i<Tr.length; i++){
@@ -224,8 +289,8 @@ $result_year->execute();
 <!-------製作物ナンバー検索--------------------------->
 <div id="number_search">
 	<b>制作物ナンバーを入力してください。</b>
-	<form  method="post" action=""style="float:right">
-		<p>制作物ナンバー：<input type="text" style="height:20px; vertical-align: middle;" name="search_text" size="20" maxlength="8" />
+	<form  name="search_number" method="post" style="float:right">
+		<p>制作物ナンバー：<input type="text" id="production" style="height:20px; vertical-align: middle;" name="search_text" size="20" maxlength="8" />
 		<span style="margin-right: 1em;" />
 		<input type="button" onclick="number_serch()" style="height:32px; vertical-align: middle;" value="表示" /></p>
 	</form>
