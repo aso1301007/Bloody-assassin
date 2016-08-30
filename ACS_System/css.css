@@ -97,6 +97,11 @@ margin-left:auto;
 margin-right:auto;
 }
 
+#logo{
+/* 	width:300px; */
+	margin-left:10px;
+	margin-top:5px;
+}
 input[type=button]{
  padding: 5px; /*ボタン内の余白*/
  hight:auto;
@@ -226,9 +231,9 @@ margin-left:180px;
 
 
 #shounin{
-width:750px;
-margin-top:70px;
-margin-left:20px;
+/* width:750px; */
+/* margin-top:70px; */
+/* margin-left:20px; */
 font-size:1.4em;
 padding:20px;
 background:#FFF;
