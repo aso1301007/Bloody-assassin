@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>報告書作成</title>
 <link rel=Stylesheet href=report.css type="text/css">
+<link rel=stylesheet type=text/css href=../../css.css>
 <style>
 <!--table
 	{mso-displayed-decimal-separator:"\.";
