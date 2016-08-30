@@ -43,10 +43,10 @@ require '../../DB.php';			//DB.php呼び出し
 <?php
 //制作会社
 $undergraduate_id = 1;
-$Yes_undergraduate = "SELECT * FROM seisaku_kaisya WHERE seisaku_id = ". $undergraduate_id. "";
+$Yes_undergraduate = "SELECT * FROM seisaku_kaisha WHERE seisaku_id = ". $undergraduate_id. "";
 $yes_undergraduate =  $pdo->prepare($Yes_undergraduate);
 $yes_undergraduate->execute();
-$No_undergraduate = "SELECT * FROM seisaku_kaisya WHERE seisaku_id <> ".$undergraduate_id."";	//選択されていない値を検索
+$No_undergraduate = "SELECT * FROM seisaku_kaisha WHERE seisaku_id <> ".$undergraduate_id."";	//選択されていない値を検索
 $no_undergraduate = $pdo->prepare($No_undergraduate);
 $no_undergraduate->execute();
 ?>
