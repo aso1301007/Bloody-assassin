@@ -207,7 +207,7 @@ $no_undergraduate->execute();
  <td class=xl69></td>
  </tr>
 
-<script language="JavaScript"><!--
+<script language="JavaScript">
    var dt=new Date();//　日付を取得
    var dy=dt.getYear();
    var dm=dt.getMonth()+1;
@@ -216,7 +216,7 @@ $no_undergraduate->execute();
    document.form1.year.value=dy;//←テキストボックスに表示
    document.form1.month.value=dm;//←テキストボックスに表示
    document.form1.date.value=dd;//←テキストボックスに表示
-//--></script>
+</script>
 
  <tr height=36 style='mso-height-source:userset;height:27.0pt'>
  <td height=36 style='height:27.0pt'></td>

@@ -49,7 +49,7 @@ include("../School_header.php")
 <input type="submit" value="保存" class ="nine" >
 </td>
 <td>
-<form action="newfile1.php" method="POST" name = "form2">
+<form action="Entry.php" method="POST" name = "form2">
 <input type="submit" value="戻る" class ="nine">
 </form>
 </td>
