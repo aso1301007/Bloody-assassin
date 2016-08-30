@@ -19,6 +19,12 @@ jQuery(document).ready(function($){
 	$(this).children('ul').hide();
 });
 });
+
+$(function() {//Enterキーでテキストボックスsubmitするのを防ぐ
+	  $(document).on("keypress", "input:not(.allow_submit)", function(event) {
+	    return event.which !== 13;
+	  });
+	});
 </script>
 <style type="text/css">/* テーブル内のスタイルを定義 */
 .list{
@@ -117,22 +123,25 @@ while($YEAR = $result_year->fetch(PDO::FETCH_ASSOC)){//注文DBにある注文�
 }
 
 //検索用のSQL文
-$search = 'SELECT t1.tm_id AS ID, t1.t_date AS DATE, t1.t_bikou AS REMARKS,';
+$search = 'SELECT t1.tm_id AS ID, t1.t_date AS DATE, t1.t_bikou AS REMARKS,t1.t_naiyou AS CONTENT, t_hin_name AS GOODS,';
 $search .= ' t2.tm_seisakubutu AS NUMBER,';
-$search .= ' h1.hin_janru AS NAME';
+$search .= ' h1.hin_janru AS NAME,';
+$search .= ' s1.school_id AS SCHOOL_ID';
 $search .= ' FROM tyuumon t1';
 $search .= ' INNER JOIN tyuumon_master t2 ON t1.tm_id = t2.tm_id';
 $search .= ' INNER JOIN hinmei h1 ON t1.t_hin_name = h1.hin_id';
-$search .= ' ORDER BY DATE DESC;';
+$search .= ' INNER JOIN school s1 ON t1.school_id = s1.school_id';
+$search .= ' ORDER BY DATE DESC, ID DESC;';
 
 //製作物ナンバー検索用の配列	$production[製作物ナンバー][注文id(tm_id)注文日付(t_date)、品名(hin_janru)、備考(t_bikou)] = DB内の値
 $result_number = $pdo->prepare($search);
 $result_number->execute();
+$c = 0;
 while($while_number = $result_number->fetch(PDO::FETCH_ASSOC)){
-	$production[$while_number['NUMBER']]['id'] = $while_number['ID'];//注文id
-	$production[$while_number['NUMBER']]['date'] = date('Y年　m月　d日', strtotime($while_number['DATE']));//注文日付
-	$production[$while_number['NUMBER']]['remarks'] = $while_number['REMARKS'];//備考
-	$production[$while_number['NUMBER']]['name'] = $while_number['NAME'];//品名
+	$production[$while_number['NUMBER']][$c]['id'] = $while_number['ID'];//注文id
+	$production[$while_number['NUMBER']][$c]['date'] = date('Y年　m月　d日', strtotime($while_number['DATE']));//注文日付
+	$production[$while_number['NUMBER']][$c]['remarks'] = $while_number['REMARKS'];//備考
+	$production[$while_number['NUMBER']][$c]['name'] = $while_number['NAME'];//品名
 }
 
 
@@ -151,13 +160,49 @@ while($while_date = $result_date->fetch(PDO::FETCH_ASSOC)){
 }
 
 //注文内容検索用の配列
+$re_order = $pdo->prepare($search);
+$re_order->execute();
+$c = 0;
+while($while_order = $re_order->fetch(PDO::FETCH_ASSOC)){
+	$s_order[$while_order['CONTENT']][$c]['id'] = $while_order['ID'];//注文id
+	$s_order[$while_order['CONTENT']][$c]['date'] = date('Y年　m月　d日', strtotime($while_order['DATE']));//注文日付
+	$s_order[$while_order['CONTENT']][$c]['remarks'] = $while_order['REMARKS'];//備考
+	$s_order[$while_order['CONTENT']][$c]['name'] = $while_order['NAME'];//品名
+	$c++;
+}
 
+//品名検索用の配列
+$re_goods = $pdo->prepare($search);
+$re_goods->execute();
+$c = 0;
+while($while_goods = $re_goods->fetch(PDO::FETCH_ASSOC)){
+	$s_goods[$while_goods['GOODS']][$c]['id'] = $while_goods['ID'];//注文id
+	$s_goods[$while_goods['GOODS']][$c]['date'] = date('Y年　m月　d日', strtotime($while_goods['DATE']));//注文日付
+	$s_goods[$while_goods['GOODS']][$c]['remarks'] = $while_goods['REMARKS'];//備考
+	$s_goods[$while_goods['GOODS']][$c]['name'] = $while_goods['NAME'];//品名
+	$c++;
+}
+
+//学校名検索用の配列
+$re_school = $pdo->prepare($search);
+$re_school->execute();
+$c = 0;
+while($while_school = $re_school->fetch(PDO::FETCH_ASSOC)){
+	$s_school[$while_school['SCHOOL_ID']][$c]['id'] = $while_school['ID'];//注文id
+	$s_school[$while_school['SCHOOL_ID']][$c]['date'] = date('Y年　m月　d日', strtotime($while_school['DATE']));//注文日付
+	$s_school[$while_school['SCHOOL_ID']][$c]['remarks'] = $while_school['REMARKS'];//備考
+	$s_school[$while_school['SCHOOL_ID']][$c]['name'] = $while_school['NAME'];//品名
+	$c++;
+}
 
 //javascriptに配列を渡すためにjsonに変換する
 $j_item = json_encode($item);				//項目onchange
 $j_month_date = json_encode($month_date);	//日付：月onchange
 $j_production = json_encode($production);	//製作物ナンバー検索
 $j_date = json_encode($date);				//日付検索
+$j_order = json_encode($s_order);				//注文内容検索
+$j_goods = json_encode($s_goods);				//品名検索
+$j_school = json_encode($s_school);			//学校名検索
 ?>
 
 //phpから配列を受け取る
@@ -165,6 +210,9 @@ var item = JSON.parse('<?php echo  $j_item; ?>');				//項目
 var month_date = JSON.parse('<?php echo  $j_month_date; ?>');	//日付：月
 var production = JSON.parse('<?php echo  $j_production; ?>');	//製作物ナンバー検索
 var date = JSON.parse('<?php echo  $j_date; ?>');				//日付検索
+var order = JSON.parse('<?php echo  $j_order; ?>');				//注文内容検索
+var goods = JSON.parse('<?php echo  $j_goods; ?>');				//品名検索
+var school = JSON.parse('<?php echo  $j_school; ?>');			//学校名検索
 
 function number_serch(){//製作物ナンバー検索
 	var search = document.forms.search_number.production.value;	//input textの値を取得
@@ -173,18 +221,32 @@ function number_serch(){//製作物ナンバー検索
 		Tbe.deleteRow( 1 );
 	}
 	if(production[search]){//配列に値が存在するかどうか判定
-		//列を追加
-		var row = Tbe.insertRow(-1);
-		//セルを追加
-		//日付
-		var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
-		col1.innerHTML = "<div class=\"over01\">" + production[search]['date'] + "</div>";
-		//品名
-		var col2 = row.insertCell(-1);
-		col2.innerHTML = "<div class=\"over01\"><a href=\"Production_companies.php?id=" + production[search]['id'] + "\">" + production[search]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
-		//備考
-		var col3 = row.insertCell(-1);
-		col3.innerHTML = "<div class=\"over02\">" + production[search]['remarks'] + "</div>";
+		var length = Object.keys(production[search]).length;//検索結果の長さ
+		var remainder = 10 - (length % 10);//検索結果を10の倍数にするために必要な値
+		if(remainder == 10){remainder = 0;}
+		for(key in production[search]){//検索結果を挿入
+			//列を追加
+			var row = Tbe.insertRow(-1);
+			//セルを追加
+			//日付
+			var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
+			col1.innerHTML = "<div class=\"over01\">" + production[search][key]['date'] + "</div>";
+			//品名
+			var col2 = row.insertCell(-1);
+			col2.innerHTML = "<div class=\"over01\"><a href=\"Production_companies.php?id=" + production[search][key]['id'] + "\">" + production[search][key]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+			//備考
+			var col3 = row.insertCell(-1);
+			col3.innerHTML = "<div class=\"over02\">" + production[search][key]['remarks'] + "</div>";
+		}
+		for(i=0; i<remainder; i++){//<table>の形式を崩さないために挿入
+			var row = Tbe.insertRow(-1);
+			var col1 = row.insertCell(-1);
+			col1.innerHTML = "<div class=\"over01\"></div>";
+			var col2 = row.insertCell(-1);
+			col2.innerHTML = "<div class=\"over01\"></div>";
+			var col3 = row.insertCell(-1);
+			col3.innerHTML = "<div class=\"over02\"></div>";
+		}
 	}
 	else{
 		var row = Tbe.insertRow(-1);
@@ -194,15 +256,15 @@ function number_serch(){//製作物ナンバー検索
 		col2.innerHTML = "<div class=\"over01\">存在しません。</div>";
 		var col3 = row.insertCell(-1);
 		col3.innerHTML = "<div class=\"over02\"></div>";
-	}
-	for(i=2; i<=10; i++){//<table>の形式を崩さないために挿入
-		var row = Tbe.insertRow(-1);
-		var col1 = row.insertCell(-1);
-		col1.innerHTML = "<div class=\"over01\"></div>";
-		var col2 = row.insertCell(-1);
-		col2.innerHTML = "<div class=\"over01\"></div>";
-		var col3 = row.insertCell(-1);
-		col3.innerHTML = "<div class=\"over02\"></div>";
+		for(i=1; i<10; i++){//<table>の形式を崩さないために挿入
+			var row = Tbe.insertRow(-1);
+			var col1 = row.insertCell(-1);
+			col1.innerHTML = "<div class=\"over01\"></div>";
+			var col2 = row.insertCell(-1);
+			col2.innerHTML = "<div class=\"over01\"></div>";
+			var col3 = row.insertCell(-1);
+			col3.innerHTML = "<div class=\"over02\"></div>";
+		}
 	}
 
 	//function起動
@@ -211,7 +273,87 @@ function number_serch(){//製作物ナンバー検索
 }
 
 function things_search(){//項目検索
-
+	var select1 = document.forms.sort.item; //項目selectを宣言
+	var select2 = document.forms.sort.conditions; //条件selectを宣言
+	var serch_item = select1.options[select1.selectedIndex].value;//選択された項目
+	var serch_conditions = select2.options[select2.selectedIndex].value;//選択された条件
+	var Tbe = document.getElementById("list");//<table>を取得
+	while(Tbe.rows[ 1 ] ){//列をヘッダ以外全て削除
+		Tbe.deleteRow( 1 );
+	}
+	var length = 0;//検索結果の長さ
+	var remainder = 0;//検索結果を10の倍数にするために必要な値
+	switch(serch_item){
+	case 'content':
+		length = Object.keys(order[serch_conditions]).length;//検索結果の長さ
+		remainder = 10 - (length % 10);//検索結果を10の倍数にするために必要な値
+		if(remainder == 10){remainder = 0;}
+		for(key in order[serch_conditions]){//検索結果を挿入
+			//列を追加
+			var row = Tbe.insertRow(-1);
+			//セルを追加
+			//日付
+			var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
+			col1.innerHTML = "<div class=\"over01\">" + order[serch_conditions][key]['date'] + "</div>";
+			//品名
+			var col2 = row.insertCell(-1);
+			col2.innerHTML = "<div class=\"over01\"><a href=\"Production_companies.php?id=" + order[serch_conditions][key]['id'] + "\">" + order[serch_conditions][key]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+			//備考
+			var col3 = row.insertCell(-1);
+			col3.innerHTML = "<div class=\"over02\">" + order[serch_conditions][key]['remarks'] + "</div>";
+		}
+		break;
+	case 'goods':
+		length = Object.keys(goods[serch_conditions]).length;//検索結果の長さ
+		remainder = 10 - (length % 10);//検索結果を10の倍数にするために必要な値
+		if(remainder == 10){remainder = 0;}
+		for(key in goods[serch_conditions]){//検索結果を挿入
+			//列を追加
+			var row = Tbe.insertRow(-1);
+			//セルを追加
+			//日付
+			var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
+			col1.innerHTML = "<div class=\"over01\">" + goods[serch_conditions][key]['date'] + "</div>";
+			//品名
+			var col2 = row.insertCell(-1);
+			col2.innerHTML = "<div class=\"over01\"><a href=\"Production_companies.php?id=" + goods[serch_conditions][key]['id'] + "\">" + goods[serch_conditions][key]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+			//備考
+			var col3 = row.insertCell(-1);
+			col3.innerHTML = "<div class=\"over02\">" + goods[serch_conditions][key]['remarks'] + "</div>";
+		}
+		break;
+	case 'school':
+		length = Object.keys(school[serch_conditions]).length;//検索結果の長さ
+		remainder = 10 - (length % 10);//検索結果を10の倍数にするために必要な値
+		if(remainder == 10){remainder = 0;}
+		for(key in school[serch_conditions]){//検索結果を挿入
+			//列を追加
+			var row = Tbe.insertRow(-1);
+			//セルを追加
+			//日付
+			var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
+			col1.innerHTML = "<div class=\"over01\">" + school[serch_conditions][key]['date'] + "</div>";
+			//品名
+			var col2 = row.insertCell(-1);
+			col2.innerHTML = "<div class=\"over01\"><a href=\"Production_companies.php?id=" + school[serch_conditions][key]['id'] + "\">" + school[serch_conditions][key]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+			//備考
+			var col3 = row.insertCell(-1);
+			col3.innerHTML = "<div class=\"over02\">" + school[serch_conditions][key]['remarks'] + "</div>";
+		}
+		break;
+	}
+	for(i=0; i<remainder; i++){//<table>の形式を崩さないために挿入
+		var row = Tbe.insertRow(-1);
+		var col1 = row.insertCell(-1);
+		col1.innerHTML = "<div class=\"over01\"></div>";
+		var col2 = row.insertCell(-1);
+		col2.innerHTML = "<div class=\"over01\"></div>";
+		var col3 = row.insertCell(-1);
+		col3.innerHTML = "<div class=\"over02\"></div>";
+	}
+	//function起動
+	putId();
+	draw();
 }
 function change_item(){//項目検索：項目onchange
 	var select1 = document.forms.sort.item; //項目selectを宣言
@@ -296,6 +438,9 @@ function draw(){//trを10件表示
 	//trを隠す
 	var Tbe = document.getElementById("list");//<table>を取得
 	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+	var total = Math.floor(Tr.length / 10);
+	var elem2 = document.getElementById("total");
+	elem2.innerHTML = total;
 	for(i=1; i<=Tr.length-1; i++){//<tr>を全て隠す
 		document.getElementById("trID"+i).style.display="none";
 	}
@@ -322,8 +467,24 @@ function next(){//次の10件を表示
 	}
 }
 
+function put(){//<table>初期値
+	var Tbe = document.getElementById("list");//<table>を取得
+	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+	for(i=1; i<10; i++){//
+		var row = Tbe.insertRow(-1);
+		var col1 = row.insertCell(-1);
+		col1.innerHTML = "<div class=\"over01\"></div>";
+		var col2 = row.insertCell(-1);
+		col2.innerHTML = "<div class=\"over01\"></div>";
+		var col3 = row.insertCell(-1);
+		col3.innerHTML = "<div class=\"over02\"></div>";
+	}
+	putId();
+	draw();
+}
+
 /* ページ読み込み完了時に、処理を実行 */
-window.onload=function(){change_year();change_item();putId();draw();}
+window.onload=function(){change_year();change_item();put();}
 </script>
 </head>
 <body>
@@ -388,35 +549,22 @@ $result_year->execute();
 	</form>
 </div>
 </div>
-<?php $count = 0;?>
-<table id="list" class="list" style="width:700px; height:20px; border-style: solid; border-width: 1px; margin-button: 40px; margin-right: 60px; margin-left: 60px; padding:10px;" align="left">
+<table id="list" class="list" style="width:700px; height:20px; border-style: solid; border-width: 1px; margin-button: 40px; margin-right: 60px; margin-left: 60px; margin-top: 50px; padding:10px;" align="left">
 	<tr style="border-style: solid; border-width: 1px;" align="center">
 		<th style="width:200px;">作成日</th>
 		<th style="width:200px;">品名</th>
 		<th style="width:300px;">備考</th>
 	</tr>
-	<?php
 
-	while($count < 100){//検索結果を表示
-		$count++;
-		echo "<tr><td><div class=\"over01\" /></td><td><div class=\"over01\" />なし".$count."</td><td><div class=\"over02\"></td></tr>";
-	}
-	// db切断
-	$pdo = null;
-	?>
 </table>
 <br clear="left" />
 <div align="left" style="margin-left:40px;" >
 	<input id="prev" type="button" onclick="prev()" value="戻る" />
 	<input id="next" type="button" onclick="next()" value="次へ" />
-	<?php
-	$total = 1;
-	if(($count / 10) > 1){
-		$total = ceil($count / 10);
-	 }
-	?>
 	<span id="page"></span>
-	<font>/<?php echo $total;?>ページ</font>
+	<font>/</font>
+	<span id="total"></span>
+	<font>ページ</font>
 </div>
 </body>
 </html>
