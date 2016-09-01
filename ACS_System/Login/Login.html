@@ -33,18 +33,6 @@ margin: 8px;
 padding: 4px;
 }
 </style>
-
-<script src="jquery-2.1.1.min.js">
-$(function() {
-    $('#passcheck').change(function(){
-        if ( $(this).prop('checked') ) {
-            $('#password').attr('type','text');
-        } else {
-            $('#password').attr('type','password');
-        }
-    });
-});
-</script>
 </head>
 
 
@@ -55,17 +43,15 @@ $(function() {
 <div style="margin:4em 9em 2em 9em;">
 	<img border="0" src="name1.png" width="300px" alt="ロゴ">
 </div>
-<center><h2><font color="#808080">サインイン</font></h2></center>
+<center><h2><font color="#808080">ログイン</font></h2></center>
 <font size="3em">
 <form action="Login.php" method="post">
 <center>
 <table top="5em">
 	<tr><td align="right">メールアドレス</td><td><input type="text" name="MAIL" style="width:20em; height:25px; border-radius:5px;" /></td></tr>
 	<tr><td align="right">パスワード</td><td><input type="password" id="password" name="PASS" style="width:20em; height:25px; border-radius:5px;" /></td></tr>
-	<tr><td></td><td align="right"><input type="checkbox" id="passcheck" />パスワードを表示</td></tr>
-
 </table>
-<input type="submit" value="サインイン" style="font-size:1em; width:10em; padding:5px; border-radius:7px; background:#72BBF0; margin:2em auto 4em auto;"/>
+<input type="submit" value="ログイン" style="font-size:1em; width:10em; padding:5px; border-radius:7px; background:#72BBF0; margin:2em auto 4em auto;"/>
 </center>
 </form>
 </font>

@@ -1,21 +1,29 @@
-<!DOCTYPE html>
-<html lang="ja">
-<meta charset="UTF-8">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
-<title>ログインエラー</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>ログイン_エラー</title>
 
 <!-- スタイルシート -->
 <style type="text/css">
 body{
-background: #ffffff;
+width:1200px;
+hight:auto;
+margin-left : auto ;
+margin-right : auto ;
+background:-webkit-gradient(linear, left top, left bottom, from(#72BBF0), to(#F0F8FF)); /*グラデーション*/
+background:-webkit-linear-gradient(#72BBF0, #F0F8FF); /*同上*/
+background:linear-gradient(#72BBF0, #F0F8FF);   /*同上*/
+
 }
 
 /*==== センター帯 ====*/
 #center{
-width: 800px; /*横幅を指定*/
-margin: 0px auto; /*左右中央揃え*/
+width: 600px; /*横幅を指定*/
+margin: 8em auto; /*左右中央揃え*/
 padding: 0px; /*内部余白なし*/
-background: #4169e1;
+background: #fff;
+border-radius:15px;
 }
 
 /*==== 本文のブロック ====*/
@@ -24,51 +32,29 @@ width: auto;
 margin: 8px;
 padding: 4px;
 }
-
 </style>
 </head>
 
-<body link="#000000" vlink="#000000" alink="#000000" >
-<font color="ffffff">
-<br>
-<br>
-<br>
-<br>
-<div id="center">
-<br>
-<div id="main">
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<center><FONT size="7"color="ffffff">ACSシステム</FONT><hr />
-<br>
-<br>
-<FONT size="4" ><a>メールアドレスかPASSが間違っています。<br>再度入力してください。</a>
 
-<br></FONT>
-</center>
-<br>
-<br>
-<font size="3">
+<body link="#000000" vlink="#000000" alink="#000000" >
+<font  color="#808080">
+<div id="center">
+<div id="main">
+<div style="margin:4em 9em 3em 9em;">
+	<img border="0" src="name1.png" width="300px" alt="ロゴ">
+</div>
+<center><h3><font color="#808080">メールアドレス又はパスワードが間違っています。<br/>再度入力してください。</font></h3></center>
+<font size="3em">
 <form action="Login.php" method="post">
-<center><table>
-	<tr><td>メールアドレス:</td><td><input type="text" name="MAIL"></td></tr>
-	<tr><td>　　パスワード:</td><td><input type="password" name="PASS"/></td></tr>
-	<tr><td><br></td></tr>
-	<tr><td></td><td>　　　　　　<input type="submit" value="LOGIN" style="width:60px; height:20px"/></td></tr>
-</table></center>
+<center>
+<table top="6em">
+	<tr><td align="right">メールアドレス</td><td><input type="text" name="MAIL" style="width:20em; height:25px; border-radius:5px;" /></td></tr>
+	<tr><td align="right">パスワード</td><td><input type="password" id="password" name="PASS" style="width:20em; height:25px; border-radius:5px;" /></td></tr>
+</table>
+<input type="submit" value="ログイン" style="font-size:1em; width:10em; padding:5px; border-radius:7px; background:#72BBF0; margin:2em auto 4em auto;"/>
+</center>
 </form>
 </font>
-<br>
-<br>
-<br>
-<br>
-<br>
-</div>
-</div>
 </font>
 </body>
 </html>

@@ -31,7 +31,7 @@ include '../acs_header.php';
 <div id="title">注文者情報の管理</div>
 
 
-<table style="margin-bottom:50px; align:center;"><tr>
+<table style="margin-bottom:50px; align:center;">
 
 	<tr>
 		<td>
