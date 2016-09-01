@@ -1,84 +1,63 @@
 @CHARSET "UTF-8";
-
-/* select_menu要素
------------------------------------------------------------ */
-#select_menu{
-  width:848px;
-  margin-left:auto;
-  margin-right:auto;
-  background:#72BBF0;
-  border-bottom: 5px solid #4169e1;
-  border-radius: 6px;
-  }
-
-
-#menu{margin-left:0px;
- 		padding: 0px;
- 		margin:0px;
-		background:#4169e1;
-
- }
-
-#menu li {
-  list-style:none;
-  text-align:center;
-  background-color:#FFFFFF;
-  position:relative ;
-  color:#222222;
-
-/* display:inline-block;*/
+.menu ul{
+  margin:0;
+  padding:0;
+  margin-left:11em;
+}
+.menu ul li {
+  list-style: none;
+  margin:0;
+  padding:0;
+  font-size:14px;
   float:left;
-  margin-right:auto;
-  margin-left:auto;
-  padding-top:8px;
-  padding-bottom:5px;
-  width: 210px;
-  hight: 20px;
-  border: solid 1px #4169e1;
-  font-weight: bold;
-list-style-position: inside;
-
+  position: relative;
+  width: 210px;/*親メニューの幅*/
+  height: 40px;/*親メニューの高さ*/
+  line-height: 40px;
+  background:#F0F8FF;/*親メニューの背景色*/
+  color: #4D4D4D;/*親メニューの文字色*/
+  text-align:center;
+  font-weight:bold;
+  border-bottom: 2px solid #4169e1;
+   border-right: 1px solid #4169e1;
+   border-left: 1px solid #4169e1;
+   border-radius: 4px 4px 1px 1px;
 
 }
-
-#menu li:hover {
-  color: #FFFFFF;
-  background:#4169e1;
+.menu ul li a {
+  color: #4D4D4D;
+  display: block;
+  text-decoration: none;
 }
-
-
-
-/* メニューの中身----------------------------------------------------------- */
-#menu li ul {
-  display: none;
+.menu ul li:hover, .menu ul li a:hover {
+  background:#4169e1;/*ホバー時の親メニューの背景色*/
+  color:#fff;/*ホバー時の親メニューの文字色*/
+}
+.menu ul li ul {
   position: absolute;
-  top: 30px;
-  left: 1px;
-  hight:5px;
-  padding: 5px;
-  width: 200px;
-  background: #eee;
-  border: solid 0.5px #ccc;
-  }
-
-
-#menu li ul li {
-  margin: 0;
-  padding: 1px;
-  width: 200px;
-  border: none;
+  top: 40px;/*親メニューの高さと同じにする*/
+  width: 100%;
+  z-index: 100;
+  margin-left:0;
 }
-#menu li ul li a {
-  display: inline-block;
-  width: 200px;
-  height: 20px;
+.menu ul li ul li {
+  visibility: hidden;
+  overflow: hidden;
+  width: 100%;/*サブメニューの幅*/
+  height: 0;
+  background:#F0F8FF;/*サブメニューの背景色*/
+/*   border-bottom: 2px solid #4169e1; */
 }
-#menu li ul li a:hover {
-  background: #E6FFE9;
-  color: #0000FF;
-  border:solid 0.5px #ccc;
+.menu ul li ul li:hover, .menu ul li ul li a:hover {
+  background:#4169e1;/*ホバー時のサブメニューの背景色*/
 }
-#menu * {
+.menu ul li:hover ul li, .menu ul li a:hover ul li{
+  visibility: visible;
+  overflow: visible;
+  height:40px;/*サブメニューの高さ*/
+  z-index: 10;
+}
+.menu * {
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
   -ms-transition: 0.5s;
@@ -86,27 +65,32 @@ list-style-position: inside;
   transition: 0.5s;
 }
 
+
+
+
 /* header要素
 ----------------------------------------------------------- */
 
 #header{
-background-color:#FFFFFF;
-width:848px;
+background-color:#FFF;
+float:center;
+width:70%;
 height:80px;
-margin-left:auto;
-margin-right:auto;
+margin:auto;
+margin-bottom:20px;
+border-radius: 7px 7px 7px 7px;
 }
 
 #logo{
 /* 	width:300px; */
-	margin-left:10px;
-	margin-top:5px;
+	margin-left:20%;
+	margin-top:3%;
 }
 input[type=button]{
  padding: 5px; /*ボタン内の余白*/
- hight:auto;
- width:auto;
- margin-top:15px;
+/*  hight:auto; */
+/*  width:auto; */
+/*  margin-top:15px; */
 /* margin-left:20px;*/
  background: #4169e1;
  border-radius:5px;
@@ -134,7 +118,8 @@ input[type=submit]{
 text-align:right;
 padding:5px;
 float:right;
-margin-top:25px;
+margin-top:4%;
+margin-left:15%;
 padding:5px;
 font-size:1em;
 }
@@ -143,19 +128,21 @@ font-size:1em;
 ----------------------------------------------------------- */
 body{
 width:1200px;
-background-color:#F0F8FF;
+hight:auto;
 margin-left : auto ;
 margin-right : auto ;
-
+/* background:-webkit-gradient(linear, left top, left bottom, from(#72BBF0), to(#F0F8FF)); グラデーション */
+/* background:-webkit-linear-gradient(#72BBF0, #F0F8FF); 同上 */
+/* background:linear-gradient(#72BBF0, #F0F8FF);   同上 */
+background:#8EB8FF;
 }
 #main{
 background-color:#FFFFFF;
-width:848px;
+width:70%;
 hight:auto;
-margin-left:auto;
-margin-right:auto;
+margin:auto;
 /*patting:40px;*/
-
+border-radius: 1px 1px 15px 15px;
       overflow:hidden;
 }
 
