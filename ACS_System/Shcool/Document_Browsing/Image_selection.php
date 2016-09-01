@@ -372,13 +372,13 @@ echo "</div>";
 		}
 //		echo "object:",$non_oblect;
 if ($kensuu==0){
-  		echo "<div style='text-align:center; font-size:1.6em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
+  		echo "<div style='text-align:center; font-size:1.5em; padding:50px 0px 50px 0px;'><a>検索条件に一致する案件はありません。</a></div>";
  // 		unset($non_oblect);
 }
 //echo "取得件数は".$kensuu."件です。";
 ?>
 	<br clear="left" />
-		<div align="left" style="margin-left:40px;" >
+		<div align="left" style="margin-left:40%; margin-bottom:50px;" >
 		<input id="prev"type="button" value="戻る" />
 		<input id="next" type="button" value="次へ" />
 		<span id="page"></span>
