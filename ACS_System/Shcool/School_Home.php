@@ -243,7 +243,7 @@ text:#000;
 		<tr><td style="background-color:#6491C7;"><!-- 折りたたみページ2  -->
 			<!-- 折り畳み展開ポインタ -->
 			<div onclick="obj=document.getElementById('open02').style; obj.display=(obj.display=='none')?'block':'none';">
-				<h style="cursor:pointer;padding:15px;">▼確認済み：<?php echo "$count02"; ?>件</h>
+				<a style="cursor:pointer; text-color:#fff; padding:15px;">▼確認済み：<?php echo "$count02"; ?>件</a>
 			</div>
 			<!--// 折り畳み展開ポインタ -->
 
@@ -272,7 +272,7 @@ text:#000;
 		<tr><td style="background-color:#6491C7;"><!-- 折りたたみページ3  -->
 			<!-- 折り畳み展開ポインタ -->
 			<div onclick="obj=document.getElementById('open03').style; obj.display=(obj.display=='none')?'block':'none';">
-				<a style="cursor:pointer; padding:5px;">▼見積もり中：<?php echo "$count03"; ?>件</a>
+				<a style="cursor:pointer; text-color:#fff; padding:15px;">▼見積もり中：<?php echo "$count03"; ?>件</a>
 			</div>
 			<!--// 折り畳み展開ポインタ -->
 
@@ -301,7 +301,7 @@ text:#000;
 		<tr><td style="background-color:#6491C7;"><!-- 折りたたみページ4  -->
 			<!-- 折り畳み展開ポインタ -->
 			<div onclick="obj=document.getElementById('open04').style; obj.display=(obj.display=='none')?'block':'none';">
-				<a style="cursor:pointer; padding:5px;">▼見積もり済み：<?php echo "$count04"; ?>件</a>
+				<a style="cursor:pointer; text-color:#fff; padding:15px;">▼見積もり済み：<?php echo "$count04"; ?>件</a>
 			</div>
 			<!--// 折り畳み展開ポインタ -->
 
@@ -330,7 +330,7 @@ text:#000;
 		<tr><td style="background-color:#6491C7;"><!-- 折りたたみページ5  -->
 			<!-- 折り畳み展開ポインタ -->
 			<div onclick="obj=document.getElementById('open05').style; obj.display=(obj.display=='none')?'block':'none';">
-				<a style="cursor:pointer; padding:5px;">▼納品：<?php echo "$count05"; ?>件</a>
+				<a style="cursor:pointer; text-color:#fff; padding:15px;">▼納品：<?php echo "$count05"; ?>件</a>
 			</div>
 			<!--// 折り畳み展開ポインタ -->
 
@@ -360,7 +360,7 @@ text:#000;
 		<tr><td style="background-color:#6491C7;"><!-- 折りたたみページ6  -->
 			<!-- 折り畳み展開ポインタ -->
 			<div onclick="obj=document.getElementById('open06').style; obj.display=(obj.display=='none')?'block':'none';">
-				<a style="cursor:pointer; padding:5px;">▼登録済み：<?php echo "$count06"; ?>件</a>
+				<a style="cursor:pointer; text-color:#fff; padding:15px;">▼登録済み：<?php echo "$count06"; ?>件</a>
 			</div>
 			<!--// 折り畳み展開ポインタ -->
 
@@ -389,7 +389,7 @@ text:#000;
 		<tr><td style="background-color:#6491C7;"><!-- 折りたたみページ7  -->
 			<!-- 折り畳み展開ポインタ -->
 			<div onclick="obj=document.getElementById('open07').style; obj.display=(obj.display=='none')?'block':'none';">
-				<a style="cursor:pointer; padding:5px;">▼報告書入力済み：<?php echo "$count07"; ?>件</a>
+				<a style="cursor:pointer; text-color:#fff; padding:15px;">▼報告書入力済み：<?php echo "$count07"; ?>件</a>
 			</div>
 			<!--// 折り畳み展開ポインタ -->
 
