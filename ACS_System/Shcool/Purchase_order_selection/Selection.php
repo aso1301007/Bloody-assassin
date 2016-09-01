@@ -130,7 +130,7 @@ require '../../DB.php';			//DB.php呼び出し
 			?>
 	</table>
 	<br clear="left" />
-		<div align="left" style="margin-left:40px;" >
+		<div align="left" style="margin:10px 0px 30px 40%;" >
 		<input id="prev"type="button" value="戻る" />
 		<input id="next" type="button" value="次へ" />
 		<span id="page"></span>
