@@ -66,15 +66,15 @@ require '../../DB.php';			//DB.php呼び出し
 <?php
 //日付検索onchange用の値を取得
 //日付:年を取得
-$year = 'SELECT SUBSTRING(t_date,1,4) AS YEAR';//例：2015-01-01を2015に変換
-$year .= ' FROM tyuumon';
+$year = 'SELECT SUBSTRING(h_date,1,4) AS YEAR';//例：2015-01-01を2015に変換
+$year .= ' FROM houkoku';
 $year .= ' GROUP BY YEAR;';
 $result_year = $pdo->prepare($year);
 $result_year->execute();
 while($YEAR = $result_year->fetch(PDO::FETCH_ASSOC)){//注文DBにある注文日付の年
-	$month = 'SELECT SUBSTRING(t_date,6,2) AS MONTH';
-	$month .= ' FROM tyuumon';
-	$month .= ' WHERE SUBSTRING(t_date,1,4) = '.$YEAR['YEAR'];
+	$month = 'SELECT SUBSTRING(h_date,6,2) AS MONTH';
+	$month .= ' FROM houkoku';
+	$month .= ' WHERE SUBSTRING(h_date,1,4) = '.$YEAR['YEAR'];
 	$month .= ' GROUP BY MONTH;';
 	$result_month = $pdo->prepare($month);
 	$result_month->execute();
@@ -251,8 +251,7 @@ function change_year(){//日付検索：年onchange
 var page = 0;	//ページ数初期値
 function putId(){// テーブルの行にID名を付ける
 	page = 0;//現在ページ数を初期化
-	var Tbe = document.getElementById("list");//<table>を取得
-	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+	var Tr = document.getElementById("kensaku");
 	for(i=0; i<Tr.length; i++){
 		Tr[i].id='trID'+i;
 	}
@@ -262,8 +261,7 @@ function draw(){//trを10件表示
 	var elem = document.getElementById("page");
 	elem.innerHTML = page + 1;
 	//trを隠す
-	var Tbe = document.getElementById("list");//<table>を取得
-	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+	var Tr = document.getElementById("kensaku");//<table>内の<tr>を取得
 	var total = Math.floor(Tr.length / 10);
 	var elem2 = document.getElementById("total");
 	elem2.innerHTML = total;
@@ -284,8 +282,7 @@ function prev(){//前の10件を表示
 	}
 }
 function next(){//次の10件を表示
-	var Tbe = document.getElementById("list");//<table>を取得
-	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+	var Tr = document.getElementById("kensaku");
 	var max = Tr.length - 1;//<th>分を引く
 	if (page < max / 10 - 1) {
 		page++;
@@ -294,16 +291,39 @@ function next(){//次の10件を表示
 }
 
 function put(){//<table>初期値
-	var Tbe = document.getElementById("list");//<table>を取得
-	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
-	for(i=1; i<10; i++){//
-		var row = Tbe.insertRow(-1);
-		var col1 = row.insertCell(-1);
-		col1.innerHTML = "<div class=\"over01\"></div>";
-		var col2 = row.insertCell(-1);
-		col2.innerHTML = "<div class=\"over01\"></div>";
-		var col3 = row.insertCell(-1);
-		col3.innerHTML = "<div class=\"over02\"></div>";
+// 	var Tbe = document.getElementById("list");//<table>を取得
+// 	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+// 	for(i=1; i<10; i++){//
+// 		var row = Tbe.insertRow(-1);
+// 		var col1 = row.insertCell(-1);
+// 		col1.innerHTML = "<div class=\"over01\"></div>";
+// 		var col2 = row.insertCell(-1);
+// 		col2.innerHTML = "<div class=\"over01\"></div>";
+// 		var col3 = row.insertCell(-1);
+// 		col3.innerHTML = "<div class=\"over02\"></div>";
+// 	}
+// 	putId();
+// 	draw();
+	var count = 0;
+	while(count < 30){
+		var div_element = document.createElement("div");
+		div_element.id = "kensaku";
+		div_element.style.width = "350px";
+		div_element.style.margin = "1em";
+		if(count%2==0){
+			div_element.innerHTML ="<br clear='left'>";
+		}
+		div_element.innerHTML = '<form action="" method="post">';
+		div_element.innerHTML += '<input type="image" src="" alt="画像" width="140px" height="200px" align="left" style="margin-right:10px;" />';
+//		div_element.innerHTML += '<input type="hidden" name="none" value="なし" /></form>';
+		div_element.innerHTML += '<b>製作物ナンバー</b><br />COUNT='+count+'<br />';
+		div_element.innerHTML += '<b>製作日</b><br /><br />';
+		div_element.innerHTML += '<b>注文内容</b><br /><br />';
+		div_element.innerHTML += '<b>品名</b><br /><br />';
+		div_element.innerHTML += '<b>学校名</b><br />';
+		var parent_object = document.getElementById("list");
+		parent_object.appendChild(div_element);
+		count++;
 	}
 	putId();
 	draw();
@@ -317,13 +337,13 @@ window.onload=function(){change_year();put();}
 <div id="title">報告書選択</div>
 <?php
 //日付(年)を取得
-$year = 'SELECT SUBSTRING(t_date,1,4) AS YEAR';//例：2015-01-01を2015に変換
-$year .= ' FROM tyuumon';
+$year = 'SELECT SUBSTRING(h_date,1,4) AS YEAR';//例：2015-01-01を2015に変換
+$year .= ' FROM houkoku';
 $year .= ' GROUP BY YEAR;';
 $result_year = $pdo->prepare($year);
 $result_year->execute();
 ?>
-<div>
+<div><!-- start_検索 -->
 <!-------製作物ナンバー検索--------------------------->
 <div id="number_search">
 	<b>制作物ナンバーを入力してください。</b>
@@ -367,16 +387,7 @@ $result_year->execute();
 		<input type="button" onclick="things_search()" style="height:32px; vertical-align: middle;" value="表示" /></p>
 	</form>
 </div>
-</div>
-<table id="list" class="list" style="width:700px; height:20px; border-style: solid; border-width: 1px; margin-button: 40px; margin-right: 60px; margin-left: 60px; margin-top: 50px; padding:10px;" align="left">
-	<tr style="border-style: solid; border-width: 1px;" align="center">
-		<th style="width:200px;">作成日</th>
-		<th style="width:200px;">品名</th>
-		<th style="width:300px;">備考</th>
-	</tr>
-
-</table>
-<br clear="left" />
+</div><!-- fin_検索div -->
 <div align="left" style="margin-left:40px;" >
 	<input id="prev" type="button" onclick="prev()" value="戻る" />
 	<input id="next" type="button" onclick="next()" value="次へ" />
@@ -385,5 +396,7 @@ $result_year->execute();
 	<span id="total"></span>
 	<font>ページ</font>
 </div>
+<div id="list"/>
+<br clear="left" />
 </body>
 </html>
