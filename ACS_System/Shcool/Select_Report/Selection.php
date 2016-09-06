@@ -57,6 +57,18 @@ div.over02{
 	height: 40px;
 	overflow: auto;
 }
+
+div.kensaku{
+	width:350px;
+	hight:250px;
+    position: relative;
+    padding: 15px;
+    color: #000;
+    background: #A4C6FF;
+    overflow: hidden;
+    float:left;
+    margin:1em;
+}
 </style>
 <?php
 include '../School_header.php';
@@ -247,32 +259,34 @@ function change_year(){//日付検索：年onchange
 // 	draw();
 // }
 
-//<table>10件表示
+//<div>10件表示
 var page = 0;	//ページ数初期値
-function putId(){// テーブルの行にID名を付ける
+function putId(){// divにID名を付ける
 	page = 0;//現在ページ数を初期化
-	var Tr = document.getElementById("kensaku");
+	var d = document.getElementById("list");
+	var Tr = d.getElementsByTagName("div");
 	for(i=0; i<Tr.length; i++){
-		Tr[i].id='trID'+i;
+		Tr[i].id='ID'+i;
 	}
 }
-function draw(){//trを10件表示
+function draw(){//divを10件表示
 	//現在ページ数を<span id="page">に挿入
 	var elem = document.getElementById("page");
 	elem.innerHTML = page + 1;
-	//trを隠す
-	var Tr = document.getElementById("kensaku");//<table>内の<tr>を取得
+	//divを隠す
+	var d = document.getElementById("list");
+	var Tr = d.getElementsByTagName("div");//<div>を取得
 	var total = Math.floor(Tr.length / 10);
 	var elem2 = document.getElementById("total");
 	elem2.innerHTML = total;
-	for(i=1; i<=Tr.length-1; i++){//<tr>を全て隠す
-		document.getElementById("trID"+i).style.display="none";
+	for(i=0; i<Tr.length; i++){//<div>を全て隠す
+		document.getElementById("ID"+i).style.display="none";
 	}
-	//trを10件表示
-	var start = (page +1) *10 -9;//<tr>開始番号
-	var end = start +10;//<tr>終了番号
+	//divを10件表示
+	var start = page *10;//<div>開始番号
+	var end = start +10;//<div>終了番号
 	for(start; start<end; start++){
-		document.getElementById("trID"+start).style.display = "";
+		document.getElementById("ID"+start).style.display = "";
 	}
 }
 function prev(){//前の10件を表示
@@ -282,9 +296,10 @@ function prev(){//前の10件を表示
 	}
 }
 function next(){//次の10件を表示
-	var Tr = document.getElementById("kensaku");
-	var max = Tr.length - 1;//<th>分を引く
-	if (page < max / 10 - 1) {
+	var d = document.getElementById("list");
+	var Tr = d.getElementsByTagName("div");
+	var total = Math.floor(Tr.length / 10);
+	if (page < total-1) {
 		page++;
 		draw();
 	}
@@ -307,15 +322,11 @@ function put(){//<table>初期値
 	var count = 0;
 	while(count < 30){
 		var div_element = document.createElement("div");
-		div_element.id = "kensaku";
-		div_element.style.width = "350px";
-		div_element.style.margin = "1em";
+		div_element.setAttribute('class', 'kensaku');
 		if(count%2==0){
 			div_element.innerHTML ="<br clear='left'>";
 		}
-		div_element.innerHTML = '<form action="" method="post">';
-		div_element.innerHTML += '<input type="image" src="" alt="画像" width="140px" height="200px" align="left" style="margin-right:10px;" />';
-//		div_element.innerHTML += '<input type="hidden" name="none" value="なし" /></form>';
+		div_element.innerHTML = '<a href=""><input type="image" src="" alt="画像" width="140px" height="200px" align="left" style="margin-right:10px;" /></a>';
 		div_element.innerHTML += '<b>製作物ナンバー</b><br />COUNT='+count+'<br />';
 		div_element.innerHTML += '<b>製作日</b><br /><br />';
 		div_element.innerHTML += '<b>注文内容</b><br /><br />';
