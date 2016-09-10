@@ -45,10 +45,12 @@ require '../../DB.php';			//DB.php呼び出し
 ?>
 <script type="text/javascript">
 <?php
+$user_id = $_SESSION['user_id'];	//ログイン中の人のユーザID
 //日付検索onchange用の値を取得
 //日付:年を取得
 $year = 'SELECT SUBSTRING(h_date,1,4) AS YEAR';//例：2015-01-01を2015に変換
 $year .= ' FROM houkoku';
+$year .= ' WHERE user_id = '.$user_id;
 $year .= ' GROUP BY YEAR;';
 $result_year = $pdo->prepare($year);
 $result_year->execute();
@@ -56,6 +58,7 @@ while($YEAR = $result_year->fetch(PDO::FETCH_ASSOC)){//注文DBにある注文�
 	$month = 'SELECT SUBSTRING(h_date,6,2) AS MONTH';
 	$month .= ' FROM houkoku';
 	$month .= ' WHERE SUBSTRING(h_date,1,4) = '.$YEAR['YEAR'];
+	$month .= ' AND user_id = '.$user_id;
 	$month .= ' GROUP BY MONTH;';
 	$result_month = $pdo->prepare($month);
 	$result_month->execute();
@@ -75,6 +78,7 @@ $search .= ' s.seisaku_name AS company, s.seisaku_id AS c_id';
 $search .= ' FROM houkoku h';
 $search .= ' INNER JOIN tyuumon_master t ON h.tm_id = t.tm_id';
 $search .= ' INNER JOIN seisaku_kaisha s ON h.h_seisaku_id = s.seisaku_id';
+$search .= ' WHERE h.user_id = '.$user_id;
 $search .= ' ORDER BY date DESC, id DESC';
 
 //製作物ナンバー検索用の配列	$production[製作物ナンバー][id,number,date,company,name] = DB内の値
@@ -379,12 +383,16 @@ window.onload=function(){change_year();put();}
 //日付(年)を取得
 $year = 'SELECT SUBSTRING(h_date,1,4) AS YEAR';//例：2015-01-01を2015に変換
 $year .= ' FROM houkoku';
+$year .= ' WHERE user_id = '.$user_id;
 $year .= ' GROUP BY YEAR;';
 $result_year = $pdo->prepare($year);
 $result_year->execute();
 //制作会社を取得
-$company = 'SELECT seisaku_id AS id, seisaku_name AS name';//例：2015-01-01を2015に変換
-$company .= ' FROM seisaku_kaisha';
+$company = 'SELECT s.seisaku_id AS id, s.seisaku_name AS name';//例：2015-01-01を2015に変換
+$company .= ' FROM seisaku_kaisha s';
+$company .= ' INNER JOIN houkoku h ON s.seisaku_id = h.h_seisaku_id';
+$company .= ' WHERE h.user_id = '.$user_id;
+$company .= ' GROUP BY id;';
 $result_company = $pdo->prepare($company);
 $result_company->execute();
 ?>
