@@ -45,33 +45,34 @@ $paper = $_POST['h_kami'];	//紙
 $how_to_fold = $_POST['h_orikata'];	//折り方
 $claim_expense = $_POST['h_money'];	//最終請求費用
 
-//DB更新 失敗
+//DB更新
 $sql = "UPDATE houkoku";
-$sql .= " SET tm_id = ". $id. ",";
-$sql .= " h_date = ". $date. ",";
-$sql .= " user_id = ". $user_id. ",";
-$sql .= " h_seisaku_id = ". $company. ",";
-$sql .= " h_nouki = ". $n_date. ",";
-$sql .= " h_pbm = ". $pbm_position. ",";
-$sql .= " h_seikou = ". $success_points. ",";
-$sql .= " h_sippai = ". $failure_points. ",";
-$sql .= " h_comment = ". $comment. ",";
-$sql .= " h_hin_janru = ". $product. ",";
-$sql .= " h_busu = ". $number_of_copies. ",";
-$sql .= " h_size = ". $size. ",";
-$sql .= " h_page = ". $number_of_pages. ",";
-$sql .= " h_color = ". $Number_of_colors. ",";
-$sql .= " h_men = ". $surface. ",";
-$sql .= " h_kami = ". $paper. ",";
-$sql .= " h_orikata = ". $how_to_fold. ",";
-$sql .= " h_hiyou = ". $claim_expense;
+$sql .= " SET h_date = '". $date. "',";
+$sql .= " user_id = '". $user_id. "',";
+$sql .= " h_seisaku_id = '". $company. "',";
+$sql .= " h_nouki = '". $n_date. "',";
+$sql .= " h_pbm_position = '". $pbm_position. "',";
+$sql .= " h_seikou = '". $success_points. "',";
+$sql .= " h_sippai = '". $failure_points. "',";
+$sql .= " h_comment = '". $comment. "',";
+$sql .= " h_hin_janru = '". $product. "',";
+$sql .= " h_busu = '". $number_of_copies. "',";
+$sql .= " h_size = '". $size. "',";
+$sql .= " h_page = '". $number_of_pages. "',";
+$sql .= " h_color = '". $Number_of_colors. "',";
+$sql .= " h_men = '". $surface. "',";
+$sql .= " h_kami = '". $paper. "',";
+$sql .= " h_orikata = '". $how_to_fold. "',";
+$sql .= " h_hiyou = '". $claim_expense. "'";
 $sql .= " WHERE tm_id = ". $id;
 $update = $pdo->prepare($sql);
 $success_flg = $update->execute();
-if(!$success_flg) var_dump($update->errorInfo());
 ?>
 
 <div id="title">保存：成功</div>
 
+<div align="center">
+<input type="button" name="can" value="戻る" onclick="location.href='Selection.php'" />
+</div>
 </body>
 </html>
