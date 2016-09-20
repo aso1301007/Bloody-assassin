@@ -73,6 +73,8 @@ $order_sql = 'SELECT *';
 $order_sql .= ' FROM tyuumon t1';
 $order_sql .= ' INNER JOIN tyuumon_master t2 ON t1.tm_id = t2.tm_id';
 $order_sql .= ' INNER JOIN hinmei h ON t1.t_hin_name = h.hin_id';
+$order_sql .= ' INNER JOIN school s ON t1.school_id = s.school_id';
+$order_sql .= ' INNER JOIN gakubu g ON t1.t_gakubu = g.gakubu_id';
 $order_sql .= ' WHERE t1.tm_id = '. $id;
 $result_sql = $pdo->prepare($order_sql);
 $result_sql->execute();
@@ -82,35 +84,35 @@ $order = $result_sql->fetch(PDO::FETCH_ASSOC);
 //見積もり・発注ラジオボタン
 switch($order['t_naiyou']){
 	case 0://見積もり
-		$estimate = 'checked="checked"';
-		$ordering = '';
+		$estimate = 'checked="checked disabled="disabled""';
+		$ordering = 'disabled="disabled"';
 		break;
 
 	case 1://発注
-		$estimate = '';
-		$ordering = 'checked="checked"';
+		$estimate = 'disabled="disabled"';
+		$ordering = 'checked="checked" disabled="disabled"';
 		break;
 }
 //片面・両面ラジオボタン
 switch($order['t_men']){
 	case '片面':
-		$other = 'checked="checked"';
-		$both = '';
+		$other = 'checked="checked" disabled="disabled"';
+		$both = 'disabled="disabled"';
 		break;
 
 	case '両面':
-		$other = '';
-		$both = 'checked="checked"';
+		$other = 'disabled="disabled"';
+		$both = 'checked="checked" disabled="disabled"';
 		break;
 }
 //昨年実績の有無ラジオボタン
 if($order['t_sakunen_jisseki']){
-	$track_record_Y = 'checked="checked"';
-	$track_record_N = '';
+	$track_record_Y = 'checked="checked" disabled="disabled"';
+	$track_record_N = 'disabled="disabled"';
 }
 else{
-	$track_record_Y = '';
-	$track_record_N = 'checked="checked"';
+	$track_record_Y = 'disabled="disabled"';
+	$track_record_N = 'checked="checked" disabled="disabled"';
 }
 //昨年実績：税込・税抜ラジオボタン
 if($order['t_zei_hantei']){
@@ -122,7 +124,23 @@ else{
 	$tax_excluded = 'checked="checked"';
 }
 //昨年実績：片面・両面
+//片面・両面ラジオボタン
+switch($order['t_sakunen_men']){
+	case '片面':
+		$last_other = 'checked="checked" disabled="disabled"';
+		$last_both = 'disabled="disabled"';
+		break;
 
+	case '両面':
+		$last_other = 'disabled="disabled"';
+		$last_both = 'checked="checked" disabled="disabled"';
+		break;
+
+	default:
+		$last_other = 'disabled="disabled"';
+		$last_both = 'disabled="disabled"';
+		break;
+}
 ?>
 <!-- 折り畳み展開ポインタ 注文書 -->
 <div onclick="obj=document.getElementById('order').style; obj.display=(obj.display=='none')?'block':'none';">
@@ -192,11 +210,11 @@ while($c < 8){
 	$c++;
 }?>
 <td colspan ="2">
-<input type="text" name="year" size = "1" maxlength = "4" value="<?php echo date('Y', strtotime($order['t_date']));?>" disabled="disabled" /></td>
+<input type="text" name="year" size = "1" maxlength = "4" value="<?php echo date('Y', strtotime($order['t_date']));?>" readonly="readonly" /></td>
 <td>年</td>
-<td><input type="text" name="month" size = "2" maxlength = "2" class = "two" value="<?php  echo date('m', strtotime($order['t_date']));?>" disabled="disabled" /></td>
+<td><input type="text" name="month" size = "2" maxlength = "2" class = "two" value="<?php  echo date('m', strtotime($order['t_date']));?>" readonly="readonly" /></td>
 <td>月</td>
-<td><input type="text" name="date" size = "2" maxlength = "2" class = "two" value="<?php  echo date('d', strtotime($order['t_date']));?>" disabled="disabled" /></td>
+<td><input type="text" name="date" size = "2" maxlength = "2" class = "two" value="<?php  echo date('d', strtotime($order['t_date']));?>" readonly="readonly" /></td>
 <td>日</td>
 <td class="xl69" />
 </tr>
@@ -208,7 +226,7 @@ while($c < 8){
 <td class="xl71">　</td>
 <td class="xl71">　</td>
 <td class="xl71" colspan="3" style='mso-ignore:colspan'>
-<input type="radio" name="t_naiyou" value="0" <?php echo $estimate?> disabled="disabled" />見積もり</td>
+<input type="radio" name="t_naiyou" value="0" <?php echo $estimate?> />見積もり</td>
 <?php
 $c = 0;
 while($c < 4){
@@ -217,7 +235,7 @@ while($c < 4){
 }
 ?>
 <td class="xl71" colspan="2" style='mso-ignore:colspan'>
-<input type="radio" name="t_naiyou" value="1" <?php echo $ordering?> disabled="disabled" />発注</td>
+<input type="radio" name="t_naiyou" value="1" <?php echo $ordering?> />発注</td>
 <?php
 $c = 0;
 while($c < 4){
@@ -234,10 +252,10 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>学校名</td>
 <td colspan="8" class="xl113" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="school_name" maxlength="25" class = "one" value = "<?php echo $order['school_name']?>" disabled="disabled" /></td>
+<input type="text" name="school_name" maxlength="25" class = "one" value = "<?php echo $order['school_name']?>" readonly="readonly" /></td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left:none'>部署名</td>
 <td colspan="6" class="xl113" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="name" maxlength="15" class = "one" value = "<?php echo $order['t_busho']?>" disabled="disabled" /></td>
+<input type="text" name="name" maxlength="15" class = "one" value = "<?php echo $order['t_busho']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -246,10 +264,10 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>ご担当者名</td>
 <td colspan="6" class="xl113" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="user_name" maxlength="15" class = "one" value = "<?php echo $order['t_tantousha']?>" disabled="disabled" /></td>
+<input type="text" name="user_name" maxlength="15" class = "one" value = "<?php echo $order['t_tantousha']?>" readonly="readonly" /></td>
 <td colspan="4"class="xl89" style='border-right:.5pt solid black;border-left:none'>お電話番号</td>
 <td colspan="6" class="xl113" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="user_tel" maxlength="11" class = "one" value = "<?php echo $order['t_tel']?>" disabled="disabled" /></td>
+<input type="text" name="user_tel" maxlength="11" class = "one" value = "<?php echo $order['t_tel']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -258,10 +276,10 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl114" style='border-right:.5pt solid black'>品名</td>
 <td colspan="6">
-<input type="text" name="product_name" class = "one" value = "<?php echo $order['hin_janru']?>" disabled="disabled" /></td>
+<input type="text" name="product_name" class = "one" value = "<?php echo $order['hin_janru']?>" readonly="readonly" /></td>
 <td colspan="3" class="xl114" style='border-right:.5pt solid black'>備考</td>
 <td colspan="7" class="xl114" style='border-right:.5pt solid black;border-bottom:border-left:none'>
-<textarea name="t_bikou" rows="2" style="wrap:soft; maxlength:255;" class = "one" disabled="disabled"><?php echo $order['t_bikou']?></textarea></td>
+<textarea name="t_bikou" rows="2" style="wrap:soft; maxlength:255;" class = "one" readonly="readonly"><?php echo $order['t_bikou']?></textarea></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -270,10 +288,10 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>利用する学部系</td>
 <td colspan="6" class="xl89" style='border-left:none'>
-<input type="text" name="gakubu_name" maxlength="20" class = "one" value = "<?php echo $order['gakubu_name']?>" disabled="disabled" /></td>
+<input type="text" name="gakubu_name" maxlength="20" class = "one" value = "<?php echo $order['gakubu_name']?>" readonly="readonly" /></td>
 <td colspan="3" class="xl111" style='border-right:.5pt solid black'>利用目的</td>
 <td colspan="7" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<textarea name="t_mokuteki" rows="2" style="wrap:soft; maxlength:255;" class = "one" disabled="disabled"><?php echo $order['t_mokuteki']?></textarea></td>
+<textarea name="t_mokuteki" rows="2" style="wrap:soft; maxlength:255;" class = "one" readonly="readonly"><?php echo $order['t_mokuteki']?></textarea></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -283,13 +301,13 @@ while($c < 4){
 <td colspan="4" rowspan="2" class="xl94" style='border-right:.5pt solid black; border-bottom:.5pt solid black'>仕様</td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left: none'>サイズ</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left: none'>
-<input type="text" name="t_size" maxlength="2" class = "three" value = "<?php echo $order['t_size']?>" disabled="disabled" /></td>
+<input type="text" name="t_size" maxlength="2" class = "three" value = "<?php echo $order['t_size']?>" readonly="readonly" /></td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left:none'>ページ数</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_page" maxlength="3" class = "three" value = "<?php echo $order['t_page']?>" disabled="disabled" /></td>
+<input type="text" name="t_page" maxlength="3" class = "three" value = "<?php echo $order['t_page']?>" readonly="readonly" /></td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left:none'>色数</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_color" maxlength="3" class = "three" value = "<?php echo $order['t_color']?>" disabled="disabled" /></td>
+<input type="text" name="t_color" maxlength="3" class = "three" value = "<?php echo $order['t_color']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -297,15 +315,15 @@ while($c < 4){
 <td height="36px" style='height:27.0pt' />
 <td class="xl68">　</td>
 <td colspan="3" class="xl90">
-<input type="radio" name="t_men" value="片面" <?php echo $other?> disabled="disabled" />片面</td>
+<input type="radio" name="t_men" value="片面" <?php echo $other?> />片面</td>
 <td colspan="3" class="xl90" style='border-right:.5pt solid black'>
-<input type="radio" name="t_men" value="両面" <?php echo $both?> disabled="disabled" />両面</td>
+<input type="radio" name="t_men" value="両面" <?php echo $both?> />両面</td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left:none'>紙</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_kami" maxlength="10" class = "one" value = "<?php echo $order['t_kami']?>" disabled="disabled" /></td>
+<input type="text" name="t_kami" maxlength="10" class = "one" value = "<?php echo $order['t_kami']?>" readonly="readonly" /></td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left:none'>折り方</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_orikata" maxlength="10" class = "one" value = "<?php echo $order['t_orikata']?>" disabled="disabled" /></td>
+<input type="text" name="t_orikata" maxlength="10" class = "one" value = "<?php echo $order['t_orikata']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -314,10 +332,10 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>部数</td>
 <td colspan="6" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_busu" maxlength="7" class = "five" value = "<?php echo $order['t_busu']?>" disabled="disabled" />部</td>
+<input type="text" name="t_busu" maxlength="7" class = "five" value = "<?php echo $order['t_busu']?>" readonly="readonly" />部</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black;border-left:none'>納品希望日</td>
 <td colspan="6" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_kiboubi" maxlength="20" class = "one" value = "<?php echo $order['t_kiboubi']?>" disabled="disabled" /></td>
+<input type="text" name="t_kiboubi" maxlength="20" class = "one" value = "<?php echo $order['t_kiboubi']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -326,7 +344,7 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>希望納品場所</td>
 <td colspan="16" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_basho" maxlength="60" class = "one" value = "<?php echo $order['t_ basho']?>" disabled="disabled" /></td>
+<input type="text" name="t_basho" maxlength="60" class = "one" value = "<?php echo $order['t_basho']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 <tr>
@@ -334,7 +352,7 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>希望金額</td>
 <td colspan="16" class="xl89" style='border-right:.5pt solid black;border-left: none'>
-<input type="text" name="t_money" maxlength="8" class = "six money" value = "<?php echo $order['t_money']?>" disabled="disabled" />円</td>
+<input type="text" name="t_money" maxlength="8" class = "six money" value = "<?php echo $order['t_money']?>" readonly="readonly" />円</td>
 <td class="xl69">　</td>
 </tr>
 
@@ -343,7 +361,7 @@ while($c < 4){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>仕様の要望</td>
 <td colspan="16" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_youbou" class = "one" value = "<?php echo $order['t_youbou']?>" disabled="disabled" /></td>
+<input type="text" name="t_youbou" class = "one" value = "<?php echo $order['t_youbou']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -354,10 +372,10 @@ while($c < 4){
 <td class="xl73" style='border-top:none;border-left:none'>　</td>
 <td class="xl71" style='border-top:none'>　</td>
 <td colspan="5" class="xl90">
-<input type="radio" name="sakunen_jisseki" value="true" <?php echo $track_record_Y?> disabled="disabled" />あり</td>
+<input type="radio" name="sakunen_jisseki" value="true" <?php echo $track_record_Y?> />あり</td>
 <td class="xl71" style='border-top:none'>　</td>
 <td colspan="5" class="xl90">
-<input type="radio" name="sakunen_jisseki" value="false" <?php echo $track_record_N?> disabled="disabled" />なし</td>
+<input type="radio" name="sakunen_jisseki" value="false" <?php echo $track_record_N?> />なし</td>
 <td class="xl71" style='border-top:none'>　</td>
 <td class="xl71" style='border-top:none'>　</td>
 <td class="xl72" style='border-top:none'>　</td>
@@ -386,13 +404,13 @@ while($c < 16){
 <td class="xl68">　</td>
 <td colspan="4" rowspan="2" class="xl94" style='border-bottom:.5pt solid black'>昨年実績費用</td>
 <td colspan="8" rowspan="2" class="xl94" style='border-right:.5pt solid black; border-bottom:.5pt solid black'>
-<input type="text" name="t_sakunen_money" maxlength="8" class = "six money" value = "<?php echo $order['t_sakunen_hiyou']?>" disabled="disabled" />円</td>
+<input type="text" name="t_sakunen_money" maxlength="8" class = "six money" value = "<?php echo $order['t_sakunen_hiyou']?>" readonly="readonly" />円</td>
 <td rowspan="2" class="xl94" style='border-bottom:.5pt solid black'>　</td>
 <td colspan="3" rowspan="2" class="xl95" style='border-right:.5pt solid black; border-bottom:.5pt solid black'>
-<input type="radio" name="zei_hantei" value="komi" <?php echo $tax_included?> disabled="disabled" />(税込み)</td>
+<input type="radio" name="zei_hantei" value="komi" <?php echo $tax_included?> />(税込み)</td>
 <td rowspan="2" class="xl95" style='border-bottom:.5pt solid black'>　</td>
 <td colspan="3" rowspan="2" class="xl95" style='border-right:.5pt solid black; border-bottom:.5pt solid black'>
-<input type="radio" name="zei_hantei" value="nuki" <?php echo $tax_excluded?> disabled="disabled" />(税抜き)</td>
+<input type="radio" name="zei_hantei" value="nuki" <?php echo $tax_excluded?> />(税抜き)</td>
 <td class="xl69">　</td>
 </tr>
 
@@ -407,7 +425,7 @@ while($c < 16){
 <td class="xl68">　</td>
 <td colspan="4" rowspan="2" class="xl94" style='border-right:.5pt solid black; border-bottom:.5pt solid black'>昨年部数</td>
 <td colspan="10" rowspan="2" class="xl100" style='border-right:.5pt solid black; border-bottom:.5pt solid black'>
-<input type="text" name="t_sakunen_busu" class = "four" value = "<?php echo $order['t_sakunen_busu']?>" disabled="disabled" />部</td>
+<input type="text" name="t_sakunen_busu" class = "four" value = "<?php echo $order['t_sakunen_busu']?>" readonly="readonly" />部</td>
 <td colspan="6" rowspan="2" class="xl102" style='border-right:.5pt solid black; border-bottom:.5pt solid black'>※↑必ずどちらか解る様にしてください。</td>
 <td class="xl69">　</td>
 </tr>
@@ -424,13 +442,13 @@ while($c < 16){
 <td colspan="4" rowspan="2" class="xl94" style='border-right:.5pt solid black;border-bottom:.5pt solid black'>昨年仕様</td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left: none'>サイズ</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left: none'>
-<input type="text" name="t_sakunen_size" maxlength="2" class = "three" value = "<?php echo $order['t_sakunen_size']?>" disabled="disabled" /></td>
+<input type="text" name="t_sakunen_size" maxlength="2" class = "three" value = "<?php echo $order['t_sakunen_size']?>" readonly="readonly" /></td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left: none'>ページ数</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left: none'>
-<input type="text" name="t_sakunen_page" maxlength="3" class = "three" value = "<?php echo $order['t_sakunen_page']?>" disabled="disabled" /></td>
+<input type="text" name="t_sakunen_page" maxlength="3" class = "three" value = "<?php echo $order['t_sakunen_page']?>" readonly="readonly" /></td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left: none'>色数</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left: none'>
-<input type="text" name="t_sakunen_color" maxlength="3" class = "three" value = "<?php echo $order['t_sakunen_color']?>" disabled="disabled" /></td>
+<input type="text" name="t_sakunen_color" maxlength="3" class = "three" value = "<?php echo $order['t_sakunen_color']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -438,15 +456,15 @@ while($c < 16){
 <td height="36px" style='height:27.0pt' />
 <td class="xl68">　</td>
 <td colspan="3" class="xl90">
-<input type="radio" name="sakunen_men" value="kata" disabled="disabled" />片面</td>
+<input type="radio" name="sakunen_men" value="片面" <?php echo $last_other?> />片面</td>
 <td colspan="3" class="xl90" style='border-right:.5pt solid black'>
-<input type="radio" name="sakunen_men" value="ryo" disabled="disabled" />両面</td>
+<input type="radio" name="sakunen_men" value="両面" <?php echo $last_both?> />両面</td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left: none'>紙</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left: none'>
-<input type="text" name="t_sakunen_kami" maxlength="10" class = "one" value = "<?php echo $order['t_sakunen_kami']?>" disabled="disabled" /></td>
+<input type="text" name="t_sakunen_kami" maxlength="10" class = "one" value = "<?php echo $order['t_sakunen_kami']?>" readonly="readonly" /></td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left: none'>折り方</td>
 <td colspan="3" class="xl89" style='border-right:.5pt solid black;border-left: none'>
-<input type="text" name="t_sakunen_orikata" maxlength="10" class = "one" value = "<?php echo $order['t_sakunen_orikata']?>" disabled="disabled" /></td>
+<input type="text" name="t_sakunen_orikata" maxlength="10" class = "one" value = "<?php echo $order['t_sakunen_orikata']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -455,10 +473,10 @@ while($c < 16){
 <td class="xl68">　</td>
 <td colspan="4" class="xl89" style='border-right:.5pt solid black'>昨年発注先</td>
 <td colspan="8" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_sakunen_basho" maxlength = "60" class = "one" value = "<?php echo $order['t_sakunen_basho']?>" disabled="disabled" /></td>
+<input type="text" name="t_sakunen_basho" maxlength = "60" class = "one" value = "<?php echo $order['t_sakunen_basho']?>" readonly="readonly" /></td>
 <td colspan="2" class="xl89" style='border-right:.5pt solid black;border-left:none'>担当者</td>
 <td colspan="6" class="xl89" style='border-right:.5pt solid black;border-left:none'>
-<input type="text" name="t_sakunen_tantou" maxlength = "15" class = "one" value = "<?php echo $order['t_sakunen_tantou']?>" disabled="disabled" /></td>
+<input type="text" name="t_sakunen_tantou" maxlength = "15" class = "one" value = "<?php echo $order['t_sakunen_tantou']?>" readonly="readonly" /></td>
 <td class="xl69">　</td>
 </tr>
 
@@ -510,7 +528,7 @@ while($c < 5){
 ?>
 <td colspan="5" class="xl86" style='border-right:.5pt solid black'>最終責任者</td>
 <td class="xl77" style='border-top:none;border-left:none'>
-<input type="checkbox" name="saisyu" value="1" disabled="disabled" /></td>
+<input type="checkbox" name="saisyu" value="1" readonly="readonly" /></td>
 <td class="xl76" />
 <td />
 <?php
@@ -536,7 +554,7 @@ while($c < 6){
 ?>
 <td colspan="5" class="xl86" style='border-right:.5pt solid black'>役職者</td>
 <td class="xl77" style='border-top:none;border-left:none'>
-<input type="checkbox" name="yakusyoku" value="2" disabled="disabled" /></td>
+<input type="checkbox" name="yakusyoku" value="2" readonly="readonly" /></td>
 <td class="xl76" />
 <td />
 <?php
@@ -562,7 +580,7 @@ while($c < 6){
 ?>
 <td colspan="5" class="xl86" style='border-right:.5pt solid black'>担当者</td>
 <td class="xl77" style='border-top:none;border-left:none'>
-<input type="checkbox" name="tanto1" value="3" disabled="disabled" /></td>
+<input type="checkbox" name="tanto1" value="3" readonly="readonly" /></td>
 <td />
 <td />
 <?php
@@ -588,7 +606,7 @@ while($c < 6){
 ?>
 <td colspan="5" class="xl86" style='border-right:.5pt solid black'>担当者</td>
 <td class="xl77" style='border-top:none;border-left:none'>
-<input type="checkbox" name="tanto2" value="4" disabled="disabled" /></td>
+<input type="checkbox" name="tanto2" value="4" readonly="readonly" /></td>
 <td class="xl80"></td>
 <?php
 $c = 0;
