@@ -19,6 +19,71 @@ jQuery(document).ready(function($){
 });
 });
 </script>
+<script type="text/javascript">
+//<table>10件表示
+var page = 0;	//ページ数初期値
+function putId(){// テーブルの行にID名を付ける
+	page = 0;//現在ページ数を初期化
+	var Tbe = document.getElementById("list");//<table>を取得
+	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+	for(i=0; i<Tr.length; i++){
+		Tr[i].id='trID'+i;
+	}
+}
+function draw(){//trを10件表示
+	//現在ページ数を<span id="page">に挿入
+	var elem = document.getElementById("page");
+	elem.innerHTML = page + 1;
+	//trを隠す
+	var Tbe = document.getElementById("list");//<table>を取得
+	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+	var total = Math.floor(Tr.length / 10);
+	var elem2 = document.getElementById("total");
+	elem2.innerHTML = total;
+	for(i=1; i<=Tr.length-1; i++){//<tr>を全て隠す
+		document.getElementById("trID"+i).style.display="none";
+	}
+	//trを10件表示
+	var start = (page +1) *10 -9;//<tr>開始番号
+	var end = start +10;//<tr>終了番号
+	for(start; start<end; start++){
+		document.getElementById("trID"+start).style.display = "";
+	}
+}
+function prev(){//前の10件を表示
+	if (page > 0) {
+		page--;
+		draw();
+	}
+}
+function next(){//次の10件を表示
+	var Tbe = document.getElementById("list");//<table>を取得
+	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+	var max = Tr.length - 1;//<th>分を引く
+	if (page < max / 10 - 1) {
+		page++;
+		draw();
+	}
+}
+
+function put(){//<table>初期値
+	var Tbe = document.getElementById("list");//<table>を取得
+	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
+	for(i=1; i<30; i++){//
+		var row = Tbe.insertRow(-1);
+		var th = document.createElement("th");
+		row.appendChild(th);
+		th.innerHTML = "　";
+		var col2 = row.insertCell(-1);
+		col2.innerHTML = "　";
+
+	}
+	putId();
+	draw();
+}
+/* ページ読み込み完了時に、処理を実行 */
+window.onload=function(){put();}
+</script>
 <style type="text/css">/* テーブル内のスタイルを定義 */
 .check{
 	width:20px;
@@ -37,7 +102,7 @@ table.type07 thead {
 	background: #04162e;
 }
 table.type07 thead th {
-	padding: 10px;
+	padding: 20px;
 	font-weight: bold;
 	vertical-align: top;
 	color: #fff;
@@ -141,6 +206,12 @@ switch($order['t_sakunen_men']){
 		$last_both = 'disabled="disabled"';
 		break;
 }
+
+//制作会社を検索
+$company_sql = 'SELECT seisaku_id AS id, seisaku_name AS name';
+$company_sql .= ' FROM seisaku_kaisha';
+$result_sql2 = $pdo->prepare($company_sql);
+$result_sql2->execute();
 ?>
 <!-- 折り畳み展開ポインタ 注文書 -->
 <div onclick="obj=document.getElementById('order').style; obj.display=(obj.display=='none')?'block':'none';">
@@ -708,7 +779,8 @@ while($c < 23){
 
 <!-- 折り畳まれ部分 相みつ会社一覧 -->
 <div id="company" style="display:none;clear:both;">
-<table class="type07" align="center">
+<form name="com" action="Competitive_quotes_list.php" method="post">
+<table id="list" class="type07" align="center">
 <thead>
 	<tr>
 		<th>check</th>
@@ -716,17 +788,24 @@ while($c < 23){
 	</tr>
 </thead>
 <tbody>
-	<tr>
-		<th><input type="checkbox" name="check1[]" class="check" value="1" /></th>
-		<td>PBM01</td>
-	</tr>
-	<tr>
-		<th><input type="checkbox" name="check1[]" class="check" value="2" /></th>
-		<td>PBM02</td>
-	</tr>
+	<?php
+		while($company = $result_sql2->fetch(PDO::FETCH_ASSOC)){
+			echo '<tr><th><input type="checkbox" name="check1[]" class="check" value="'.$company['id'].'" /></th>';
+			echo '<td>'.$company['name'].'</td></tr>';
+		}
+	?>
 </tbody>
 </table>
-
+<div align="left" style="margin-left:200px;" >
+	<input type="button" onclick="prev()" value="戻る" />
+	<input type="button" onclick="next()" value="次へ" />
+	<span id="page"></span>
+	<font>/</font>
+	<span id="total"></span>
+	<font>ページ</font>
+	<input type="submit" name="decision" style="margin-left:200px;" />
+</div>
+</form>
 </div>
 <!--// 折り畳まれ部分 相みつ会社一覧 -->
 <div>
