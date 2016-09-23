@@ -65,24 +65,8 @@ function next(){//次の10件を表示
 		draw();
 	}
 }
-
-function put(){//<table>初期値
-	var Tbe = document.getElementById("list");//<table>を取得
-	Tr = Tbe.getElementsByTagName("tr");//<table>内の<tr>を取得
-	for(i=1; i<30; i++){//
-		var row = Tbe.insertRow(-1);
-		var th = document.createElement("th");
-		row.appendChild(th);
-		th.innerHTML = "　";
-		var col2 = row.insertCell(-1);
-		col2.innerHTML = "　";
-
-	}
-	putId();
-	draw();
-}
 /* ページ読み込み完了時に、処理を実行 */
-window.onload=function(){put();}
+window.onload=function(){putId();draw();}
 </script>
 <style type="text/css">/* テーブル内のスタイルを定義 */
 .check{
@@ -212,6 +196,11 @@ $company_sql = 'SELECT seisaku_id AS id, seisaku_name AS name';
 $company_sql .= ' FROM seisaku_kaisha';
 $result_sql2 = $pdo->prepare($company_sql);
 $result_sql2->execute();
+//案件数を検索
+$result_count = $pdo->prepare($company_sql);
+$result_count->execute();
+$result_count01 = $result_count->fetchAll();
+$count = count($result_count01);
 ?>
 <!-- 折り畳み展開ポインタ 注文書 -->
 <div onclick="obj=document.getElementById('order').style; obj.display=(obj.display=='none')?'block':'none';">
@@ -780,6 +769,9 @@ while($c < 23){
 <!-- 折り畳まれ部分 相みつ会社一覧 -->
 <div id="company" style="display:none;clear:both;">
 <form name="com" action="Competitive_quotes_list.php" method="post">
+<?php //注文書idをform送信
+echo "<input type='hidden' name='tm_id' value=". $id .">";
+?>
 <table id="list" class="type07" align="center">
 <thead>
 	<tr>
@@ -792,6 +784,11 @@ while($c < 23){
 		while($company = $result_sql2->fetch(PDO::FETCH_ASSOC)){
 			echo '<tr><th><input type="checkbox" name="check1[]" class="check" value="'.$company['id'].'" /></th>';
 			echo '<td>'.$company['name'].'</td></tr>';
+		}
+		$null = $count % 10;
+		while($null < 10){
+			echo '<tr><th>　</th><td>　</td></tr>';
+			$null++;
 		}
 	?>
 </tbody>
