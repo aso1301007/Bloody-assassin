@@ -112,6 +112,12 @@ include '../acs_header.php';
 ?>
 <div id="title">以下の制作会社を相みつ候補にしますか？</div>
 <?php
+	if(empty($_POST['check1'])){
+		echo '<script language=javascript>alert("値が選択されていません。");</script>';
+		$url = $_SERVER['HTTP_REFERER'];
+		echo '<meta http-equiv="refresh" content="0;URL='.$url.'">';
+		exit;
+	}
 	$posid = $_POST['check1'];//チェックボックスの値が配列で入っている
 	$sql = 'SELECT *';
 	$sql .= ' FROM seisaku_kaisha';
