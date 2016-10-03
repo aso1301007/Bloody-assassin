@@ -57,6 +57,36 @@ div.over02{
 	height: 40px;
 	overflow: auto;
 }
+#view_or_edit{
+float:left;
+width:775px;
+height:70px;
+border-style: solid;
+border-width: 1px;
+margin:20px 20px 5px 20px;
+padding:6px;
+text-align:left;
+
+background:#B0C4DE;
+color:#333;
+padding:15px;
+border:2px dashed rgba(0,0,0,0.5);
+border-radius:6px;
+-moz-border-radius:6px;
+-webkit-border-radius:6px;
+box-shadow:0 0 0 5px #B0C4DE,0 2px 3px 5px rgba(0,0,0,5);
+-moz-box-shadow:0 0 0 5px #B0C4DE, 0 2px 3px 5px rgba(0,0,0,5);
+-webkit-box-shadow:0 0 0 5px #B0C4DE, 0 2px 3px 5px rgba(0,0,0,5);
+}
+.radio{
+	width:20px;
+	height:20px;
+	text-align: right;
+}
+.btn{
+	font-size: 20px;
+	padding:5px;
+}
 </style>
 <?php
 require '../../DB.php';
@@ -202,14 +232,27 @@ while($while_school = $re_school->fetch(PDO::FETCH_ASSOC)){
 	$c++;
 }
 
+//製作会社が決定済みかどうか検索用の配列
+$decision = 'SELECT tm_id';
+$decision .= ' FROM tyuumon_master';
+$decision .= ' WHERE seisaku_id <> 0';
+$result_decision = $pdo->prepare($decision);
+$result_decision->execute();
+$count=0;
+while($DECISION = $result_decision->fetch(PDO::FETCH_ASSOC)){
+	$Decision[$count] = $DECISION['tm_id'];
+	$count++;
+}
+
 //javascriptに配列を渡すためにjsonに変換する
 $j_item = json_encode($item);				//項目onchange
 $j_month_date = json_encode($month_date);	//日付：月onchange
 $j_production = json_encode($production);	//製作物ナンバー検索
 $j_date = json_encode($date);				//日付検索
-$j_order = json_encode($s_order);				//注文内容検索
-$j_goods = json_encode($s_goods);				//品名検索
+$j_order = json_encode($s_order);			//注文内容検索
+$j_goods = json_encode($s_goods);			//品名検索
 $j_school = json_encode($s_school);			//学校名検索
+$j_decision = json_encode($Decision);		//制作会社決定済み検索用
 ?>
 
 //phpから配列を受け取る
@@ -220,6 +263,7 @@ var date = JSON.parse('<?php echo  $j_date; ?>');				//日付検索
 var order = JSON.parse('<?php echo  $j_order; ?>');				//注文内容検索
 var goods = JSON.parse('<?php echo  $j_goods; ?>');				//品名検索
 var school = JSON.parse('<?php echo  $j_school; ?>');			//学校名検索
+var decision = JSON.parse('<?php echo  $j_decision; ?>');		//制作会社決定済み検索用
 
 function number_serch(){//製作物ナンバー検索
 	var search = document.forms.search_number.production.value;	//input textの値を取得
@@ -234,13 +278,19 @@ function number_serch(){//製作物ナンバー検索
 		for(key in production[search]){//検索結果を挿入
 			//列を追加
 			var row = Tbe.insertRow(-1);
+			for(var i=0;i<decision.length;i++){//相みつ会社を決定済みの場合、列の背景色を変更する
+				if(decision[i] == production[search][key]['id']){
+					row.style.backgroundColor = 'aquamarine';
+					break;
+				}
+			}
 			//セルを追加
 			//日付
 			var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
 			col1.innerHTML = "<div class=\"over01\">" + production[search][key]['date'] + "</div>";
 			//品名
 			var col2 = row.insertCell(-1);
-			col2.innerHTML = "<div class=\"over01\"><a href=\"Company_decision.php?id=" + production[search][key]['id'] + "\">" + production[search][key]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+			col2.innerHTML = "<div class=\"over01\"><button type=\"button\" onclick=\"radio_move(this.value)\" class=\"btn\" value=\"" + production[search][key]['id'] + "\">" + production[search][key]['name'] + "</button></div>";//Production_companies.phpに注文idをGET送信
 			//備考
 			var col3 = row.insertCell(-1);
 			col3.innerHTML = "<div class=\"over02\">" + production[search][key]['remarks'] + "</div>";
@@ -298,13 +348,19 @@ function things_search(){//項目検索
 		for(key in order[serch_conditions]){//検索結果を挿入
 			//列を追加
 			var row = Tbe.insertRow(-1);
+			for(var i=0;i<decision.length;i++){//相みつ会社を決定済みの場合、列の背景色を変更する
+				if(decision[i] == order[serch_conditions][key]['id']){
+					row.style.backgroundColor = 'aquamarine';
+					break;
+				}
+			}
 			//セルを追加
 			//日付
 			var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
 			col1.innerHTML = "<div class=\"over01\">" + order[serch_conditions][key]['date'] + "</div>";
 			//品名
 			var col2 = row.insertCell(-1);
-			col2.innerHTML = "<div class=\"over01\"><a href=\"Company_decision.php?id=" + order[serch_conditions][key]['id'] + "\">" + order[serch_conditions][key]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+			col2.innerHTML = "<div class=\"over01\"><button type=\"button\" onclick=\"radio_move(this.value)\" class=\"btn\" value=\"" + order[serch_conditions][key]['id'] + "\">" + order[serch_conditions][key]['name'] + "</button></div>";//Production_companies.phpに注文idをGET送信
 			//備考
 			var col3 = row.insertCell(-1);
 			col3.innerHTML = "<div class=\"over02\">" + order[serch_conditions][key]['remarks'] + "</div>";
@@ -317,13 +373,19 @@ function things_search(){//項目検索
 		for(key in goods[serch_conditions]){//検索結果を挿入
 			//列を追加
 			var row = Tbe.insertRow(-1);
+			for(var i=0;i<decision.length;i++){//相みつ会社を決定済みの場合、列の背景色を変更する
+				if(decision[i] == goods[serch_conditions][key]['id']){
+					row.style.backgroundColor = 'aquamarine';
+					break;
+				}
+			}
 			//セルを追加
 			//日付
 			var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
 			col1.innerHTML = "<div class=\"over01\">" + goods[serch_conditions][key]['date'] + "</div>";
 			//品名
 			var col2 = row.insertCell(-1);
-			col2.innerHTML = "<div class=\"over01\"><a href=\"Company_decision.php?id=" + goods[serch_conditions][key]['id'] + "\">" + goods[serch_conditions][key]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+			col2.innerHTML = "<div class=\"over01\"><button type=\"button\" onclick=\"radio_move(this.value)\" class=\"btn\" value=\"" + goods[serch_conditions][key]['id'] + "\">" + goods[serch_conditions][key]['name'] + "</button></div>";//Production_companies.phpに注文idをGET送信
 			//備考
 			var col3 = row.insertCell(-1);
 			col3.innerHTML = "<div class=\"over02\">" + goods[serch_conditions][key]['remarks'] + "</div>";
@@ -336,13 +398,19 @@ function things_search(){//項目検索
 		for(key in school[serch_conditions]){//検索結果を挿入
 			//列を追加
 			var row = Tbe.insertRow(-1);
+			for(var i=0;i<decision.length;i++){//相みつ会社を決定済みの場合、列の背景色を変更する
+				if(decision[i] == school[serch_conditions][key]['id']){
+					row.style.backgroundColor = 'aquamarine';
+					break;
+				}
+			}
 			//セルを追加
 			//日付
 			var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
 			col1.innerHTML = "<div class=\"over01\">" + school[serch_conditions][key]['date'] + "</div>";
 			//品名
 			var col2 = row.insertCell(-1);
-			col2.innerHTML = "<div class=\"over01\"><a href=\"Company_decision.php?id=" + school[serch_conditions][key]['id'] + "\">" + school[serch_conditions][key]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+			col2.innerHTML = "<div class=\"over01\"><button type=\"button\" onclick=\"radio_move(this.value)\" class=\"btn\" value=\"" + school[serch_conditions][key]['id'] + "\">" + school[serch_conditions][key]['name'] + "</button></div>";//Production_companies.phpに注文idをGET送信
 			//備考
 			var col3 = row.insertCell(-1);
 			col3.innerHTML = "<div class=\"over02\">" + school[serch_conditions][key]['remarks'] + "</div>";
@@ -391,13 +459,19 @@ function period_sort(){//日時検索
 	for(key in date[ym]){//検索結果を挿入
 		//列を追加
 		var row = Tbe.insertRow(-1);
+		for(var i=0;i<decision.length;i++){//相みつ会社を決定済みの場合、列の背景色を変更する
+			if(decision[i] == date[ym][key]['id']){
+				row.style.backgroundColor = 'aquamarine';
+				break;
+			}
+		}
 		//セルを追加
 		//日付
 		var col1 = row.insertCell(-1);//インデックス指定、-1で末尾に追加
 		col1.innerHTML = "<div class=\"over01\">" + date[ym][key]['date'] + "</div>";
 		//品名
 		var col2 = row.insertCell(-1);
-		col2.innerHTML = "<div class=\"over01\"><a href=\"Company_decision.php?id=" + date[ym][key]['id'] + "\">" + date[ym][key]['name'] + "</div>";//Production_companies.phpに注文idをGET送信
+		col2.innerHTML = "<div class=\"over01\"><button type=\"button\" onclick=\"radio_move(this.value)\" class=\"btn\" value=\"" + date[ym][key]['id'] + "\">" + date[ym][key]['name'] + "</button></div>";//Production_companies.phpに注文idをGET送信
 		//備考
 		var col3 = row.insertCell(-1);
 		col3.innerHTML = "<div class=\"over02\">" + date[ym][key]['remarks'] + "</div>";
@@ -425,6 +499,18 @@ function change_year(){//日付検索：年onchange
 	for(i=0; sel2_len>i; i++){//月selectに年selectに連動した月を挿入
 		var mon = month_date[sel1_value][i];
 		select2.options[i] = new Option(mon+"月", mon);
+	}
+}
+
+function radio_move(value){//ラジオボタンによって画面遷移先を変更
+	//ラジオボタンの値を取得
+	var view = document.voe.view.checked;
+	var decision = document.voe.decision.checked;
+	if(view){
+		document.location.href = "Company_reference.php?id=" +value;
+	}
+	else if(decision){
+		document.location.href = "Company_decision.php?id=" +value;
 	}
 }
 
@@ -501,6 +587,7 @@ window.onload=function(){change_year();change_item();put();}
 $year = 'SELECT SUBSTRING(t1.t_date,1,4) AS YEAR';//例：2015-01-01を2015に変換
 $year .= ' FROM tyuumon t1';
 $year .= ' INNER JOIN competitive_quotes c ON t1.tm_id = c.tm_id';
+$year .= ' INNER JOIN tyuumon_master t2 ON t1.tm_id = t2.tm_id';
 $year .= ' GROUP BY YEAR;';
 $result_year = $pdo->prepare($year);
 $result_year->execute();
@@ -510,9 +597,9 @@ $result_year->execute();
 <div id="number_search">
 	<b>制作物ナンバーを入力してください。</b>
 	<form  name="search_number" method="post" style="float:right">
-		<p>制作物ナンバー：<input type="text" id="production" style="height:20px; vertical-align: middle;" name="search_text" size="20" maxlength="8" />
+		<input type="text" id="production" style="height:20px; vertical-align: middle;" name="search_text" size="20" maxlength="8" />
 		<span style="margin-right: 1em;" />
-		<input type="button" onclick="number_serch()" style="height:32px; vertical-align: middle;" value="表示" /></p>
+		<input type="button" onclick="number_serch()" style="height:32px; vertical-align: middle;" value="表示" />
 	</form>
 </div>
 
@@ -554,6 +641,15 @@ $result_year->execute();
 		<select name = "conditions" />
 		<span style="margin-right: 1em;"/>
 		<input type="button" onclick="things_search()" style="height:32px; vertical-align: middle;" value="表示" /></p>
+	</form>
+</div>
+<div id="view_or_edit">
+	<form name="voe" method="post">
+		<b>制作会社を閲覧か決定か選択してください。&nbsp;※制作会社決定済みの場合、背景色が水色です。</b>
+		<p>
+			<input type="radio" id="view" name="rdo_btn" class="radio" checked="checked" />相みつ会社閲覧
+			<input type="radio" id="decision" name="rdo_btn" class="radio" />制作会社決定
+		</p>
 	</form>
 </div>
 </div>
