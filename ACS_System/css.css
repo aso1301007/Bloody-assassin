@@ -359,3 +359,60 @@ box-shadow:0 0 0 5px #B0C4DE,0 2px 3px 5px rgba(0,0,0,5);
     -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.4);
     -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.4);
 }
+/*ACS・学校ホームページで使用
+---------------------------------------------- */
+.home_table{
+	width: 500px;
+	margin: 20px auto;
+	*border-collapse: collapse; /* IE7 and lower */
+	border-spacing: 0;
+	border-top: 1px solid #0099CC;
+	font-size: 20px;
+}
+
+.home_table th{
+	color: #FFFFFF;
+	background: #4169E1;
+	border-bottom: 1px solid #0099CC;
+	padding: 3px;
+	text-align: center;
+}
+
+.home_table td{
+	padding-top: 3px;
+	padding-left:8px;
+	text-align: left;
+	background: #F0F8FF;
+	font-weight:bold;
+}
+
+.home_table div{
+	margin-top:5px;
+}
+
+.home_table a{
+	border-bottom: 2px solid #0099CC;
+	font-weight:bold;
+}
+
+.home_table a:hover{
+	background: #D3D3D3;
+	-o-transition: all 0.1s ease-in-out;
+	-webkit-transition: all 0.1s ease-in-out;
+	-moz-transition: all 0.1s ease-in-out;
+	-ms-transition: all 0.1s ease-in-out;
+	transition: all 0.1s ease-in-out;
+}
+
+.home_table ul{
+	list-style: none;
+	margin-top: 5px;
+	margin-bottom: 0;
+	padding: 2px;
+	color: #0000FF;
+}
+
+.home_table li{
+	margin-top: 5px;
+	border-bottom: 1px solid #0099CC;
+}
